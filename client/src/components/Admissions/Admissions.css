@@ -1,0 +1,484 @@
+#admissions_page .breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+}
+
+#admissions_page .breadcrumb .crumb {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #3b8dbd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#admissions_page .breadcrumb .crumb:hover {
+    background: #dbeafe;
+    color: #0d6efd;
+    transform: translateY(-2px);
+}
+
+#admissions_page .breadcrumb .separator {
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+#admissions_page .breadcrumb .active {
+    background: #3b8dbd;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+@media (max-width: 1440px) {
+    #admissions_page .breadcrumb {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 1024px) {
+    #admissions_page .breadcrumb {
+        margin-top: -8px;
+    }
+}
+
+@media (max-width: 768px) {
+    #admissions_page .breadcrumb {
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 426px) {
+    #admissions_page .breadcrumb {
+        font-size: 13px;
+        margin-top: 40px;
+    }
+
+    #admissions_page .breadcrumb .crumb {
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    #admissions_page .breadcrumb {
+        margin-top: 85px;
+        font-size: 12px;
+    }
+}
+
+#admissions_page .divide {
+    display: flex;
+    gap: 40px;
+}
+
+#admissions_page .content {
+    flex: 3;
+}
+
+#admissions_page .title {
+    font-size: 28px;
+    color: #3b8dbd;
+    margin-bottom: 20px;
+}
+
+
+#admissions_page .sidebar {
+    flex: 1;
+    background: linear-gradient(145deg, #f0f6fa, #dce9f2);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+#admissions_page .sidebar-title {
+    color: #3b8dbd;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#admissions_page .sidebar-title::after {
+    content: "";
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(to right, #3b8dbd, #0982e4);
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    border-radius: 10px;
+}
+
+#admissions_page .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#admissions_page .sidebar li {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #333;
+    background: transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#admissions_page .sidebar li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+#admissions_page .sidebar li:hover a {
+    color: #3b8dbd;
+}
+
+#admissions_page .sidebar .active a {
+    color: white;
+}
+
+#admissions_page .sidebar li:hover {
+    background: #e3f2fd;
+    transform: translateX(5px);
+    color: #0d6efd;
+}
+
+#admissions_page .sidebar li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #3b8dbd, #4dabf7);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+#admissions_page .sidebar li:hover::before {
+    opacity: 1;
+}
+
+#admissions_page .sidebar .active {
+    background: linear-gradient(to right, #3b8dbd, #4dabf7);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+#admissions_page .sidebar .active:hover {
+    transform: none;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    #admissions_page .divide {
+        flex-direction: column;
+    }
+
+    #admissions_page .sidebar {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 426px) {
+    #admissions_page {
+        padding: 15px;
+    }
+
+    #admissions_page .title {
+        font-size: 22px;
+    }
+
+}
+
+
+/* admission procedure table css start */
+
+#admissions_page #admission_procedure_table .custom-fee-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-size: 14px;
+}
+
+#admissions_page #admission_procedure_table .table-title {
+    background: #1f7ea8;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+}
+
+#admissions_page #admission_procedure_table .custom-fee-table td {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+#admissions_page #admission_procedure_table .custom-fee-table tbody tr:nth-child(even) {
+    background: #f7f9fb;
+}
+
+#admissions_page #admission_procedure_table .custom-fee-table tbody tr:hover {
+    background: #eef6fb;
+}
+
+#admissions_page #admission_procedure_table .custom-fee-table td:first-child {
+    text-align: center;
+    width: 60px;
+}
+
+#admissions_page #admission_procedure_table .custom-fee-table td:last-child {
+    text-align: center;
+    font-weight: 500;
+}
+
+#admissions_page #admission_procedure_table .total-row {
+    background: #e3f2fd;
+    font-weight: 600;
+}
+
+#admissions_page #admission_procedure_table .total-row td {
+    border-top: 2px solid #1f7ea8;
+}
+
+/* admission procedure table css end */
+
+
+
+/* admission eligibility criteria table css end*/
+
+#admissions_page #admission_ec_table .custom-table {
+    border-radius: 12px;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+#admissions_page #admission_ec_table .custom-table thead {
+    background: linear-gradient(to right, #0d6efd, #4dabf7);
+    color: white;
+}
+
+#admissions_page #admission_ec_table .custom-table th {
+    padding: 14px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+#admissions_page #admission_ec_table .custom-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #444;
+}
+
+#admissions_page #admission_ec_table .custom-table tbody tr:nth-child(even) {
+    background-color: #f8fbff;
+}
+
+#admissions_page #admission_ec_table .custom-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+#admissions_page #admission_ec_table .custom-table tbody tr:hover {
+    background-color: #e3f2fd;
+    transform: scale(1.01);
+}
+
+#admissions_page #admission_ec_table .custom-table td:first-child {
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+#admissions_page #admission_ec_table .custom-table thead tr:first-child th:first-child {
+    border-top-left-radius: 12px;
+}
+
+#admissions_page #admission_ec_table .custom-table thead tr:first-child th:last-child {
+    border-top-right-radius: 12px;
+}
+
+@media (max-width: 768px) {
+
+    #admissions_page #admission_ec_table .custom-table th,
+    #admissions_page #admission_ec_table .custom-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    #admissions_page #admission_ec_table .custom-table th,
+    #admissions_page #admission_ec_table .custom-table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+/* admission eligibility criteria table css end*/
+
+
+/* admission help table css start*/
+
+#admissions_page #admission_help_table .custom-table {
+    border-radius: 12px;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+#admissions_page #admission_help_table .custom-table thead {
+    background: linear-gradient(to right, #0d6efd, #4dabf7);
+    color: white;
+}
+
+#admissions_page #admission_help_table .custom-table th {
+    padding: 14px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+#admissions_page #admission_help_table .custom-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #444;
+}
+
+#admissions_page #admission_help_table .custom-table tbody tr:nth-child(even) {
+    background-color: #f8fbff;
+}
+
+#admissions_page #admission_help_table .custom-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+#admissions_page #admission_help_table .custom-table tbody tr:hover {
+    background-color: #e3f2fd;
+    transform: scale(1.01);
+}
+
+#admissions_page #admission_help_table .custom-table td:first-child {
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+#admissions_page #admission_help_table .custom-table thead tr:first-child th:first-child {
+    border-top-left-radius: 12px;
+}
+
+#admissions_page #admission_help_table .custom-table thead tr:first-child th:last-child {
+    border-top-right-radius: 12px;
+}
+
+@media (max-width: 768px) {
+
+    #admissions_page #admission_help_table .custom-table th,
+    #admissions_page #admission_help_table .custom-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    #admissions_page #admission_help_table .custom-table th,
+    #admissions_page #admission_help_table .custom-table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+/* admission help table css end*/
+
+
+/* admission seat distribution table css start*/
+
+#admissions_page #admission_seat_table .custom-table {
+    border-radius: 12px;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+#admissions_page #admission_seat_table .custom-table thead {
+    background: linear-gradient(to right, #0d6efd, #4dabf7);
+    color: white;
+}
+
+#admissions_page #admission_seat_table .custom-table th {
+    padding: 14px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+#admissions_page #admission_seat_table .custom-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #444;
+}
+
+#admissions_page #admission_seat_table .custom-table tbody tr:nth-child(even) {
+    background-color: #f8fbff;
+}
+
+#admissions_page #admission_seat_table .custom-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+#admissions_page #admission_seat_table .custom-table tbody tr:hover {
+    background-color: #e3f2fd;
+    transform: scale(1.01);
+}
+
+#admissions_page #admission_seat_table .custom-table td:first-child {
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+#admissions_page #admission_seat_table .custom-table thead tr:first-child th:first-child {
+    border-top-left-radius: 12px;
+}
+
+#admissions_page #admission_seat_table .custom-table thead tr:first-child th:last-child {
+    border-top-right-radius: 12px;
+}
+
+@media (max-width: 768px) {
+
+    #admissions_page #admission_seat_table .custom-table th,
+    #admissions_page #admission_seat_table .custom-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    #admissions_page #admission_seat_table .custom-table th,
+    #admissions_page #admission_seat_table .custom-table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+/* admission seat distribution table css end*/

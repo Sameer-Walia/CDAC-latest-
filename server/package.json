@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "express-mongo-sanitize": "^2.2.0",
+    "fs": "^0.0.1-security",
+    "helmet": "^8.1.0",
+    "mongoose": "^9.3.3",
+    "multer": "^2.1.1",
+    "nodemailer": "^8.0.5",
+    "os": "^0.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

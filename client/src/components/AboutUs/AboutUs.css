@@ -1,0 +1,562 @@
+#about_page .breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+}
+
+#about_page .breadcrumb .crumb {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #3b8dbd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#about_page .breadcrumb .crumb:hover {
+    background: #dbeafe;
+    color: #0d6efd;
+    transform: translateY(-2px);
+}
+
+#about_page .breadcrumb .separator {
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+#about_page .breadcrumb .active {
+    background: #3b8dbd;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+@media (max-width: 1440px) {
+    #about_page .breadcrumb {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 1024px) {
+    #about_page .breadcrumb {
+        margin-top: -8px;
+    }
+}
+
+@media (max-width: 768px) {
+    #about_page .breadcrumb {
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 426px) {
+    #about_page .breadcrumb {
+        font-size: 13px;
+        margin-top: 40px;
+    }
+
+    #about_page .breadcrumb .crumb {
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    #about_page .breadcrumb {
+        margin-top: 85px;
+        font-size: 12px;
+    }
+}
+
+#about_page .divide {
+    display: flex;
+    gap: 40px;
+}
+
+#about_page .content {
+    flex: 3;
+}
+
+#about_page .title {
+    font-size: 28px;
+    color: #3b8dbd;
+    margin-bottom: 20px;
+}
+
+
+#about_page .sidebar {
+    flex: 1;
+    background: linear-gradient(145deg, #f0f6fa, #dce9f2);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+#about_page .sidebar-title {
+    color: #3b8dbd;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#about_page .sidebar-title::after {
+    content: "";
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(to right, #3b8dbd, #0982e4);
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    border-radius: 10px;
+}
+
+#about_page .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#about_page .sidebar li {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #333;
+    background: transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#about_page .sidebar li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+#about_page .sidebar li:hover a {
+    color: #3b8dbd;
+}
+
+#about_page .sidebar .active a {
+    color: white;
+}
+
+#about_page .sidebar li:hover {
+    background: #e3f2fd;
+    transform: translateX(5px);
+    color: #0d6efd;
+}
+
+#about_page .sidebar li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #3b8dbd, #4dabf7);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+#about_page .sidebar li:hover::before {
+    opacity: 1;
+}
+
+#about_page .sidebar .active {
+    background: linear-gradient(to right, #3b8dbd, #4dabf7);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+#about_page .sidebar .active:hover {
+    transform: none;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    #about_page .divide {
+        flex-direction: column;
+    }
+
+    #about_page .sidebar {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 426px) {
+    #about_page {
+        padding: 15px;
+    }
+
+    #about_page .title {
+        font-size: 22px;
+    }
+
+}
+
+#about_page .pdf-links {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#about_page .pdf-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+#about_page .pdf-links a:hover {
+    background: #dbeafe;
+    transform: translateX(5px);
+}
+
+
+/* Departmental Activities css start */
+
+#about_page .title {
+    color: #3b8dbd;
+    margin-bottom: 30px;
+}
+
+#about_page .timeline {
+    position: relative;
+    margin-left: 50px;
+}
+
+#about_page .timeline::before {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: #cbd5e1;
+}
+
+#about_page .timeline-item {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+#about_page .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    width: 15px;
+    height: 15px;
+    background: #0d6efd;
+    border-radius: 50%;
+    border: 3px solid white;
+}
+
+#about_page .timeline-date {
+    position: absolute;
+    left: -80px;
+    top: 0;
+    background: #dbeafe;
+    color: #0d6efd;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#about_page .timeline-content {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    margin-left: 40px;
+    transition: all 0.3s ease;
+}
+
+#about_page .timeline-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+#about_page .timeline-content h3 {
+    color: #279bdf;
+    margin-bottom: 10px;
+}
+
+#about_page .timeline-content p {
+    color: #444;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    #about_page .timeline {
+        margin-left: 30px;
+    }
+
+    #about_page .timeline-date {
+        left: -60px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 426px) {
+    #about_page {
+        padding: 20px;
+    }
+
+    #about_page .timeline {
+        margin-left: 0;
+    }
+
+    #about_page .timeline::before {
+        left: 0;
+    }
+
+    #about_page .timeline-item::before {
+        left: -7px;
+    }
+
+    #about_page .timeline-date {
+        position: static;
+        margin-bottom: 10px;
+    }
+
+    #about_page .timeline-content {
+        margin-left: 10px;
+    }
+}
+
+#about_page .sports-list li {
+    list-style: none;
+    position: relative;
+    padding-left: 25px;
+}
+
+#about_page .sports-list li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+/* Departmental Activities css end */
+
+
+/* Table container css start*/
+
+#about_page #about_holiday_table .custom-table {
+    border-radius: 12px;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+#about_page #about_holiday_table .custom-table thead {
+    background: linear-gradient(to right, #0d6efd, #4dabf7);
+    color: white;
+}
+
+#about_page #about_holiday_table .custom-table th {
+    padding: 14px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+#about_page #about_holiday_table .custom-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #444;
+}
+
+#about_page #about_holiday_table .custom-table tbody tr:nth-child(even) {
+    background-color: #f8fbff;
+}
+
+#about_page #about_holiday_table .custom-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+#about_page #about_holiday_table .custom-table tbody tr:hover {
+    background-color: #e3f2fd;
+    transform: scale(1.01);
+}
+
+#about_page #about_holiday_table .custom-table td:first-child {
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+#about_page #about_holiday_table .custom-table thead tr:first-child th:first-child {
+    border-top-left-radius: 12px;
+}
+
+#about_page #about_holiday_table .custom-table thead tr:first-child th:last-child {
+    border-top-right-radius: 12px;
+}
+
+@media (max-width: 768px) {
+
+    #about_page #about_holiday_table .custom-table th,
+    #about_page #about_holiday_table .custom-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    #about_page #about_holiday_table .custom-table th,
+    #about_page #about_holiday_table .custom-table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+/* Table container css end*/
+
+
+
+/* contactus css start */
+
+
+#about_page .contact-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#about_page .contact-left,
+#about_page .contact-right {
+    width: 50%;
+    position: relative;
+}
+
+#about_page .map iframe {
+    width: 100%;
+    height: 520px;
+    border: none;
+    filter: grayscale(20%);
+}
+
+#about_page .contact-card {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-30%, -50%);
+}
+
+#about_page .card-content {
+    background: linear-gradient(135deg, #3b8dbd, #4aa3d6);
+    padding: 20px;
+    width: 340px;
+    color: #fff;
+    border: 6px solid #fff;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+#about_page .card-content h3 {
+    margin-bottom: 8px;
+}
+
+#about_page .card-content p {
+    margin-bottom: 12px;
+}
+
+#about_page .card-content ul {
+    padding: 0;
+    list-style: none;
+}
+
+#about_page .card-content li {
+    margin-bottom: 10px;
+}
+
+#about_page .social span {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background: #fff;
+    color: #3b8dbd;
+    text-align: center;
+    line-height: 35px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+#about_page .contact-right {
+    /* background: #fff; */
+    padding: 10px 40px;
+    /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); */
+}
+
+#about_page .contact-right h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#about_page .contact-right h2 span {
+    width: 60px;
+    height: 3px;
+    margin: 3px auto;
+}
+
+#about_page .contact-right input,
+#about_page .contact-right textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    background: #fafafa;
+}
+
+#about_page .contact-right textarea {
+    height: 150px;
+}
+
+#about_page .contact-right button {
+    width: 100%;
+    padding: 14px;
+    background: #3b8dbd;
+    color: #fff;
+    border: none;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+#about_page .contact-right button:hover {
+    background: #0f94e1;
+}
+
+@media (max-width: 768px) {
+
+    #about_page .contact-left,
+    #about_page .contact-right {
+        width: 100%;
+    }
+
+    #about_page .contact-card {
+        position: static;
+        transform: none;
+        margin: 20px auto;
+    }
+}
+
+/* contactus css end */

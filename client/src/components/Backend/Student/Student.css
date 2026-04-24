@@ -1,0 +1,231 @@
+#student_page .breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+}
+
+#student_page .breadcrumb .crumb {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #3b8dbd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#student_page .breadcrumb .crumb:hover {
+    background: #dbeafe;
+    color: #0d6efd;
+    transform: translateY(-2px);
+}
+
+#student_page .breadcrumb .separator {
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+#student_page .breadcrumb .active {
+    background: #3b8dbd;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+@media (max-width: 1440px) {
+    #student_page .breadcrumb {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 1024px) {
+    #student_page .breadcrumb {
+        margin-top: -8px;
+    }
+}
+
+@media (max-width: 768px) {
+    #student_page .breadcrumb {
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 426px) {
+    #student_page .breadcrumb {
+        font-size: 13px;
+        margin-top: 40px;
+    }
+
+    #student_page .breadcrumb .crumb {
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    #student_page .breadcrumb {
+        margin-top: 45px;
+        font-size: 12px;
+    }
+}
+
+
+#student_page .fees-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+#student_page .fees-heading {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#student_page .filters {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#student_page .degree {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    background: #5fa8d3;
+    padding: 6px 22px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 20px;
+}
+
+#student_page .degree-title {
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+#student_page .degree-separator {
+    color: white;
+}
+
+#student_page .degree-course {
+    font-weight: 500;
+    color: white;
+}
+
+#student_page .filters select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+}
+
+#student_page .filters select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+#student_page .status-box {
+    padding: 12px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+#student_page .pending {
+    color: red;
+}
+
+#student_page .paid {
+    color: green;
+}
+
+#student_page .upload-box {
+    padding: 20px;
+    border: 1px dashed #ccc;
+    border-radius: 10px;
+    text-align: center;
+    background: #fafafa;
+}
+
+#student_page .upload-box input {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+#student_page .upload-box button {
+    padding: 10px 20px;
+    border: none;
+    background: #28a745;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#student_page .upload-box button:hover {
+    background: #218838;
+}
+
+
+
+/* student fees details table css start */
+
+#student_page #student_fees_upload_table .custom-fee-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-size: 14px;
+}
+
+#student_page #student_fees_upload_table .table-title {
+    background: #3b8dbd;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+}
+
+#student_page #student_fees_upload_table .custom-fee-table td {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+#student_page #student_fees_upload_table .custom-fee-table tbody tr:nth-child(even) {
+    background: #f7f9fb;
+}
+
+#student_page #student_fees_upload_table .custom-fee-table tbody tr:hover {
+    background: #eef6fb;
+}
+
+#student_page #student_fees_upload_table .custom-fee-table td:first-child {
+    text-align: center;
+    width: 60px;
+}
+
+#student_page #student_fees_upload_table .custom-fee-table td:last-child {
+    text-align: center;
+    font-weight: 500;
+}
+
+#student_page #student_fees_upload_table .total-row {
+    background: #e3f2fd;
+    font-weight: 600;
+}
+
+#student_page #student_fees_upload_table .total-row td {
+    border-top: 2px solid #1f7ea8;
+}
+
+/* student fees details table css end */

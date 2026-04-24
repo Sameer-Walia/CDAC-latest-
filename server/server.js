@@ -1,0 +1,1635 @@
+import cluster from "cluster";
+import os from "os";
+import express from 'express'
+import mongoose from 'mongoose'
+import cors from 'cors'
+import mongoSanitize from 'express-mongo-sanitize'
+import helmet from 'helmet'
+import nodemailer from 'nodemailer'
+import dotenv from "dotenv";
+import multer from "multer";
+import fs from "fs";
+
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+console.log(os.cpus().length);
+
+if (cluster.isPrimary)
+{
+    const numCPUs = os.cpus().length;
+
+    console.log(`Master process running. Forking ${numCPUs} workers`);
+
+    for (let i = 0; i < 4; i++)
+    {
+        cluster.fork();
+    }
+
+    cluster.on("exit", (worker) =>
+    {
+        console.log(`Worker ${worker.process.pid} died. Restarting...`);
+        cluster.fork();
+    });
+
+}
+else
+{
+    const port = 4000;
+    const app = express();
+
+    app.use(helmet());
+    app.use(cors());
+    app.use(express.json());
+    // app.use(mongoSanitize());
+    app.use((req, res, next) =>
+    {
+        if (req.body)
+        {
+            console.log("Before:", req.body);
+            req.body = mongoSanitize.sanitize(req.body);
+            console.log("After:", req.body);
+        }
+        if (req.params)
+        {
+            req.params = mongoSanitize.sanitize(req.params);
+        }
+        //  DO NOT reassign req.query
+        if (req.query)
+        {
+            mongoSanitize.sanitize(req.query);
+        }
+        next();
+    });
+
+    function generate_Password_for_student(studentId)
+    {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let randomPart = "";
+
+        for (let i = 0; i < 6; i++)
+        {
+            randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+
+        return studentId + randomPart;
+    }
+
+    dotenv.config()
+
+    const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true, // true for 465, false for other ports
+        auth: {
+            user: process.env.SMTP_UNAME,
+            pass: process.env.SMTP_PASS
+        },
+    });
+
+    // syllabus upload
+    const syllabusStorage = multer.diskStorage({
+        destination: (req, file, cb) =>
+        {
+            cb(null, 'uploads/syllabus');
+        },
+        filename: (req, file, cb) =>
+        {
+            cb(null, Date.now() + '-' + file.originalname);
+        }
+    });
+
+    const uploadSyllabus = multer({
+        storage: syllabusStorage,
+        limits: { fileSize: 3 * 1024 * 1024 },
+        fileFilter: (req, file, cb) =>
+        {
+            if (file.mimetype === "application/pdf")
+            {
+                cb(null, true);
+            }
+            else
+            {
+                cb(new Error("Only PDF allowed"), false);
+            }
+        }
+    });
+
+    // fees upload
+    const feesStorage = multer.diskStorage({
+        destination: (req, file, cb) =>
+        {
+            cb(null, 'uploads/fees');
+        },
+        filename: (req, file, cb) =>
+        {
+            cb(null, Date.now() + '-' + file.originalname);
+        }
+    });
+
+    const uploadFees = multer({
+        storage: feesStorage,
+        limits: { fileSize: 3 * 1024 * 1024 },
+        fileFilter: (req, file, cb) =>
+        {
+            if (file.mimetype === "application/pdf")
+            {
+                cb(null, true);
+            }
+            else
+            {
+                cb(new Error("Only PDF allowed"), false);
+            }
+        }
+    });
+
+    app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  //Allow files inside uploads/ to be opened directly via URL.
+
+    mongoose.connect('mongodb://127.0.0.1:27017/CDAC').then(() => console.log('Connected to MongoDB'));
+
+    const TeacherSignupSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, phone: { type: String, required: true, trim: true }, email: { type: String, required: true, unique: true, lowercase: true, trim: true }, password: { type: String, required: true }, usertype: { type: String, required: true } }, { versionKey: false });
+
+    const TeacherSignupModel = mongoose.model("TeacherSignup", TeacherSignupSchema, "TeacherSignup")
+
+    app.post("/api/add_teacher_by_admin", async (req, res) => 
+    {
+        try 
+        {
+            const { name, phone, email, pass } = req.body;
+
+            // 1. Empty check
+            if (!name || !phone || !email || !pass)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            // 2. Name validation
+            if (name.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
+            }
+
+            // 3. Phone validation
+            if (!/^[0-9]{10}$/.test(phone))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Phone must be 10 digits" });
+            }
+
+            // 4. Email validation
+            if (!/\S+@\S+\.\S+/.test(email))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            }
+
+            // 5. Password validation
+            if (pass.length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Password must be at least 3 characters" });
+            }
+
+            const existingUser = await TeacherSignupModel.findOne({ email: email });
+            if (existingUser)
+            {
+                return res.status(409).json({ statuscode: 0, msg: "Email already registered" });
+            }
+
+            const newrecord = new TeacherSignupModel({ name: name, phone: phone, email: email, password: pass, usertype: "normal" })
+            const result = await newrecord.save();
+            if (result) 
+            {
+                return res.status(201).json({ statuscode: 1, msg: "Teacher Added successfully" });
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "Teacher not Added successfully" });
+            }
+        }
+        catch (e) 
+        {
+            console.log(e.message)
+            return res.status(500).json({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.post("/api/add_teacher_by_itself", async (req, res) => 
+    {
+        try 
+        {
+            const { name, phone, email, pass } = req.body;
+
+            // 1. Empty check
+            if (!name || !phone || !email || !pass)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            // 2. Name validation
+            if (name.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
+            }
+
+            // 3. Phone validation
+            if (!/^[0-9]{10}$/.test(phone))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Phone must be 10 digits" });
+            }
+
+            // 4. Email validation
+            if (!/\S+@\S+\.\S+/.test(email))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            }
+
+            // 5. Password validation
+            if (pass.length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Password must be at least 3 characters" });
+            }
+
+            const existingUser = await TeacherSignupModel.findOne({ email: email });
+            if (existingUser)
+            {
+                return res.status(409).json({ statuscode: 0, msg: "Email already registered" });
+            }
+
+            const newrecord = new TeacherSignupModel({ name: name, phone: phone, email: email, password: pass, usertype: "normal" })
+            const result = await newrecord.save();
+            if (result) 
+            {
+                return res.status(201).json({ statuscode: 1, msg: "Signup successfully" });
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "Signup not successfully" });
+            }
+        }
+        catch (e) 
+        {
+            console.log(e.message)
+            return res.status(500).json({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.post("/api/staff_login", async (req, res) =>
+    {
+        try
+        {
+            const { email, pass } = req.body;
+
+            // 1. Empty check
+            if (!email || !pass)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            if (!/\S+@\S+\.\S+/.test(email))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            }
+
+            if (pass.length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Password must be at least 3 characters" });
+            }
+
+            const result = await TeacherSignupModel.findOne({ email: email, password: pass }).select("-password").select("-phone");
+            console.log(result)
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Incorrect Email/Password" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, teacherdata: result, msg: "Login Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.get("/api/fetch_all_Teachers_to_admin", async (req, res) =>
+    {
+        try
+        {
+            const result = await TeacherSignupModel.find()
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Teacher Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, allteachers_list: result, msg: "Teachers Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_admin_profile/:email", async (req, res) =>
+    {
+        try
+        {
+            if (!/\S+@\S+\.\S+/.test(req.params.email))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            }
+
+            const result = await TeacherSignupModel.findOne({ email: req.params.email })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Profile Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, profile: result, msg: "Profile Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_teacher_profile/:email", async (req, res) =>
+    {
+        try
+        {
+            if (!/\S+@\S+\.\S+/.test(req.params.email))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            }
+
+            const result = await TeacherSignupModel.findOne({ email: req.params.email })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Profile Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, profile: result, msg: "Profile Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.get("/api/search_teacher_by_admin/:em", async (req, res) =>
+    {
+        try
+        {
+            if (!/\S+@\S+\.\S+/.test(req.params.em))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            }
+
+            const result = await TeacherSignupModel.findOne({ email: req.params.em })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Teacher Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, teacher_data: result, msg: "Teacher Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_teacher_data_by_admin/:tid", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await TeacherSignupModel.findOne({ _id: req.params.tid })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Teacher Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, teacher_data: result })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.put("/api/update_teacher_by_admin", async (req, res) =>
+    {
+        try
+        {
+            const { name, phone, usertype, tid } = req.body;
+
+            if (!name || !phone || !usertype)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            if (name.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
+            }
+
+            if (!/^[0-9]{10}$/.test(phone))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Phone Number must be 10 digits" });
+            }
+
+            const result = await TeacherSignupModel.updateOne({ _id: tid }, { $set: { name: name, phone: phone, usertype: usertype } })
+
+            if (result.modifiedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Teacher Updated Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Teacher Not Updated Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.put("/api/update_admin_profile", async (req, res) =>
+    {
+        try
+        {
+            const { name, phone, email } = req.body;
+
+            if (!name || !phone || !email)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            if (name.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
+            }
+
+            if (!/^[0-9]{10}$/.test(phone))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Phone Number must be 10 digits" });
+            }
+
+            const result = await TeacherSignupModel.updateOne({ email: email }, { $set: { name: name, phone: phone } })
+
+            if (result.modifiedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "profile Updated Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "profile Not Updated Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.put("/api/update_teacher_profile", async (req, res) =>
+    {
+        try
+        {
+            const { name, phone, email } = req.body;
+
+            if (!name || !phone || !email)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            if (name.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
+            }
+
+            if (!/^[0-9]{10}$/.test(phone))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Phone Number must be 10 digits" });
+            }
+
+            const result = await TeacherSignupModel.updateOne({ email: email }, { $set: { name: name, phone: phone } })
+
+            if (result.modifiedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "profile Updated Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "profile Not Updated Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.delete("/api/delete_teacher_by_admin/:tid", async (req, res) =>
+    {
+        try
+        {
+            const result = await TeacherSignupModel.deleteOne({ _id: req.params.tid })
+            if (result.deletedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Teacher Deleted Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Teacher Not Deleted Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    const StudentSignupSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, studentID: { type: String, required: true, unique: true, trim: true }, password: { type: String, required: true, trim: true }, course: { type: String, required: true }, teacher_email: { type: String, required: true }, email: { type: String, required: true, unique: true, lowercase: true, trim: true }, father: { type: String, required: true, trim: true }, mother: { type: String, required: true, trim: true }, phone: { type: String, required: true, trim: true }, phone2: { type: String, required: true, trim: true }, usertype: { type: String, required: true } }, { versionKey: false });
+
+    const StudentSignupModel = mongoose.model("StudentSignup", StudentSignupSchema, "StudentSignup")
+
+    app.post("/api/add_student_by_admin", async (req, res) => 
+    {
+        try 
+        {
+            const { name, studentId, studentemail, course, phone, fathername, mothername, phone2, email } = req.body;
+
+            const allowedCourses = [
+                "AI",
+                "VLSI",
+                "ES"
+            ];
+
+            if (!name || !studentId || !studentemail || !course || !phone || !fathername || !mothername || !phone2)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            if (!allowedCourses.includes(course))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid course selected" });
+            }
+
+            if (name.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
+            }
+
+            if (fathername.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Father Name must be at least 3 characters" });
+            }
+
+            if (mothername.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Mother Name must be at least 3 characters" });
+            }
+
+            if (!/^[0-9]{10}$/.test(phone))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Phone Number must be 10 digits" });
+            }
+
+            if (!/^[0-9]{10}$/.test(phone2))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Alternative Number must be 10 digits" });
+            }
+
+            if (!/\S+@\S+\.\S+/.test(studentemail))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            }
+
+            const existingUser1 = await StudentSignupModel.findOne({ email: studentemail });
+            if (existingUser1)
+            {
+                return res.status(409).json({ statuscode: 0, msg: "Email already registered" });
+            }
+
+            const existingUser2 = await StudentSignupModel.findOne({ studentID: studentId });
+            if (existingUser2)
+            {
+                return res.status(409).json({ statuscode: 0, msg: "Student Id already registered" });
+            }
+
+            const gen_password = generate_Password_for_student(studentId);
+
+            const newrecord = new StudentSignupModel({ name: name, studentID: studentId, password: gen_password, phone: phone, phone2: phone2, teacher_email: email, email: studentemail, course: course, father: fathername, mother: mothername, usertype: "normal" })
+
+            const result = await newrecord.save();
+
+            if (result) 
+            {
+                return res.status(201).json({ statuscode: 1, msg: "Student Added successfully" });
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "Student not Added  successfully" });
+            }
+        }
+        catch (e) 
+        {
+            console.log(e.message)
+            return res.status(500).json({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.post("/api/add_student_by_teacher", async (req, res) => 
+    {
+        try 
+        {
+            const { name, studentId, studentemail, course, phone, fathername, mothername, phone2, email } = req.body;
+
+            const allowedCourses = [
+                "AI",
+                "VLSI",
+                "ES"
+            ];
+
+            if (!name || !studentId || !studentemail || !course || !phone || !fathername || !mothername || !phone2)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            if (!allowedCourses.includes(course))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid course selected" });
+            }
+
+            if (name.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
+            }
+
+            if (fathername.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Father Name must be at least 3 characters" });
+            }
+
+            if (mothername.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Mother Name must be at least 3 characters" });
+            }
+
+            if (!/^[0-9]{10}$/.test(phone))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Phone Number must be 10 digits" });
+            }
+
+            if (!/^[0-9]{10}$/.test(phone2))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Alternative Number must be 10 digits" });
+            }
+
+            if (!/\S+@\S+\.\S+/.test(studentemail))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            }
+
+            const existingUser1 = await StudentSignupModel.findOne({ email: studentemail });
+            if (existingUser1)
+            {
+                return res.status(409).json({ statuscode: 0, msg: "Email already registered" });
+            }
+
+            const existingUser2 = await StudentSignupModel.findOne({ studentID: studentId });
+            if (existingUser2)
+            {
+                return res.status(409).json({ statuscode: 0, msg: "Student Id already registered" });
+            }
+
+            const gen_password = generate_Password_for_student(studentId);
+
+            const newrecord = new StudentSignupModel({ name: name, studentID: studentId, password: gen_password, course: course, phone: phone, phone2: phone2, teacher_email: email, email: studentemail, father: fathername, mother: mothername, usertype: "normal" })
+
+            const result = await newrecord.save();
+
+            if (result) 
+            {
+                return res.status(201).json({ statuscode: 1, msg: "Student Added successfully" });
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "Student not Added  successfully" });
+            }
+        }
+        catch (e) 
+        {
+            console.log(e.message)
+            return res.status(500).json({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.get("/api/fetch_all_Students_by_teacher", async (req, res) =>
+    {
+        try
+        {
+            const result = await StudentSignupModel.find()
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Students Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, allstudents_list: result, msg: "Students Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_students_added_by_me/:teacheremail", async (req, res) =>
+    {
+        try
+        {
+            const result = await StudentSignupModel.find({ teacher_email: req.params.teacheremail })
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Students Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, students_addedbyMe: result, msg: "Students Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.delete("/api/delete_student_by_admin/:sid", async (req, res) =>
+    {
+        try
+        {
+            const result = await StudentSignupModel.deleteOne({ _id: req.params.sid })
+            if (result.deletedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Student Deleted Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Student Not Deleted Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.delete("/api/delete_1_fees_by_admin/:fid", async (req, res) =>
+    {
+        try
+        {
+            const data = await FeesUploadModel.findById(req.params.fid)
+
+            if (!data)
+            {
+                return res.status(404).send({ statuscode: 0, msg: "Fees Details not found" });
+            }
+
+            const filePath = path.join(__dirname, "uploads", "fees", data.fees_pdf);
+
+            if (fs.existsSync(filePath))
+            {
+                fs.unlinkSync(filePath);
+            }
+
+            const result = await FeesUploadModel.deleteOne({ _id: req.params.fid });
+
+            if (result.deletedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Fees Details Deleted Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Fees Details Not Deleted Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.put("/api/update_fees_status", async (req, res) =>
+    {
+        try
+        {
+            const { id, newStatus } = req.body;
+
+            const result = await FeesUploadModel.updateOne({ _id: id }, { $set: { status: newStatus } })
+
+            if (result.modifiedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Status Updated Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Status Not Updated Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
+    app.get("/api/fetch_sem_fees_detail_status/:studentID/:semester", async (req, res) =>
+    {
+        try
+        {
+            const { studentID, semester } = req.params;
+
+            if (!semester)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            const result = await FeesUploadModel.findOne({ studentID: studentID, semester: semester })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Not Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, feesstatus: result, msg: "Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.delete("/api/delete_student_by_teacher/:sid", async (req, res) =>
+    {
+        try
+        {
+            const result = await StudentSignupModel.deleteOne({ _id: req.params.sid })
+            if (result.deletedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Student Deleted Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Student Not Deleted Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_student_data_by_Admin/:sid", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await StudentSignupModel.findOne({ _id: req.params.sid })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Student Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, student_data: result })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+
+    app.get("/api/fetch_student_data_by_teacher/:sid", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await StudentSignupModel.findOne({ _id: req.params.sid })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Student Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, student_data: result })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.put("/api/update_student_data_by_admin", async (req, res) =>
+    {
+        try
+        {
+            const { name, phone, phone2, course, sid, fathername, mothername, studentemail } = req.body;
+
+            const allowedCourses = [
+                "AI",
+                "VLSI",
+                "ES"
+            ];
+
+            if (!name || !phone || !course || !phone2 || !fathername || !mothername || !studentemail)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            if (!allowedCourses.includes(course))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid course selected" });
+            }
+
+            if (name.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
+            }
+
+            if (fathername.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Father Name must be at least 3 characters" });
+            }
+
+            if (mothername.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Mother Name must be at least 3 characters" });
+            }
+
+            if (!/\S+@\S+\.\S+/.test(studentemail))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            }
+
+            if (!/^[0-9]{10}$/.test(phone))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Phone Number must be 10 digits" });
+            }
+
+            if (!/^[0-9]{10}$/.test(phone2))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Alternative Phone Number must be 10 digits" });
+            }
+
+            const result = await StudentSignupModel.updateOne({ _id: sid }, { $set: { name: name, course: course, phone: phone, phone2: phone2, father: fathername, mother: mothername, email: studentemail } })
+
+            if (result.modifiedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Student Updated Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Student Not Updated Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.put("/api/update_student_data_by_teacher", async (req, res) =>
+    {
+        try
+        {
+            const { name, course, phone, phone2, sid, fathername, mothername, studentemail } = req.body;
+
+            const allowedCourses = [
+                "AI",
+                "VLSI",
+                "ES"
+            ];
+
+            if (!name || !phone || !course || !phone2 || !fathername || !mothername || !studentemail)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            if (!allowedCourses.includes(course))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid course selected" });
+            }
+
+            if (name.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
+            }
+
+            if (fathername.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Father Name must be at least 3 characters" });
+            }
+
+            if (mothername.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Mother Name must be at least 3 characters" });
+            }
+
+            if (!/\S+@\S+\.\S+/.test(studentemail))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            }
+
+
+            if (!/^[0-9]{10}$/.test(phone))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Phone Number must be 10 digits" });
+            }
+
+            if (!/^[0-9]{10}$/.test(phone2))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Alternative Phone Number must be 10 digits" });
+            }
+
+            const result = await StudentSignupModel.updateOne({ _id: sid }, { $set: { name: name, course: course, phone: phone, phone2: phone2, father: fathername, mother: mothername, email: studentemail } })
+
+            if (result.modifiedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Student Updated Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Student Not Updated Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.get("/api/search_student_by_teacher/:studentid", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await StudentSignupModel.findOne({ studentID: req.params.studentid })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No student Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, student_data: result, msg: "Student Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/search_student_by_admin/:studentid", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await StudentSignupModel.findOne({ studentID: req.params.studentid })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No student Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, student_data: result, msg: "Student Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.get("/api/fetch_all_Students_by_admin", async (req, res) =>
+    {
+        try
+        {
+            const result = await StudentSignupModel.find()
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Students Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, allstudents_list: result, msg: "Students Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_all_fees_list_by_admin", async (req, res) =>
+    {
+        try
+        {
+            const result = await FeesUploadModel.find()
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Fees-List Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, all_Fees_list: result, msg: "Fees-List Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_students_added_by_admin/:admin_email", async (req, res) =>
+    {
+        try
+        {
+            const result = await StudentSignupModel.find({ teacher_email: req.params.admin_email })
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Students Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, students_addedbyMe: result, msg: "Students Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.post("/api/send_mail_to_student_by_admin", async (req, res) =>
+    {
+        try
+        {
+            const { name, studentpassword, studentemail, studentId } = req.body
+
+            if (!name || !studentpassword || !studentemail || !studentId)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            if (name.trim().length < 3)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
+            }
+
+            if (!/\S+@\S+\.\S+/.test(studentemail))
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            }
+
+            const result = await StudentSignupModel.findOne({ studentID: studentId })
+
+            if (result === null)
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Students Found with this Id" })
+            }
+            else
+            {
+
+                const mailOptions = {
+                    from: "sameerwalia13@gmail.com",
+                    to: studentemail,
+                    subject: 'Mail from CDAC',
+                    html: `Dear ${name}<br/><br/>Thanks for Admission in CDAC .<br/><br/>Your Student id = ${studentId}<br/><br/>
+                    Your Password = ${studentpassword}`
+                };
+
+                transporter.sendMail(mailOptions, (error, info) =>
+                {
+                    if (error)
+                    {
+                        console.log(error);
+                        res.status(200).send({ statuscode: 2, msg: "Mail Not Sent Successfully" })
+
+                    }
+                    else
+                    {
+                        console.log("Email sent: " + info.response);
+                        res.status(200).send({ statuscode: 1, msg: "Mail Sent Successfully" })
+                    }
+                });
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    const SyllabusSchema = new mongoose.Schema({ subjectname: { type: String, required: true, trim: true, unique: true }, syllabus_pdf: { type: String, required: true }, email: { type: String, required: true }, Addedon: { type: Date } }, { versionKey: false });
+
+    const SyllabusModel = mongoose.model("Syllabus", SyllabusSchema, "Syllabus")
+
+    app.post('/api/add_syllabus_by_teacher', uploadSyllabus.single('pdf'), async (req, res) =>
+    {
+        try
+        {
+            const { subjectname, email } = req.body;
+
+            const deleteFile = () =>
+            {
+                if (req.file)
+                {
+                    // const fullPath = `uploads/syllabus/${req.file.filename}`;
+                    const fullPath = path.join(__dirname, "uploads", "syllabus", req.file.filename);
+                    if (fs.existsSync(fullPath))
+                    {
+                        fs.unlinkSync(fullPath);
+                    }
+                }
+            };
+
+            if (!subjectname || !req.file)
+            {
+                deleteFile();
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            if (subjectname.trim().length < 2)
+            {
+                deleteFile();
+                return res.status(400).json({ statuscode: 0, msg: "Name must be at least 2 characters" });
+            }
+
+            const existingSubject = await SyllabusModel.findOne({ subjectname: subjectname });
+            if (existingSubject)
+            {
+                deleteFile();
+                return res.status(409).json({ statuscode: 0, msg: "Subject already Added" });
+            }
+
+            const filePath = req.file.filename;
+            // const filePath = `${req.file.filename}`;
+
+            const currentDateUTC = new Date(); // Get the current Date in GMt/UTC
+            const ISTOffset = 5.5 * 60 * 60 * 1000; // IST offset in milliseconds (5 hours 30 minutes)
+            const currentDateIST = new Date(currentDateUTC.getTime() + ISTOffset)  // convert to IST
+
+            const newrecord = new SyllabusModel({ subjectname: subjectname, syllabus_pdf: filePath, email: email, Addedon: currentDateIST })
+
+            const result = await newrecord.save()
+
+            if (result) 
+            {
+                return res.status(201).json({ statuscode: 1, msg: "Syllabus Added successfully" });
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "Syllabus not Added successfully" });
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
+    app.get("/api/fetch_all_syllabusList_by_teacher", async (req, res) =>
+    {
+        try
+        {
+            const result = await SyllabusModel.find()
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, allsyllabus_list: result, msg: "Syllabus Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_all_syllabusList_for_student", async (req, res) =>
+    {
+        try
+        {
+            const result = await SyllabusModel.find()
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, allsyllabus_list: result, msg: "Syllabus Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.delete("/api/delete_syllabus_by_teacher/:sid", async (req, res) =>
+    {
+        try
+        {
+            const data = await SyllabusModel.findById(req.params.sid)
+
+            if (!data)
+            {
+                return res.status(404).send({ statuscode: 0, msg: "Syllabus not found" });
+            }
+
+            // const filePath = "." + `uploads/syllabus/${data.syllabus_pdf}`;
+            // const filePath = `uploads/syllabus/${data.syllabus_pdf}`;
+
+            const filePath = path.join(__dirname, "uploads", "syllabus", data.syllabus_pdf);
+
+            if (fs.existsSync(filePath))
+            {
+                fs.unlinkSync(filePath);
+            }
+
+            const result = await SyllabusModel.deleteOne({ _id: req.params.sid });
+
+            if (result.deletedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Syllabus Deleted Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Syllabus Not Deleted Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_syllabusList_added_by_me_teacher/:email", async (req, res) =>
+    {
+        try
+        {
+            const result = await SyllabusModel.find({ email: req.params.email })
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, my_syllabus_list: result, msg: "Syllabus Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+
+    // student server starts
+
+    app.post("/api/student_login", async (req, res) =>
+    {
+        try
+        {
+            const { studentID, pass } = req.body;
+
+            if (!studentID || !pass)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            const result = await StudentSignupModel.findOne({ studentID: studentID, password: pass }).select("-password").select("-phone").select("-phone2").select("-father").select("-mother").select("-teacher_email")
+            console.log(result)
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Incorrect StudentID/Password" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, studentdata: result, msg: "Login Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    const FeesUploadSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, email: { type: String, required: true }, studentID: { type: String, required: true }, semester: { type: String, required: true }, course: { type: String, required: true }, fees_pdf: { type: String, required: true }, Addedon: { type: Date }, status: { type: String, default: "Pending", required: true } }, { versionKey: false });
+
+    const FeesUploadModel = mongoose.model("FeesUpload", FeesUploadSchema, "FeesUpload")
+
+
+    app.post('/api/upload_fees_by_student', uploadFees.single('pdf'), async (req, res) =>
+    {
+        try
+        {
+            const { semester, studentID, email, name, course } = req.body;
+
+            if (!semester || !req.file)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            const filePath = req.file.filename;
+            // const filePath = `${req.file.filename}`;
+
+            const currentDateUTC = new Date(); // Get the current Date in GMt/UTC
+            const ISTOffset = 5.5 * 60 * 60 * 1000; // IST offset in milliseconds (5 hours 30 minutes)
+            const currentDateIST = new Date(currentDateUTC.getTime() + ISTOffset)  // convert to IST
+
+            const newrecord = new FeesUploadModel({ name: name, email: email, studentID: studentID, semester: semester, course: course, fees_pdf: filePath, Addedon: currentDateIST, status: "Pending" })
+
+            const result = await newrecord.save()
+
+            if (result) 
+            {
+                return res.status(201).json({ statuscode: 1, msg: "Fees Pdf Uploaded Successfully" });
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "Fees Pdf not Uploaded Successfully" });
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
+
+
+
+    // student server ends
+
+
+
+    app.listen(port, () =>
+    {
+        console.log(`Server running on port ${port}`);
+    });
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

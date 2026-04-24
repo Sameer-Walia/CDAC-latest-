@@ -1,0 +1,288 @@
+#studentcorner_page .breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+}
+
+#studentcorner_page .breadcrumb .crumb {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #3b8dbd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#studentcorner_page .breadcrumb .crumb:hover {
+    background: #dbeafe;
+    color: #0d6efd;
+    transform: translateY(-2px);
+}
+
+#studentcorner_page .breadcrumb .separator {
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+#studentcorner_page .breadcrumb .active {
+    background: #3b8dbd;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+@media (max-width: 1440px) {
+    #studentcorner_page .breadcrumb {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 1024px) {
+    #studentcorner_page .breadcrumb {
+        margin-top: -8px;
+    }
+}
+
+@media (max-width: 768px) {
+    #studentcorner_page .breadcrumb {
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 426px) {
+    #studentcorner_page .breadcrumb {
+        font-size: 13px;
+        margin-top: 40px;
+    }
+
+    #studentcorner_page .breadcrumb .crumb {
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    #studentcorner_page .breadcrumb {
+        margin-top: 45px;
+        font-size: 12px;
+    }
+}
+
+#studentcorner_page .divide {
+    display: flex;
+    gap: 40px;
+}
+
+#studentcorner_page .content {
+    flex: 3;
+}
+
+#studentcorner_page .title {
+    font-size: 28px;
+    color: #3b8dbd;
+    margin-bottom: 20px;
+}
+
+
+#studentcorner_page .sidebar {
+    flex: 1;
+    background: linear-gradient(145deg, #f0f6fa, #dce9f2);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+#studentcorner_page .sidebar-title {
+    color: #3b8dbd;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#studentcorner_page .sidebar-title::after {
+    content: "";
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(to right, #3b8dbd, #0982e4);
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    border-radius: 10px;
+}
+
+#studentcorner_page .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#studentcorner_page .sidebar li {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #333;
+    background: transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#studentcorner_page .sidebar li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+#studentcorner_page .sidebar li:hover a {
+    color: #3b8dbd;
+}
+
+#studentcorner_page .sidebar .active a {
+    color: white;
+}
+
+#studentcorner_page .sidebar li:hover {
+    background: #e3f2fd;
+    transform: translateX(5px);
+    color: #0d6efd;
+}
+
+#studentcorner_page .sidebar li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #3b8dbd, #4dabf7);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+#studentcorner_page .sidebar li:hover::before {
+    opacity: 1;
+}
+
+#studentcorner_page .sidebar .active {
+    background: linear-gradient(to right, #3b8dbd, #4dabf7);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+#studentcorner_page .sidebar .active:hover {
+    transform: none;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    #studentcorner_page .divide {
+        flex-direction: column;
+    }
+
+    #studentcorner_page .sidebar {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 426px) {
+    #studentcorner_page {
+        padding: 15px;
+    }
+
+    #studentcorner_page .title {
+        font-size: 22px;
+    }
+
+}
+
+/* student antiragging Table container css start*/
+
+#studentcorner_page #student_antiragging_table .custom-table {
+    border-radius: 12px;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+#studentcorner_page #student_antiragging_table .custom-table thead {
+    background: linear-gradient(to right, #0d6efd, #4dabf7);
+    color: white;
+}
+
+#studentcorner_page #student_antiragging_table .custom-table th {
+    padding: 14px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+#studentcorner_page #student_antiragging_table .custom-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #444;
+}
+
+#studentcorner_page #student_antiragging_table .custom-table tbody tr:nth-child(even) {
+    background-color: #f8fbff;
+}
+
+#studentcorner_page #student_antiragging_table .custom-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+#studentcorner_page #student_antiragging_table .custom-table tbody tr:hover {
+    background-color: #e3f2fd;
+    transform: scale(1.01);
+}
+
+#studentcorner_page #student_antiragging_table .custom-table td:first-child {
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+#studentcorner_page #student_antiragging_table .custom-table thead tr:first-child th:first-child {
+    border-top-left-radius: 12px;
+}
+
+#studentcorner_page #student_antiragging_table .custom-table thead tr:first-child th:last-child {
+    border-top-right-radius: 12px;
+}
+
+@media (max-width: 768px) {
+
+    #studentcorner_page #student_antiragging_table .custom-table th,
+    #studentcorner_page #student_antiragging_table .custom-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    #studentcorner_page #student_antiragging_table .custom-table th,
+    #studentcorner_page #student_antiragging_table .custom-table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+#studentcorner_page #student_antiragging_table .pdf_cal_link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+#studentcorner_page #student_antiragging_table .pdf_cal_link:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* student antiragging Table container css end*/

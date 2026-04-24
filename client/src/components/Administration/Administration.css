@@ -1,0 +1,329 @@
+#adminstration_page .breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+}
+
+#adminstration_page .breadcrumb .crumb {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #3b8dbd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#adminstration_page .breadcrumb .crumb:hover {
+    background: #dbeafe;
+    color: #0d6efd;
+    transform: translateY(-2px);
+}
+
+#adminstration_page .breadcrumb .separator {
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+#adminstration_page .breadcrumb .active {
+    background: #3b8dbd;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+@media (max-width: 1440px) {
+    #adminstration_page .breadcrumb {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 1024px) {
+    #adminstration_page .breadcrumb {
+        margin-top: -8px;
+    }
+}
+
+@media (max-width: 768px) {
+    #adminstration_page .breadcrumb {
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 426px) {
+    #adminstration_page .breadcrumb {
+        font-size: 13px;
+        margin-top: 40px;
+    }
+
+    #adminstration_page .breadcrumb .crumb {
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    #adminstration_page .breadcrumb {
+        margin-top: 85px;
+        font-size: 12px;
+    }
+}
+
+#adminstration_page .divide {
+    display: flex;
+    gap: 40px;
+}
+
+#adminstration_page .content {
+    flex: 3;
+}
+
+#adminstration_page .title {
+    font-size: 28px;
+    color: #3b8dbd;
+    margin-bottom: 20px;
+}
+
+
+#adminstration_page .sidebar {
+    flex: 1;
+    background: linear-gradient(145deg, #f0f6fa, #dce9f2);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+#adminstration_page .sidebar-title {
+    color: #3b8dbd;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#adminstration_page .sidebar-title::after {
+    content: "";
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(to right, #3b8dbd, #0982e4);
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    border-radius: 10px;
+}
+
+#adminstration_page .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#adminstration_page .sidebar li {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #333;
+    background: transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#adminstration_page .sidebar li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+#adminstration_page .sidebar li:hover a {
+    color: #3b8dbd;
+}
+
+#adminstration_page .sidebar .active a {
+    color: white;
+}
+
+#adminstration_page .sidebar li:hover {
+    background: #e3f2fd;
+    transform: translateX(5px);
+    color: #0d6efd;
+}
+
+#adminstration_page .sidebar li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #3b8dbd, #4dabf7);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+#adminstration_page .sidebar li:hover::before {
+    opacity: 1;
+}
+
+#adminstration_page .sidebar .active {
+    background: linear-gradient(to right, #3b8dbd, #4dabf7);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+#adminstration_page .sidebar .active:hover {
+    transform: none;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    #adminstration_page .divide {
+        flex-direction: column;
+    }
+
+    #adminstration_page .sidebar {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 426px) {
+    #adminstration_page {
+        padding: 15px;
+    }
+
+    #adminstration_page .title {
+        font-size: 22px;
+    }
+
+}
+
+
+/* Director css start */
+
+
+#adminstration_page .director-card {
+    max-width: 750px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+#adminstration_page .director-img {
+    width: 260px;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+
+#adminstration_page .director-name {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 5px 0;
+}
+
+#adminstration_page .director-designation {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* #adminstration_page .director-message {
+    text-align: justify;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #333;
+    margin-top: 10px;
+} */
+
+#adminstration_page .director-sign {
+    text-align: right;
+    margin-top: 20px;
+    font-weight: 500;
+}
+
+/* Director css close */
+
+
+/* Main container */
+#adminstration_page .rules-container {
+    max-width: 850px;
+    margin: 25px auto;
+    padding: 20px 25px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Section headings */
+#adminstration_page .section-title {
+    color: #d9480f;
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-left: 4px solid #0077b6;
+    padding-left: 10px;
+}
+
+/* Ordered list */
+#adminstration_page .rules-list {
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+
+#adminstration_page .rules-list li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Alphabetical list */
+#adminstration_page .rules-list.alpha {
+    list-style-type: lower-alpha;
+}
+
+/* Paragraph text */
+#adminstration_page .rules-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #444;
+    text-align: justify;
+}
+
+/* Title styling */
+#adminstration_page .title.hd {
+    text-align: left;
+    color: #3b8dbd;
+    margin-bottom: 15px;
+}
+
+/* Improve spacing with sidebar layout */
+#adminstration_page .content {
+    flex: 3;
+}
+
+#adminstration_page .sidebar {
+    flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #adminstration_page .rules-container {
+        padding: 15px;
+    }
+
+    #adminstration_page .section-title {
+        font-size: 18px;
+    }
+}

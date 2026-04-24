@@ -1,0 +1,698 @@
+/* marquee css start */
+
+#marquee_tag_home {
+    background: #ffffff;
+    border-bottom: 2px solid #e8edf2;
+    padding: 10px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#marquee_tag_home a {
+    color: #5fa8d3;
+    font-weight: 600;
+    text-decoration: none;
+    margin-right: 40px;
+    transition: all 0.3s ease;
+}
+
+#marquee_tag_home a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+
+@media (max-width: 1440px) {
+
+    #marquee_tag_home {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 1024px) {
+
+    #marquee_tag_home {
+        margin-top: 4px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    #marquee_tag_home {
+        margin-top: 65px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    #marquee_tag_home {
+        margin-top: 50px;
+    }
+}
+
+@media (max-width: 320px) {
+
+    #marquee_tag_home {
+        margin-top: 50px;
+    }
+}
+
+
+/* marquee css end */
+
+
+
+/* movinghome css start */
+
+#movinghome {
+    position: relative;
+    overflow: hidden;
+}
+
+#movinghome .main-heading {
+    font-size: 58px;
+}
+
+@media (max-width: 768px) {
+
+    #movinghome .main-heading {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    #movinghome .main-heading {
+        font-size: 30px;
+    }
+}
+
+#movinghome .ccc {
+    color: #5fa8d3;
+}
+
+#movinghome .custom-img {
+    height: 400px;
+    width: 100%;
+    object-fit: cover;
+}
+
+
+#movinghome::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image: url('/assets/images/CDAC_Image3.avif');
+    background-size: auto 100%;
+    background-position: 0 center;
+
+    z-index: 0;
+
+    animation: moveBgHorizontal 15s linear infinite;
+}
+
+#movinghome::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.75);
+    z-index: 1;
+}
+
+#movinghome .container {
+    position: relative;
+    z-index: 2;
+}
+
+@keyframes moveBgHorizontal {
+    0% {
+        background-position: 0px center;
+    }
+
+    50% {
+        background-position: 200px center;
+    }
+
+    100% {
+        background-position: 0px center;
+    }
+}
+
+@media (max-width: 769px) {
+
+    #movinghome {
+        padding-top: 40px;
+    }
+}
+
+
+/* movinghome css close  */
+
+
+
+
+/* about css start */
+
+#aboutHome {
+    margin-top: -50px;
+}
+
+#aboutHome .main-heading {
+    font-size: 58px;
+}
+
+@media (max-width: 768px) {
+
+    #aboutHome .main-heading {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    #aboutHome .main-heading {
+        font-size: 30px;
+    }
+}
+
+#aboutHome .ccc {
+    color: #5fa8d3;
+}
+
+#aboutHome .custom-img {
+    height: 400px;
+    width: 100%;
+    object-fit: cover;
+}
+
+/* about css close  */
+
+
+#custom_bg .custom-background {
+    background-image: url("/assets/images/hostel.png"), linear-gradient(to right, rgb(91, 66, 156), rgb(40, 72, 110));
+    background-blend-mode: overlay;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    height: 300px;
+}
+
+#custom_bg .custom-text-center {
+    text-align: center;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+@media (min-width: 640px) {
+
+    #custom_bg.custom-text-center {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+
+#custom_bg .custom-title {
+    font-size: 2.25rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 1rem;
+    padding-top: 70px;
+}
+
+#custom_bg .custom-subtitle {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: white;
+    margin-bottom: 2rem;
+}
+
+#custom_bg .custom-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+#custom_bg .custom-button-start,
+#custom_bg .custom-button-contact,
+#custom_bg .custom-button-admin {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: white;
+    font-weight: bold;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+#custom_bg .custom-button-start {
+    background-color: #323290;
+}
+
+#custom_bg .custom-button-start:hover {
+    background-color: #1e3a8a;
+}
+
+#custom_bg .custom-button-contact {
+    background-color: #ed1f26;
+}
+
+#custom_bg .custom-button-contact:hover {
+    background-color: #db2777;
+}
+
+#custom_bg .custom-button-admin {
+    background-color: rgb(5, 224, 5);
+}
+
+#custom_bg .custom-button-admin:hover {
+    background-color: #5ad142;
+}
+
+
+@media (max-width: 426px) {
+
+    #custom_bg .custom-title {
+        font-size: 1.2rem;
+    }
+
+    #custom_bg .custom-subtitle {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    #custom_bg .custom-buttons {
+        gap: 0.2rem;
+    }
+
+    #custom_bg .custom-buttons {
+        gap: 0.4rem;
+    }
+
+
+    #custom_bg .custom-button-start,
+    #custom_bg .custom-button-contact,
+    #custom_bg .custom-button-admin {
+        font-size: 0.6rem;
+        padding: 3;
+        color: white;
+        font-weight: bold;
+        border-radius: 0.375rem;
+        text-decoration: none;
+        transition: background-color 0.3s;
+
+    }
+}
+
+
+/* process css start */
+
+#process .effect {
+    position: relative;
+}
+
+#process .eff {
+    background-color: rgba(0, 90, 255, 0.65);
+    color: white;
+    position: absolute;
+    top: 0%;
+    height: 100%;
+    padding: 30px;
+    padding-top: 50px;
+    transform: scale(0);
+    /* hide */
+    transition: all 0.5s ease-out;
+}
+
+#process .effect:hover .eff {
+    transform: scale(1);
+    /* show */
+}
+
+#process .eff h4 {
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 28px;
+    margin-bottom: 18px;
+}
+
+#process .eff p {
+    color: white;
+    opacity: 1;
+}
+
+#process .effect span.fa {
+    color: #fff;
+    background-color: #5fa8d3;
+    padding: 10px;
+    border-bottom-left-radius: 5px;
+    position: absolute;
+    bottom: 0%;
+    left: 0%;
+    transition: all 0.4s linear;
+}
+
+#process .effect:hover span.fa {
+    opacity: 0;
+}
+
+@media (max-width: 1024px) {
+
+    #process .eff h4 {
+        font-size: 15px;
+    }
+
+    #process .eff p {
+        font-size: 14px;
+    }
+
+}
+
+@media (max-width: 769px) {
+
+    #process .eff h4 {
+        font-size: 26px;
+    }
+
+    #process .eff p {
+        font-size: 20px;
+    }
+
+}
+
+@media (max-width: 426px) {
+
+    #process .eff h4 {
+        font-size: 10px;
+        margin-bottom: 5px;
+    }
+
+    #process .eff p {
+        font-size: 8px;
+        line-height: 2;
+    }
+
+}
+
+@media (max-width: 378px) {
+
+    #process .eff h4 {
+        font-size: 8px;
+
+    }
+
+    #process .eff p {
+        font-size: 6px;
+        line-height: 2;
+    }
+
+}
+
+@media (max-width: 321px) {
+
+    #process .eff h4 {
+        font-size: 6px;
+        margin-bottom: 0;
+
+    }
+
+    #process .eff p {
+        font-size: 5px;
+        line-height: 2;
+    }
+
+}
+
+/* process css close */
+
+
+
+/* solution css start */
+
+#solution .nav-item {
+    font-weight: 600;
+    font-size: 18px;
+    color: #3f3a64;
+    margin-right: 15px;
+}
+
+#solution .nav-item button {
+    background-color: #f8f9fa;
+    color: #3f3a64;
+    padding: 15px;
+}
+
+#solution .nav-item button.active {
+    background-color: #5fa8d3 !important;
+    color: white;
+}
+
+#solution .tab-pane h3 {
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 30px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    color: #3f3a64;
+}
+
+#solution .tab-pane li {
+    margin-bottom: 10px;
+    color: #3f3a64;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+#solution .tab-pane li span {
+    font-size: 12px;
+    margin-right: 16px;
+    opacity: 0.4;
+}
+
+/* tabs css close */
+#solution .accordion button {
+    padding: 1em 0;
+    color: #3f3a64;
+    font-size: 1.15rem;
+    font-weight: 700;
+    box-shadow: none;
+    position: relative;
+}
+
+#solution .accordion button:hover {
+    color: #5fa8d3 !important;
+}
+
+#solution .accordion .accordion-item {
+    border: none;
+    border-bottom: 1px solid #eee;
+}
+
+#solution .accordion .accordion-body {
+    padding-left: 0px;
+}
+
+#solution .accordion-button:not(.collapsed) {
+    color: white !important;
+    background-color: #5fa8d3 !important;
+    padding: 15px 20px;
+    box-shadow: none;
+    border-radius: 5px;
+}
+
+#solution .accordion-button:not(.collapsed):hover {
+    color: white !important;
+}
+
+#solution .accordion-button::after {
+    background-image: none;
+}
+
+#solution .accordion-button span {
+    position: absolute;
+    right: 3%;
+}
+
+#solution .accordion-button span.plus {
+    display: block;
+}
+
+#solution .accordion-button span.minus {
+    display: none;
+}
+
+#solution .accordion-button:not(.collapsed) span.plus {
+    display: none;
+}
+
+#solution .accordion-button:not(.collapsed) span.minus {
+    display: block;
+}
+
+/* accordian close */
+/* solution css close */
+
+
+#products .pro {
+    background-color: white;
+    box-shadow: 0px 9px 24px 5px rgba(0, 0, 0, 0.2);
+    padding: 2.5rem 2rem;
+    transition: all 0.5 ease-out;
+}
+
+#products .pro span {
+    font-size: 30px;
+    color: #5fa8d3;
+    margin-bottom: 20px;
+    transition: all 0.5s ease;
+    transform: scale(1);
+}
+
+#products .pro h3 {
+    font-size: 24px;
+    line-height: 34px;
+    font-weight: 700;
+    color: #5fa8d3;
+    transition: all 0.3s ease;
+}
+
+#products .pro p {
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+#products .pro a {
+    font-weight: 600;
+    font-size: 16px;
+    color: #3f3a64;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#products .pr1:hover {
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.74), rgba(0, 0, 0, 0.67)), url(/assets/images/s1.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#products .pr2:hover {
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.74), rgba(0, 0, 0, 0.67)), url(/assets/images/s2.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#products .pr3:hover {
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.74), rgba(0, 0, 0, 0.67)), url(/assets/images/s3.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#products .pro:hover h3,
+#products .pro:hover p,
+#products .pro:hover a,
+#products .pro:hover span {
+    color: white;
+}
+
+#products .pro:hover span {
+    transform: scale(1.1);
+}
+
+/* products css close */
+
+
+/* join css start */
+
+/* PRIMARY BUTTON (Gradient) */
+#join .btn-primary-custom {
+    background: linear-gradient(45deg, #4a90c2, #5fa8d3);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover */
+#join .btn-primary-custom:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+/* OUTLINE BUTTON */
+#join .btn-outline-custom {
+    border: 2px solid #5fa8d3;
+    color: #5fa8d3;
+    padding: 8px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+/* Hover */
+#join .btn-outline-custom:hover {
+    background: linear-gradient(45deg, #4a90c2, #5fa8d3);
+    color: white;
+    border-color: transparent;
+    transform: translateY(-3px);
+}
+
+/* join css close */
+
+
+/* crousel css start */
+
+.custom-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+}
+
+.custom-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.custom-img-box {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 15px;
+    background: #f5f5f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-img-box img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.custom-content h5 {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.custom-content p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* crousel css end */
