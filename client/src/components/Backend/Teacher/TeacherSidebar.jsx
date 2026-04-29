@@ -79,6 +79,13 @@ function TeacherSidebar({ collapse, setCollapse })
                             </Link>
                         </li>
 
+                        <li data-title="all_marks_list" className={activeTab === "all_marks_list" ? "active" : ""}>
+                            <Link to="/all_students_marks_list_to_teacher" onClick={() => handleTabClick("all_marks_list")}>
+                                <span className="icon">📝</span>
+                                <span className="text">Upload Marks</span>
+                            </Link>
+                        </li>
+
                         <li data-title="teacherprofile" className={activeTab === "teacherprofile" ? "active" : ""}>
                             <Link to="/teacherprofile" onClick={() => handleTabClick("teacherprofile")}>
                                 <span className="icon">💬</span>

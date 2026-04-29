@@ -137,11 +137,11 @@
     font-weight: bold;
 }
 
-#student_page .pending {
+#student_page .status-box .pending {
     color: red;
 }
 
-#student_page .paid {
+#student_page .status-box .paid {
     color: green;
 }
 
@@ -211,7 +211,6 @@
 
 #student_page #student_fees_upload_table .custom-fee-table td:first-child {
     text-align: center;
-    width: 60px;
 }
 
 #student_page #student_fees_upload_table .custom-fee-table td:last-child {

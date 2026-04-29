@@ -30,7 +30,11 @@ function UploadFees_ByStudent()
         try
         {
             setloading(true);
-
+            if (!semester)
+            {
+                toast.error("Please select semester");
+                return;
+            }
             const formData = new FormData();
             formData.append("semester", semester);
             formData.append("studentID", studentID);
@@ -52,7 +56,7 @@ function UploadFees_ByStudent()
                 setPdf(null);
                 if (fileInputRef.current) 
                 {
-                    fileInputRef.current.value = ''; // Reset the value to clear the input
+                    fileInputRef.current.value = '';
                 }
             }
             else
@@ -71,14 +75,12 @@ function UploadFees_ByStudent()
         }
     }
 
-
-    // This causes UI flicker / wrong display briefly
     useEffect(() =>
     {
         if (semester)
         {
-            setStatusType("");      // reset
-            setfeesstatus(null);    // reset
+            setStatusType("");
+            setfeesstatus(null);
             fetch_sem_fees_detail_status()
         }
     }, [semester])
@@ -91,18 +93,19 @@ function UploadFees_ByStudent()
             const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_sem_fees_detail_status/${studentID}/${semester}`,)
             if (resp.data.statuscode === 1)
             {
-                setfeesstatus(resp.data.feesstatus);
+                setfeesstatus(resp.data.fees_status);
 
-                if (resp.data.feesstatus.status === "Paid")
+                if (resp.data.fees_status.status === "Paid")
                 {
                     setStatusType("paid");
-                } else
+                }
+                else
                 {
                     setStatusType("pending");
                 }
-            } else
+            }
+            else
             {
-                // NOT FOUND
                 setfeesstatus(null);
                 setStatusType("notfound");
             }
@@ -155,11 +158,11 @@ function UploadFees_ByStudent()
                         </thead>
 
                         <tbody>
-                            <tr><td>1</td><td>NAME</td><td>DIRECTOR CDAC MOHALI</td></tr>
-                            <tr><td>2</td><td>BANK</td><td>STATE BANK OF INDIA</td></tr>
-                            <tr><td>3</td><td>ACCOUNT NO.</td><td>55034442545</td></tr>
-                            <tr><td>4</td><td>IFSC Code</td><td>SBIN0050502</td></tr>
-                            <tr><td>5</td><td>Branch</td><td>SBI Phase 7 Mohali</td></tr>
+                            <tr><td>NAME</td><td>DIRECTOR CDAC MOHALI</td></tr>
+                            <tr><td>BANK</td><td>STATE BANK OF INDIA</td></tr>
+                            <tr><td>ACCOUNT NO.</td><td>55034442545</td></tr>
+                            <tr><td>IFSC Code</td><td>SBIN0050502</td></tr>
+                            <tr><td>Branch</td><td>SBI Phase 7 Mohali</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -182,17 +185,18 @@ function UploadFees_ByStudent()
 
                 </div>
 
-                {semester && !loading && (
+                {
+                    semester &&
                     <>
-                        {/* ✅ PAID */}
-                        {statusType === "paid" && (
+                        {
+                            statusType === "paid" &&
                             <div className="status-box">
                                 Status: <span className="paid">Paid</span>
                             </div>
-                        )}
+                        }
 
-                        {/* 🟡 PENDING OR NOT FOUND */}
-                        {(statusType === "pending" || statusType === "notfound") && (
+                        {
+                            (statusType === "pending" || statusType === "notfound") &&
                             <>
                                 <div className="status-box">
                                     Status: <span className="pending">Pending</span>
@@ -227,12 +231,12 @@ function UploadFees_ByStudent()
                                             setPdf(file);
                                         }}
                                     />
-                                    <button onClick={submit_fees_proof}>Submit</button>
+                                    <button onClick={submit_fees_proof} disabled={!pdf} >Submit</button>
                                 </div>
                             </>
-                        )}
+                        }
                     </>
-                )}
+                }
 
             </div>
         </div>

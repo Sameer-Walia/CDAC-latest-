@@ -720,3 +720,92 @@
 
 
 /* Teacher PROFILE CSS ends */
+
+
+
+
+
+/* add mst marks css starts  */
+
+#Teacher_page .marksForm_container {
+    width: 550px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+#Teacher_page .marksForm_title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+}
+
+#Teacher_page .marksForm_group {
+    position: relative;
+}
+
+#Teacher_page .marksForm_input {
+    width: 100%;
+    padding: 12px 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+#Teacher_page .marksForm_input:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 8px rgba(74, 144, 226, 0.3);
+}
+
+#Teacher_page .marksForm_label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    font-size: 13px;
+    color: #888;
+    background: white;
+    padding: 0 5px;
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+#Teacher_page .marksForm_input:focus+.marksForm_label,
+#Teacher_page .marksForm_input:not(:placeholder-shown)+.marksForm_label {
+    top: -8px;
+    font-size: 11px;
+    color: #4a90e2;
+}
+
+#Teacher_page .marksForm_button {
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #4a90e2, #3b8dbd);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#Teacher_page .marksForm_button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+#Teacher_page .marksForm_button:active {
+    transform: scale(0.97);
+}
+
+
+/* add mst marks css ends  */

@@ -25,6 +25,13 @@ function SearchTeacher_ByAdmin()
         try
         {
             setloading(true)
+
+            if (email === "")
+            {
+                toast.error("Enter Teacher Email")
+                return
+            }
+
             const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_teacher_by_admin/${email}`);
 
             if (resp.data.statuscode === 1)

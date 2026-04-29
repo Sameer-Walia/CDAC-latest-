@@ -87,7 +87,7 @@ function UpdateTeacher_ByAdmin()
         }
         catch (e)
         {
-            toast.error("Error Occured " + (e.response?.data?.msg || e.message))
+            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
         }
         finally
         {
@@ -126,19 +126,19 @@ function UpdateTeacher_ByAdmin()
                             <div className="form-group">
                                 <label>Name</label>
                                 <input type="text" placeholder="Enter teacher name" value={name || ""}
-                                    required onChange={(e) => setname(e.target.value)} />
+                                    required minLength={3} onChange={(e) => setname(e.target.value)} />
                             </div>
 
                             <div className="form-group">
                                 <label>Email</label>
-                                <input type="email" disabled placeholder="Enter email" value={email || ""}
+                                <input type="email" required disabled placeholder="Enter email" value={email || ""}
                                 />
                             </div>
 
                             <div className="form-group">
                                 <label>Phone</label>
                                 <input type="text" placeholder="Enter phone number" value={phone || ""}
-                                    required onChange={(e) => setphone(e.target.value)} />
+                                    required minLength={10} maxLength={10} onChange={(e) => setphone(e.target.value)} />
                             </div>
 
                             <div className="form-group">

@@ -401,6 +401,7 @@ else
     {
         try
         {
+
             if (!/\S+@\S+\.\S+/.test(req.params.em))
             {
                 return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
@@ -594,6 +595,8 @@ else
 
 
     const StudentSignupSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, studentID: { type: String, required: true, unique: true, trim: true }, password: { type: String, required: true, trim: true }, course: { type: String, required: true }, teacher_email: { type: String, required: true }, email: { type: String, required: true, unique: true, lowercase: true, trim: true }, father: { type: String, required: true, trim: true }, mother: { type: String, required: true, trim: true }, phone: { type: String, required: true, trim: true }, phone2: { type: String, required: true, trim: true }, usertype: { type: String, required: true } }, { versionKey: false });
+
+    StudentSignupSchema.index({ teacher_email: 1 });
 
     const StudentSignupModel = mongoose.model("StudentSignup", StudentSignupSchema, "StudentSignup")
 
@@ -838,96 +841,8 @@ else
         }
     })
 
-    app.delete("/api/delete_1_fees_by_admin/:fid", async (req, res) =>
-    {
-        try
-        {
-            const data = await FeesUploadModel.findById(req.params.fid)
 
-            if (!data)
-            {
-                return res.status(404).send({ statuscode: 0, msg: "Fees Details not found" });
-            }
 
-            const filePath = path.join(__dirname, "uploads", "fees", data.fees_pdf);
-
-            if (fs.existsSync(filePath))
-            {
-                fs.unlinkSync(filePath);
-            }
-
-            const result = await FeesUploadModel.deleteOne({ _id: req.params.fid });
-
-            if (result.deletedCount === 1) 
-            {
-                res.status(200).send({ statuscode: 1, msg: "Fees Details Deleted Successfully" })
-            }
-            else 
-            {
-                res.status(200).send({ statuscode: 0, msg: "Fees Details Not Deleted Successfully" })
-            }
-
-        }
-        catch (e)
-        {
-            console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
-        }
-    })
-
-    app.put("/api/update_fees_status", async (req, res) =>
-    {
-        try
-        {
-            const { id, newStatus } = req.body;
-
-            const result = await FeesUploadModel.updateOne({ _id: id }, { $set: { status: newStatus } })
-
-            if (result.modifiedCount === 1) 
-            {
-                res.status(200).send({ statuscode: 1, msg: "Status Updated Successfully" })
-            }
-            else 
-            {
-                res.status(200).send({ statuscode: 0, msg: "Status Not Updated Successfully" })
-            }
-        }
-        catch (e)
-        {
-            console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
-        }
-    });
-
-    app.get("/api/fetch_sem_fees_detail_status/:studentID/:semester", async (req, res) =>
-    {
-        try
-        {
-            const { studentID, semester } = req.params;
-
-            if (!semester)
-            {
-                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
-            }
-
-            const result = await FeesUploadModel.findOne({ studentID: studentID, semester: semester })
-
-            if (result === null) 
-            {
-                res.status(200).send({ statuscode: 0, msg: "Not Found" })
-            }
-            else 
-            {
-                res.status(200).send({ statuscode: 1, feesstatus: result, msg: "Found Successfully" })
-            }
-
-        }
-        catch (e)
-        {
-            console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
-        }
-    })
 
     app.delete("/api/delete_student_by_teacher/:sid", async (req, res) =>
     {
@@ -1217,28 +1132,7 @@ else
         }
     })
 
-    app.get("/api/fetch_all_fees_list_by_admin", async (req, res) =>
-    {
-        try
-        {
-            const result = await FeesUploadModel.find()
 
-            if (result.length === 0) 
-            {
-                res.status(200).send({ statuscode: 0, msg: "No Fees-List Found" })
-            }
-            else 
-            {
-                res.status(200).send({ statuscode: 1, all_Fees_list: result, msg: "Fees-List Found Successfully" })
-            }
-
-        }
-        catch (e)
-        {
-            console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
-        }
-    })
 
     app.get("/api/fetch_students_added_by_admin/:admin_email", async (req, res) =>
     {
@@ -1326,6 +1220,8 @@ else
 
 
     const SyllabusSchema = new mongoose.Schema({ subjectname: { type: String, required: true, trim: true, unique: true }, syllabus_pdf: { type: String, required: true }, email: { type: String, required: true }, Addedon: { type: Date } }, { versionKey: false });
+
+    SyllabusSchema.index({ email: 1 });
 
     const SyllabusModel = mongoose.model("Syllabus", SyllabusSchema, "Syllabus")
 
@@ -1503,6 +1399,97 @@ else
         }
     })
 
+    const MarksUploadSchema = new mongoose.Schema({ studentID: { type: String, required: true, trim: true }, subjectCode: { type: String, required: true }, obtainedMarks: { type: String, required: true }, totalMarks: { type: String, required: true }, teacher_email: { type: String, required: true }, type: { type: String, required: true } }, { versionKey: false });
+
+    MarksUploadSchema.index({ studentID: 1 });
+    MarksUploadSchema.index({ teacher_email: 1 });
+
+    const MarksUploadModel = mongoose.model("MarksUpload", MarksUploadSchema, "MarksUpload")
+
+
+    app.post('/api/add_mst_marks_by_teacher', async (req, res) =>
+    {
+        try
+        {
+            const { studentID, subjectCode, obtainedMarks, email, type } = req.body;
+
+            if (!studentID || !subjectCode || !email || !obtainedMarks || !type)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            if (Number(obtainedMarks) > 24)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Obtained marks cannot be greater than total marks" });
+            }
+
+            const newrecord = new MarksUploadModel({ studentID: studentID, subjectCode: subjectCode, obtainedMarks: obtainedMarks, teacher_email: email, type: type, totalMarks: "24" })
+
+            const result = await newrecord.save()
+
+            if (result) 
+            {
+                return res.status(201).json({ statuscode: 1, msg: "Marks Uploaded Successfully" });
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "Marks not Uploaded Successfully" });
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
+    app.get("/api/fetch_all_Students_marks_by_teacher", async (req, res) =>
+    {
+        try
+        {
+            const result = await MarksUploadModel.find()
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Students Marks Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, students_marks_list: result, msg: "Students Marks Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_marks_by_me_teacher/:teacheremail", async (req, res) =>
+    {
+        try
+        {
+            const result = await MarksUploadModel.find({ teacher_email: req.params.teacheremail })
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Marks Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, marks_addedbyMe: result, msg: "Marks Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
 
 
     // student server starts
@@ -1539,6 +1526,10 @@ else
 
     const FeesUploadSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, email: { type: String, required: true }, studentID: { type: String, required: true }, semester: { type: String, required: true }, course: { type: String, required: true }, fees_pdf: { type: String, required: true }, Addedon: { type: Date }, status: { type: String, default: "Pending", required: true } }, { versionKey: false });
 
+    FeesUploadSchema.index({ studentID: 1 });
+    FeesUploadSchema.index({ semester: 1 });
+    FeesUploadSchema.index({ studentID: 1, semester: 1 });
+
     const FeesUploadModel = mongoose.model("FeesUpload", FeesUploadSchema, "FeesUpload")
 
 
@@ -1551,6 +1542,11 @@ else
             if (!semester || !req.file)
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            if (!req.file)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Please select pdf" });
             }
 
             const filePath = req.file.filename;
@@ -1581,6 +1577,179 @@ else
         }
     });
 
+    app.get("/api/fetch_all_fees_list_by_admin", async (req, res) =>
+    {
+        try
+        {
+            const result = await FeesUploadModel.find()
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Fees-List Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, all_Fees_list: result, msg: "Fees-List Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.delete("/api/delete_1_fees_by_admin/:fid", async (req, res) =>
+    {
+        try
+        {
+            const data = await FeesUploadModel.findById(req.params.fid)
+
+            if (!data)
+            {
+                return res.status(404).send({ statuscode: 0, msg: "Fees Details not found" });
+            }
+
+            const filePath = path.join(__dirname, "uploads", "fees", data.fees_pdf);
+
+            if (fs.existsSync(filePath))
+            {
+                fs.unlinkSync(filePath);
+            }
+
+            const result = await FeesUploadModel.deleteOne({ _id: req.params.fid });
+
+            if (result.deletedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Fees Details Deleted Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Fees Details Not Deleted Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.put("/api/update_fees_status", async (req, res) =>
+    {
+        try
+        {
+            const { id, newStatus } = req.body;
+
+            if (!id || !newStatus)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            const result = await FeesUploadModel.updateOne({ _id: id }, { $set: { status: newStatus } })
+
+            if (result.modifiedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Status Updated Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Status Not Updated Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
+    app.get("/api/fetch_sem_fees_detail_status/:studentID/:semester", async (req, res) =>
+    {
+        try
+        {
+            const { studentID, semester } = req.params;
+
+            if (!semester)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            const result = await FeesUploadModel.findOne({ studentID: studentID, semester: semester })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Not Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, fees_status: result, msg: "Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_feesList_acc_to_studentID_by_admin", async (req, res) =>
+    {
+        try
+        {
+            const { sid } = req.query;
+
+            if (!sid)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Enter Student ID" });
+            }
+
+            const result = await FeesUploadModel.find({ studentID: sid })
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Fees-List Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, student_Fees_list: result, msg: "Fees-List Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_feesList_acc_to_semester_by_admin/:sem", async (req, res) =>
+    {
+        try
+        {
+            const { sem } = req.params
+
+            const result = await FeesUploadModel.find({ semester: sem })
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Fees-List Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, sem_Fees_list: result, msg: "Fees-List Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
 
 
 

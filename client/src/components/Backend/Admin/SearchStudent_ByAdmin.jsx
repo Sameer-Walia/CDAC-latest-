@@ -24,6 +24,13 @@ function SearchStudent_ByAdmin()
         try
         {
             setloading(true)
+
+            if (studentid === "")
+            {
+                toast.error("Enter student ID")
+                return
+            }
+
             const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_student_by_admin/${studentid}`);
 
             if (resp.data.statuscode === 1)

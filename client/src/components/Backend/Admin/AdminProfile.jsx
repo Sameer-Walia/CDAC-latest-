@@ -21,7 +21,6 @@ function AdminProfile()
         document.title = "My Profile"
     }, [])
 
-
     useEffect(() =>
     {
         if (email)

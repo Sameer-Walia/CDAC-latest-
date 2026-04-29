@@ -12,7 +12,6 @@ function AllFeesList_ToAdmin()
     const [Feeslistdata, setfeesListdata] = useState([]);
     const navi = useNavigate();
 
-
     useEffect(() =>
     {
         document.title = "All Fees List"
@@ -43,7 +42,7 @@ function AllFeesList_ToAdmin()
         }
         catch (e)
         {
-            toast.error("Error Occured " + (e.response?.data?.msg || e.message))
+            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
         }
         finally
         {
@@ -72,7 +71,7 @@ function AllFeesList_ToAdmin()
         }
         catch (e)
         {
-            toast.error("Error Occured " + (e.response?.data?.msg || e.message))
+            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
         }
         finally
         {
@@ -104,7 +103,7 @@ function AllFeesList_ToAdmin()
         }
         catch (e)
         {
-            toast.error("Error Occured " + (e.response?.data?.msg || e.message))
+            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
         }
         finally
         {
@@ -136,13 +135,13 @@ function AllFeesList_ToAdmin()
                         <h1 className="hd">Fees List</h1>
                         <button
                             className="search-btn"
-                            onClick={() => navi("/")}
+                            onClick={() => navi("/search_fees_by_sem_for_admin")}
                         >
                             🔍 Search By Semester
                         </button>
                         <button
                             className="search-btn"
-                            onClick={() => navi("/")}
+                            onClick={() => navi("/search_fees_by_studentid_for_admin")}
                         >
                             🔍 Search By StudentId
                         </button>

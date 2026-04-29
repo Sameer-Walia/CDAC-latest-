@@ -65,6 +65,12 @@ import AddSyllabus_ByTeacher from "./Backend/Teacher/AddSyllabus_ByTeacher";
 import SyllabusAdded_ByTeacher from "./Backend/Teacher/SyllabusAdded_ByTeacher";
 import UploadFees_ByStudent from "./Backend/Student/UploadFees_ByStudent";
 import AllFeesList_ToAdmin from "./Backend/Admin/AllFeesList_ToAdmin";
+import SearchFeesListOfStudent_ByAdmin from "./Backend/Admin/SearchFeesListOfStudent_ByAdmin";
+import SearchFeesListAccToSem_ByAdmin from "./Backend/Admin/SearchFeesListAccToSem_ByAdmin";
+import AddMst1Marks_ByTeacher from "./Backend/Teacher/AddMst1Marks_ByTeacher";
+import AllMarksList_ToTeacher from "./Backend/Teacher/AllMarksList_ToTeacher";
+import AddMst2Marks_ByTeacher from "./Backend/Teacher/AddMst2Marks_ByTeacher";
+import MarksAdded_ByTeacher from "./Backend/Teacher/MarksAdded_ByTeacher";
 
 
 function Siteroutes()
@@ -140,6 +146,8 @@ function Siteroutes()
                 <Route path="/edit_profile_of_admin" element={<EditAdminProfile />}></Route>
                 <Route path="/changepassword_for_admin" element={<ChangePassword_ByAdmin />}></Route>
                 <Route path="/all_fees_list_to_admin" element={<AllFeesList_ToAdmin />}></Route>
+                <Route path="/search_fees_by_sem_for_admin" element={<SearchFeesListAccToSem_ByAdmin />}></Route>
+                <Route path="/search_fees_by_studentid_for_admin" element={<SearchFeesListOfStudent_ByAdmin />}></Route>
 
 
                 {/* teacher */}
@@ -154,6 +162,11 @@ function Siteroutes()
                 <Route path="/all_syllabus_list_to_teacher" element={<AllSyllabusList_ToTeacher />}></Route>
                 <Route path="/add_syllabus" element={<AddSyllabus_ByTeacher />}></Route>
                 <Route path="/syllabus_add_by_me_teacher" element={<SyllabusAdded_ByTeacher />}></Route>
+                <Route path="/all_students_marks_list_to_teacher" element={<AllMarksList_ToTeacher />}></Route>
+                <Route path="/marks_added_by_me_teacher" element={<MarksAdded_ByTeacher />}></Route>
+                <Route path="/add_mst_1_marks_by_teacher" element={<AddMst1Marks_ByTeacher />}></Route>
+                <Route path="/add_mst_2_marks_by_teacher" element={<AddMst2Marks_ByTeacher />}></Route>
+
 
                 {/* student */}
                 <Route path="/upload_fees_by_student" element={<UploadFees_ByStudent />}></Route>
