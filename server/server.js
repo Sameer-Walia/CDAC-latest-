@@ -890,7 +890,6 @@ else
     })
 
 
-
     app.get("/api/fetch_student_data_by_teacher/:sid", async (req, res) =>
     {
         try
@@ -1399,7 +1398,7 @@ else
         }
     })
 
-    const MarksUploadSchema = new mongoose.Schema({ studentID: { type: String, required: true, trim: true }, subjectCode: { type: String, required: true }, obtainedMarks: { type: String, required: true }, totalMarks: { type: String, required: true }, teacher_email: { type: String, required: true }, type: { type: String, required: true } }, { versionKey: false });
+    const MarksUploadSchema = new mongoose.Schema({ studentID: { type: String, required: true, trim: true }, course: { type: String, required: true }, semester: { type: String, required: true }, subjectCode: { type: String, required: true }, obtainedMarks: { type: String, required: true }, totalMarks: { type: String, required: true }, teacher_email: { type: String, required: true }, type: { type: String, required: true } }, { versionKey: false });
 
     MarksUploadSchema.index({ studentID: 1 });
     MarksUploadSchema.index({ teacher_email: 1 });
@@ -1411,9 +1410,9 @@ else
     {
         try
         {
-            const { studentID, subjectCode, obtainedMarks, email, type } = req.body;
+            const { studentID, course, semester, subjectCode, obtainedMarks, email, type } = req.body;
 
-            if (!studentID || !subjectCode || !email || !obtainedMarks || !type)
+            if (!studentID || !course || !semester || !subjectCode || !email || !obtainedMarks || !type)
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields required" });
             }
@@ -1423,7 +1422,7 @@ else
                 return res.status(400).json({ statuscode: 0, msg: "Obtained marks cannot be greater than total marks" });
             }
 
-            const newrecord = new MarksUploadModel({ studentID: studentID, subjectCode: subjectCode, obtainedMarks: obtainedMarks, teacher_email: email, type: type, totalMarks: "24" })
+            const newrecord = new MarksUploadModel({ studentID: studentID, course: course, semester: semester, subjectCode: subjectCode, obtainedMarks: obtainedMarks, teacher_email: email, type: type, totalMarks: "24" })
 
             const result = await newrecord.save()
 
@@ -1490,9 +1489,91 @@ else
         }
     })
 
+    app.delete("/api/delete_marks_by_teacher/:sid", async (req, res) =>
+    {
+        try
+        {
+            const result = await MarksUploadModel.deleteOne({ _id: req.params.sid })
+            if (result.deletedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Marks Deleted Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Marks Not Deleted Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_marks_data_by_teacher/:mid", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await MarksUploadModel.findOne({ _id: req.params.mid })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Marks Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, student_marks: result })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.put("/api/update_student_marks_by_teacher", async (req, res) =>
+    {
+        try
+        {
+            const { mid, studentID, type, course, semester, subjectCode, obtainedMarks, email } = req.body;
+
+
+            if (!studentID || !type || !course || !semester || !subjectCode || !obtainedMarks || !email || !mid)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            if (Number(obtainedMarks) > 24)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Obtained marks cannot be greater than total marks" });
+            }
+
+            const result = await MarksUploadModel.updateOne({ _id: mid }, { $set: { studentID: studentID, course: course, semester: semester, subjectCode: subjectCode, obtainedMarks: obtainedMarks, teacher_email: email, type: type } })
+
+            if (result.modifiedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Marks Updated Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Marks Not Updated Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
 
 
     // student server starts
+
 
     app.post("/api/student_login", async (req, res) =>
     {
@@ -1523,6 +1604,8 @@ else
             res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
+
+
 
     const FeesUploadSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, email: { type: String, required: true }, studentID: { type: String, required: true }, semester: { type: String, required: true }, course: { type: String, required: true }, fees_pdf: { type: String, required: true }, Addedon: { type: Date }, status: { type: String, default: "Pending", required: true } }, { versionKey: false });
 
@@ -1741,6 +1824,29 @@ else
             else 
             {
                 res.status(200).send({ statuscode: 1, sem_Fees_list: result, msg: "Fees-List Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_my_marks_by_student/:sid", async (req, res) =>
+    {
+        try
+        {
+            const result = await MarksUploadModel.find({ studentID: req.params.sid })
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Students Marks Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, my_marks_list: result, msg: "Students Marks Found Successfully" })
             }
 
         }

@@ -187,6 +187,7 @@ function StudentHeader()
                                     <li><a href="http://acsd.ac.in/readdata/TIME%20TABLE17.pdf" target="_blank" rel="noopener noreferrer">Time Table</a></li>
                                     <li><Link to="/syllabus">Syllabus</Link></li>
                                     <li><Link to="/upload_fees_by_student">Upload Fees</Link></li>
+                                    <li><Link to="/my_marks">Marks</Link></li>
                                 </ul>
                             </li>
 

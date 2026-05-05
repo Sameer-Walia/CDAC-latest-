@@ -64,10 +64,105 @@
 
 @media (max-width: 320px) {
     #student_page .breadcrumb {
-        margin-top: 45px;
+        margin-top: 85px;
         font-size: 12px;
     }
 }
+
+
+#student_page .title {
+    font-size: 28px;
+    color: #3b8dbd;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 426px) {
+    #student_page {
+        padding: 15px;
+    }
+
+    #student_page .title {
+        font-size: 22px;
+    }
+
+}
+
+/* Table container css start*/
+
+#student_page #student_marks_table .custom-table {
+    border-radius: 12px;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+#student_page #student_marks_table .custom-table thead {
+    background: linear-gradient(to right, #0d6efd, #4dabf7);
+    color: white;
+}
+
+#student_page #student_marks_table .custom-table th {
+    padding: 14px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+#student_page #student_marks_table .custom-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #444;
+}
+
+#student_page #student_marks_table .custom-table tbody tr:nth-child(even) {
+    background-color: #f8fbff;
+}
+
+#student_page #student_marks_table .custom-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+#student_page #student_marks_table .custom-table tbody tr:hover {
+    background-color: #e3f2fd;
+    transform: scale(1.01);
+}
+
+#student_page #student_marks_table .custom-table td:first-child {
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+#student_page #student_marks_table .custom-table thead tr:first-child th:first-child {
+    border-top-left-radius: 12px;
+}
+
+#student_page #student_marks_table .custom-table thead tr:first-child th:last-child {
+    border-top-right-radius: 12px;
+}
+
+@media (max-width: 768px) {
+
+    #student_page #student_marks_table .custom-table th,
+    #student_page #student_marks_table .custom-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    #student_page #student_marks_table .custom-table th,
+    #student_page #student_marks_table .custom-table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+/* Table container css end*/
+
+
+
+/* fees css start */
 
 
 #student_page .fees-container {

@@ -13,7 +13,7 @@ function MarksAdded_ByTeacher()
     const [studentsdata_marks, setstudentsdata_marks] = useState([]);
     const navi = useNavigate();
 
-    const { email } = useSelector   ((state) => state.teacher)
+    const { email } = useSelector((state) => state.teacher)
 
     useEffect(() =>
     {
@@ -58,7 +58,7 @@ function MarksAdded_ByTeacher()
 
     function handleEdit(id)
     {
-        navi(`/update_student_by_teacher/${id}`)
+        navi(`/update_marks_by_teacher/${id}`)
     }
 
     async function handleDelete(id)
@@ -141,8 +141,10 @@ function MarksAdded_ByTeacher()
                                 <tr>
                                     <th>S.NO.</th>
                                     <th>StudentID</th>
-                                    <th>Subject Code</th>
                                     <th>Type</th>
+                                    <th>Course</th>
+                                    <th>Semester</th>
+                                    <th>Subject Code</th>
                                     <th>Total Marks</th>
                                     <th>Obtained Marks</th>
                                     <th>Edit</th>
@@ -157,8 +159,10 @@ function MarksAdded_ByTeacher()
                                             <tr key={item._id}>
                                                 <td>{index + 1}</td>
                                                 <td>{item.studentID}</td>
-                                                <td>{item.subjectCode}</td>
                                                 <td>{item.type}</td>
+                                                <td>{item.course}</td>
+                                                <td>{item.semester}</td>
+                                                <td>{item.subjectCode}</td>
                                                 <td>{item.totalMarks}</td>
                                                 <td>{item.obtainedMarks}</td>
                                                 <td>

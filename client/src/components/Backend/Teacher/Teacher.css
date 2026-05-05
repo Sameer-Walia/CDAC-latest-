@@ -729,7 +729,7 @@
 
 #Teacher_page .marksForm_container {
     width: 550px;
-    margin: 40px auto;
+    margin: 20px auto;
     padding: 30px;
     border-radius: 16px;
     background: #ffffff;
@@ -738,6 +738,84 @@
     flex-direction: column;
     gap: 20px;
     font-family: 'Segoe UI', sans-serif;
+}
+
+#Teacher_page .search_student_container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+#Teacher_page .search_student_btn {
+    height: 45px;
+    padding: 0 15px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#Teacher_page .student_form_wrapper {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+}
+
+#Teacher_page .marksForm_row {
+    display: flex;
+    gap: 15px;
+}
+
+#Teacher_page .marksForm_row .marksForm_group {
+    flex: 1;
+}
+
+
+#Teacher_page .marksForm_container {
+    flex: 2;
+    min-width: 300px;
+}
+
+#Teacher_page .student_card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 500px;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+#Teacher_page .student_card_title {
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+#Teacher_page .student_info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+#Teacher_page .student_info span {
+    font-weight: 500;
+    color: #555;
+}
+
+#Teacher_page .student_info p {
+    margin: 0;
+    color: #222;
 }
 
 #Teacher_page .marksForm_title {
