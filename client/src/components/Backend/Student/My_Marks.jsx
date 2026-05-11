@@ -119,7 +119,7 @@ function My_Marks()
 
                 <div className="container">
                     <div className="breadcrumb">
-                        <Link to="/" className="crumb">Home</Link>
+                        <Link to="/studenthome" className="crumb">Home</Link>
                         <span className="separator">›</span>
                         <span className="crumb">About Us</span>
                         <span className="separator">›</span>

@@ -887,3 +887,108 @@
 
 
 /* add mst marks css ends  */
+
+
+/* mark attendance css start  */
+
+#Teacher_page .attendance-filter-box {
+    width: 100%;
+    background: #fff;
+    margin-top: 25px;
+    padding: 25px;
+    border-radius: 16px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+#Teacher_page .filter-group {
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+}
+
+#Teacher_page .filter-group label {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+#Teacher_page .filter-group select,
+#Teacher_page .filter-group input {
+    height: 48px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    padding: 0 14px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+    background: #fafafa;
+}
+
+#Teacher_page .filter-group select:focus,
+#Teacher_page .filter-group input:focus {
+    border-color: #2563eb;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+#Teacher_page .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+
+#Teacher_page .attendance-action {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+#Teacher_page .present-box,
+#Teacher_page .absent-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#Teacher_page .present-box {
+    background: rgba(34, 197, 94, 0.12);
+    color: #15803d;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+#Teacher_page .absent-box {
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+#Teacher_page .present-box:hover {
+    background: rgba(34, 197, 94, 0.2);
+}
+
+#Teacher_page .absent-box:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+#Teacher_page .present-box input,
+#Teacher_page .absent-box input {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+
+/* mark attendance css end  */

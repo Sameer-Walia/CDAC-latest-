@@ -188,6 +188,7 @@ function StudentHeader()
                                     <li><Link to="/syllabus">Syllabus</Link></li>
                                     <li><Link to="/upload_fees_by_student">Upload Fees</Link></li>
                                     <li><Link to="/my_marks">Marks</Link></li>
+                                    <li><Link to="/my_attendance">Attendance</Link></li>
                                 </ul>
                             </li>
 

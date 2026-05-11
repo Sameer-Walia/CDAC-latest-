@@ -73,6 +73,9 @@ import AddMst2Marks_ByTeacher from "./Backend/Teacher/AddMst2Marks_ByTeacher";
 import MarksAdded_ByTeacher from "./Backend/Teacher/MarksAdded_ByTeacher";
 import UpdateMarks_ByTeacher from "./Backend/Teacher/UpdateMarks_ByTeacher";
 import My_Marks from "./Backend/Student/My_Marks";
+import MarkAttendence_ByTeacher from "./Backend/Teacher/MarkAttendence_ByTeacher";
+import My_Attendance from "./Backend/Student/My_Attendance";
+import SearchAttendence_ByTeacher from "./Backend/Teacher/SearchAttendence_ByTeacher";
 
 
 function Siteroutes()
@@ -169,12 +172,15 @@ function Siteroutes()
                 <Route path="/add_mst_1_marks_by_teacher" element={<AddMst1Marks_ByTeacher />}></Route>
                 <Route path="/add_mst_2_marks_by_teacher" element={<AddMst2Marks_ByTeacher />}></Route>
                 <Route path="/update_marks_by_teacher/:mid" element={<UpdateMarks_ByTeacher />}></Route>
+                <Route path="/mark_attendance_by_teacher" element={<MarkAttendence_ByTeacher />}></Route>
+                <Route path="/search_attendence_by_teacher" element={<SearchAttendence_ByTeacher />}></Route>
 
 
 
                 {/* student */}
                 <Route path="/upload_fees_by_student" element={<UploadFees_ByStudent />}></Route>
                 <Route path="/my_marks" element={<My_Marks />}></Route>
+                <Route path="/my_attendance" element={<My_Attendance />}></Route>
 
             </Routes>
         </div>

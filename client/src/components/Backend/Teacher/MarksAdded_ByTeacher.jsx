@@ -70,7 +70,7 @@ function MarksAdded_ByTeacher()
 
             if (resp === true)
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_by_teacher/${id}`)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_marks_by_teacher/${id}`)
 
                 if (resp.data.statuscode === 1)
                 {

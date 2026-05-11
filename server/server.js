@@ -597,6 +597,7 @@ else
     const StudentSignupSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, studentID: { type: String, required: true, unique: true, trim: true }, password: { type: String, required: true, trim: true }, course: { type: String, required: true }, teacher_email: { type: String, required: true }, email: { type: String, required: true, unique: true, lowercase: true, trim: true }, father: { type: String, required: true, trim: true }, mother: { type: String, required: true, trim: true }, phone: { type: String, required: true, trim: true }, phone2: { type: String, required: true, trim: true }, usertype: { type: String, required: true } }, { versionKey: false });
 
     StudentSignupSchema.index({ teacher_email: 1 });
+    StudentSignupSchema.index({ course: 1 });
 
     const StudentSignupModel = mongoose.model("StudentSignup", StudentSignupSchema, "StudentSignup")
 
@@ -796,6 +797,8 @@ else
             res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
+
+
 
     app.get("/api/fetch_students_added_by_me/:teacheremail", async (req, res) =>
     {
@@ -1857,9 +1860,197 @@ else
         }
     })
 
-
-
     // student server ends
+
+
+    app.get("/api/fetch_students_acc_to_Course/:course", async (req, res) =>
+    {
+        try
+        {
+            const result = await StudentSignupModel.find({ course: req.params.course })
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Students Found " })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, course_students_list: result, msg: "Students Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    const AttendanceSchema = new mongoose.Schema({
+        teacherEmail: { type: String, required: true, trim: true }, course: { type: String, required: true, trim: true }, semester: { type: String, required: true, trim: true }, subjectCode: { type: String, required: true, trim: true }, attendanceDate: { type: String, required: true },
+        students:
+            [
+                {
+                    studentID: { type: String, required: true, trim: true },
+                    studentName: { type: String, required: true, trim: true },
+                    studentEmail: { type: String, required: true, trim: true },
+                    attendanceStatus: { type: String, enum: ["Present", "Absent"], required: true }
+                }
+            ],
+
+    }, { versionKey: false });
+
+    const AttendanceModel = mongoose.model("Attendance", AttendanceSchema, "Attendance");
+
+
+    app.post("/api/submit_Attendnace_by_teacher", async (req, res) =>
+    {
+        try
+        {
+            const { email, course, semester, subjectCode, date, students } = req.body;
+
+            if (!email || !course || !semester || !subjectCode || !date)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            if (!students || students.length === 0)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Students attendance not found" });
+            }
+
+            const newrecord = new AttendanceModel({ teacherEmail: email, course: course, semester: semester, subjectCode: subjectCode, attendanceDate: date, students: students });
+
+            const result = await newrecord.save();
+
+            if (result) 
+            {
+                return res.status(201).json({ statuscode: 1, msg: "Attendance Submitted Successfully" });
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "Attendance Not Submitted Successfully" });
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
+
+    app.get("/api/fetch_my_attendance_acc_to_sem/:course/:semester/:studentID", async (req, res) =>
+    {
+        try
+        {
+            const { course, semester, studentID } = req.params;
+
+            const attendance = await AttendanceModel.find({ course, semester, "students.studentID": studentID });
+
+            if (attendance.length === 0)
+            {
+                return res.status(200).json({ statuscode: 0, msg: "No Attendance Found" });
+            }
+
+            const subjectWiseAttendance = {};
+
+            attendance.forEach((item) =>
+            {
+                const student = item.students.find(
+                    (s) => s.studentID === studentID
+                );
+
+                if (!student) return;
+
+                if (!subjectWiseAttendance[item.subjectCode])
+                {
+                    subjectWiseAttendance[item.subjectCode] =
+                    {
+                        subjectCode: item.subjectCode,
+                        totalClasses: 0,
+                        presentCount: 0,
+                        absentCount: 0
+                    };
+                }
+
+                subjectWiseAttendance[item.subjectCode].totalClasses++;
+
+                if (student.attendanceStatus === "Present")
+                {
+                    subjectWiseAttendance[item.subjectCode].presentCount++;
+                }
+                else
+                {
+                    subjectWiseAttendance[item.subjectCode].absentCount++;
+                }
+            });
+
+            const finalData = Object.values(subjectWiseAttendance);
+
+            return res.status(200).json({ statuscode: 1, my_attendance_list: finalData });
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
+    app.post("/api/search_attendance_by_teacher", async (req, res) =>
+    {
+        try
+        {
+            const { email, course, semester, subjectCode, date } = req.body;
+
+            if (!email || !course || !semester || !subjectCode || !date)
+            {
+                return res.status(400).send({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            const result = await AttendanceModel.find({ teacherEmail: email, course, semester, subjectCode, attendanceDate: date })
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Attendance Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, attendance_data: result, msg: "Attendance Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.delete("/api/delete_attendence_by_teacher/:aid", async (req, res) =>
+    {
+        try
+        {
+            const result = await AttendanceModel.deleteOne({ _id: req.params.aid })
+            if (result.deletedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Attendance Deleted Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Attendance Not Deleted Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
 
 
 
