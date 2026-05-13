@@ -17,7 +17,6 @@ function App()
 
   const { isLoggedIn: studentLoggedIn, usertype: studentType } = useSelector((state) => state.student);
 
-
   const dispatch = useDispatch()
 
   useEffect(() =>

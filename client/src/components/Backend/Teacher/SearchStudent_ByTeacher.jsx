@@ -129,6 +129,7 @@ function SearchStudent_ByTeacher()
                                         <th>Name</th>
                                         <th>ID</th>
                                         <th>Password</th>
+                                        <th>Batch</th>
                                         <th>Course</th>
                                         <th>Email</th>
                                         <th>Father Name</th>
@@ -146,6 +147,7 @@ function SearchStudent_ByTeacher()
                                         <td>{student_data?.name || ""}</td>
                                         <td>{student_data?.studentID || ""}</td>
                                         <td>{student_data?.password || ""}</td>
+                                        <td>{student_data?.batch || ""}</td>
                                         <td>{student_data?.course || ""}</td>
                                         <td>{student_data?.email || ""}</td>
                                         <td>{student_data?.father || ""}</td>

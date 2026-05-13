@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const istate = { isLoggedIn: false, name: "Guest", email: null, usertype: null, id: null, studentID: null, phone: null, course: null }
+const istate = { isLoggedIn: false, name: "Guest", email: null, usertype: null, id: null, studentID: null, phone: null, batch: null, course: null }
 const studentSlice = createSlice({
     name: "student",
     initialState: istate,
@@ -14,6 +14,7 @@ const studentSlice = createSlice({
             state.id = action.payload._id
             state.studentID = action.payload.studentID
             state.phone = action.payload.phone
+            state.batch = action.payload.batch
             state.course = action.payload.course
         },
         StudentLogOut(state, action)
@@ -25,6 +26,7 @@ const studentSlice = createSlice({
             state.id = null
             state.studentID = null
             state.phone = null
+            state.batch = null
             state.course = null
         }
     }

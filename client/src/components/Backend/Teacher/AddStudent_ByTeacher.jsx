@@ -17,6 +17,7 @@ function AddStudent_ByTeacher()
     const [name, setname] = useState("")
     const [studentId, setstudentId] = useState("")
     const [studentemail, setstudentemail] = useState("")
+    const [batch, setbatch] = useState("")
     const [course, setCourse] = useState("")
     const [phone, setphone] = useState("")
     const [fathername, setfathername] = useState("")
@@ -38,7 +39,11 @@ function AddStudent_ByTeacher()
         }
         else
         {
-            const reqdata = { name, studentId, email, course, studentemail, phone, fathername, mothername, phone2 }
+            if (!name || !studentId || !email || !batch || !course || !studentemail || !phone || !fathername || !mothername || !phone2)
+            {
+                return toast.error("All fields are required");
+            }
+            const reqdata = { name, studentId, email, batch, course, studentemail, phone, fathername, mothername, phone2 }
             try 
             {
                 setloading(true)
@@ -104,6 +109,23 @@ function AddStudent_ByTeacher()
                                 <div className="form-group">
                                     <label>Email</label>
                                     <input type="email" placeholder="Enter email" required onChange={(e) => setstudentemail(e.target.value)} />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Select Batch</label>
+                                    <select onChange={(e) => setbatch(e.target.value)} required>
+                                        <option value="">-- Select Batch --</option>
+                                        <option value="2025-2027">2025-2027</option>
+                                        <option value="2026-2028">2026-2028</option>
+                                        <option value="2027-2029">2027-2029</option>
+                                        <option value="2028-2030">2028-2030</option>
+                                        <option value="2029-2031">2029-2031</option>
+                                        <option value="2030-2032">2030-2032</option>
+                                        <option value="2031-2033">2031-2033</option>
+                                        <option value="2032-2034">2032-2034</option>
+                                        <option value="2033-2035">2033-2035</option>
+                                        <option value="2034-2036">2034-2036</option>
+                                    </select>
                                 </div>
 
                                 <div className="form-group">

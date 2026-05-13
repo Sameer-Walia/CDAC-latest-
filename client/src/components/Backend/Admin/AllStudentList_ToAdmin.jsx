@@ -137,6 +137,7 @@ function AllStudentList_ToAdmin()
                                     <th>Name</th>
                                     <th>ID</th>
                                     <th>Password</th>
+                                    <th>Batch</th>
                                     <th>Course</th>
                                     <th>Email</th>
                                     <th>Father Name</th>
@@ -156,6 +157,7 @@ function AllStudentList_ToAdmin()
                                             <td>{item.name}</td>
                                             <td>{item.studentID}</td>
                                             <td>{item.password}</td>
+                                            <td>{item.batch}</td>
                                             <td>{item.course}</td>
                                             <td>{item.email}</td>
                                             <td>{item.father}</td>

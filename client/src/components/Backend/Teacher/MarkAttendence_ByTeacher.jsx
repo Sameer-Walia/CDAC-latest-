@@ -15,6 +15,7 @@ function MarkAttendence_ByTeacher()
     const [loading, setloading] = useState(false);
     const navi = useNavigate()
 
+    const [batch, setbatch] = useState("")
     const [course, setCourse] = useState("");
     const [semester, setSemester] = useState("");
     const [subjectCode, setSubjectCode] = useState("");
@@ -49,24 +50,28 @@ function MarkAttendence_ByTeacher()
 
     useEffect(() =>
     {
-        if (course)
+        if (batch && course)
         {
-            fetch_students_acc_to_Course()
+            fetch_students_acc_to_batch_Course()
         }
-    }, [course])
+    }, [batch, course])
 
-    async function fetch_students_acc_to_Course()
+    async function fetch_students_acc_to_batch_Course()
     {
         try
         {
             setloading(true)
 
+            if (batch == "")
+            {
+                toast.error("Please Select Batch")
+            }
             if (course == "")
             {
                 toast.error("Please Select Course")
             }
 
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_students_acc_to_Course/${course}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_students_acc_to_batch_Course/${batch}/${course}`);
 
             if (resp.data.statuscode === 1)
             {
@@ -96,6 +101,11 @@ function MarkAttendence_ByTeacher()
         e.preventDefault()
         try
         {
+            if (batch == "")
+            {
+                return toast.error("Please Select Batch")
+            }
+
             if (course == "")
             {
                 return toast.error("Please Select Course")
@@ -111,6 +121,11 @@ function MarkAttendence_ByTeacher()
                 return toast.error("Please Select Subject Code")
             }
 
+            if (date == "")
+            {
+                return toast.error("Please Select Date")
+            }
+
             setloading(true)
 
             const formData = new FormData(e.target);
@@ -122,7 +137,7 @@ function MarkAttendence_ByTeacher()
                 attendanceStatus: formData.get(`attendance_${item.studentID}`)
             }));
 
-            const data = { email, course, semester, subjectCode, date, students }
+            const data = { email, batch, course, semester, subjectCode, date, students }
 
             const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/submit_Attendnace_by_teacher`, data);
 
@@ -180,6 +195,32 @@ function MarkAttendence_ByTeacher()
                     </div>
 
                     <div className="attendance-filter-box">
+
+                        <div className="filter-group">
+                            <label>Batch</label>
+                            <select
+                                onChange={(e) =>
+                                {
+                                    setbatch(e.target.value)
+                                    setcourse_students([]);
+                                    setCourse("");
+                                    setSemester("");
+                                    setSubjectCode("");
+                                }}
+                                required>
+                                <option value="">Select Batch</option>
+                                <option value="2025-2027">2025-2027</option>
+                                <option value="2026-2028">2026-2028</option>
+                                <option value="2027-2029">2027-2029</option>
+                                <option value="2028-2030">2028-2030</option>
+                                <option value="2029-2031">2029-2031</option>
+                                <option value="2030-2032">2030-2032</option>
+                                <option value="2031-2033">2031-2033</option>
+                                <option value="2032-2034">2032-2034</option>
+                                <option value="2033-2035">2033-2035</option>
+                                <option value="2034-2036">2034-2036</option>
+                            </select>
+                        </div>
 
                         <div className="filter-group">
                             <label>Course</label>
@@ -255,6 +296,7 @@ function MarkAttendence_ByTeacher()
                                                 <th>S.NO.</th>
                                                 <th>Student ID</th>
                                                 <th>Name</th>
+                                                <th>Batch</th>
                                                 <th>Course</th>
                                                 <th>Email</th>
                                                 <th>Attendance</th>
@@ -268,6 +310,7 @@ function MarkAttendence_ByTeacher()
                                                         <td>{index + 1}</td>
                                                         <td>{item.studentID}</td>
                                                         <td>{item.name}</td>
+                                                        <td>{item.batch}</td>
                                                         <td>{item.course}</td>
                                                         <td>{item.email}</td>
                                                         <td>
@@ -313,7 +356,7 @@ function MarkAttendence_ByTeacher()
                 </div>
 
             </div>
-        </div>
+        </div >
     )
 }
 

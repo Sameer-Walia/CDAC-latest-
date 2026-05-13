@@ -9,6 +9,7 @@ import nodemailer from 'nodemailer'
 import dotenv from "dotenv";
 import multer from "multer";
 import fs from "fs";
+import { v4 as uuidv4 } from 'uuid';
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -146,11 +147,39 @@ else
         }
     });
 
+    // Time Table upload
+    const TimeTableStorage = multer.diskStorage({
+        destination: (req, file, cb) =>
+        {
+            cb(null, 'uploads/timetable');
+        },
+        filename: (req, file, cb) =>
+        {
+            cb(null, Date.now() + '-' + file.originalname);
+        }
+    });
+
+    const uploadTimeTable = multer({
+        storage: TimeTableStorage,
+        limits: { fileSize: 3 * 1024 * 1024 },
+        fileFilter: (req, file, cb) =>
+        {
+            if (file.mimetype === "application/pdf")
+            {
+                cb(null, true);
+            }
+            else
+            {
+                cb(new Error("Only PDF allowed"), false);
+            }
+        }
+    });
+
     app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  //Allow files inside uploads/ to be opened directly via URL.
 
     mongoose.connect('mongodb://127.0.0.1:27017/CDAC').then(() => console.log('Connected to MongoDB'));
 
-    const TeacherSignupSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, phone: { type: String, required: true, trim: true }, email: { type: String, required: true, unique: true, lowercase: true, trim: true }, password: { type: String, required: true }, usertype: { type: String, required: true } }, { versionKey: false });
+    const TeacherSignupSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, phone: { type: String, required: true, trim: true }, email: { type: String, required: true, unique: true, lowercase: true, trim: true }, password: { type: String, required: true }, usertype: { type: String, required: true }, actstatus: { type: Boolean, required: true }, token: { type: String, required: true } }, { versionKey: false });
 
     const TeacherSignupModel = mongoose.model("TeacherSignup", TeacherSignupSchema, "TeacherSignup")
 
@@ -256,11 +285,34 @@ else
                 return res.status(409).json({ statuscode: 0, msg: "Email already registered" });
             }
 
-            const newrecord = new TeacherSignupModel({ name: name, phone: phone, email: email, password: pass, usertype: "normal" })
+            const acttoken = uuidv4();
+            console.log(acttoken)
+
+            const newrecord = new TeacherSignupModel({ name: name, phone: phone, email: email, password: pass, usertype: "normal", actstatus: false, token: acttoken })
+
             const result = await newrecord.save();
             if (result) 
             {
-                return res.status(201).json({ statuscode: 1, msg: "Signup successfully" });
+                const mailOptions = {
+                    from: 'sameerwalia13@gmail.com',
+                    to: email,
+                    subject: 'Activation Mail from CDAC',
+                    html: `Dear ${name}<br/><br/>Thanks for signing up on our website.<br/><br/>Click on the following link to activate your account.<br/><br/><a href='http://localhost:5173/activateaccount?code=${acttoken}'>Activate Account<a/>`
+                };
+
+                transporter.sendMail(mailOptions, (error, info) =>
+                {
+                    if (error)
+                    {
+                        console.log(error);
+                        return res.status(200).json({ statuscode: 2, msg: "Signup Successfull , error while sending activation mail" });
+                    }
+                    else
+                    {
+                        console.log("Email sent: " + info.response);
+                        return res.status(200).json({ statuscode: 1, msg: "Signup Successfull , Check your email to activate your account" });
+                    }
+                });
             }
             else 
             {
@@ -273,6 +325,28 @@ else
             return res.status(500).json({ statuscode: -1, msg: "Server error" })
         }
     })
+
+    app.put("/api/activateuseraccount", async (req, res) =>
+    {
+        try
+        {
+            const updateresult = await TeacherSignupModel.updateOne({ token: req.body.code }, { $set: { actstatus: true } });
+            if (updateresult.modifiedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Account Activated Successfully , please login now" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Teacher Not Updated Successfully" })
+            }
+        }
+        catch (e)
+        {
+            res.send({ statuscode: -1 })
+            console.log(e.message)
+        }
+    })
+
 
 
     app.post("/api/staff_login", async (req, res) =>
@@ -594,10 +668,10 @@ else
     })
 
 
-    const StudentSignupSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, studentID: { type: String, required: true, unique: true, trim: true }, password: { type: String, required: true, trim: true }, course: { type: String, required: true }, teacher_email: { type: String, required: true }, email: { type: String, required: true, unique: true, lowercase: true, trim: true }, father: { type: String, required: true, trim: true }, mother: { type: String, required: true, trim: true }, phone: { type: String, required: true, trim: true }, phone2: { type: String, required: true, trim: true }, usertype: { type: String, required: true } }, { versionKey: false });
+    const StudentSignupSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, studentID: { type: String, required: true, unique: true, trim: true }, password: { type: String, required: true, trim: true }, batch: { type: String, required: true }, course: { type: String, required: true }, teacher_email: { type: String, required: true }, email: { type: String, required: true, unique: true, lowercase: true, trim: true }, father: { type: String, required: true, trim: true }, mother: { type: String, required: true, trim: true }, phone: { type: String, required: true, trim: true }, phone2: { type: String, required: true, trim: true }, usertype: { type: String, required: true } }, { versionKey: false });
 
     StudentSignupSchema.index({ teacher_email: 1 });
-    StudentSignupSchema.index({ course: 1 });
+    StudentSignupSchema.index({ batch: 1, course: 1 });
 
     const StudentSignupModel = mongoose.model("StudentSignup", StudentSignupSchema, "StudentSignup")
 
@@ -605,7 +679,7 @@ else
     {
         try 
         {
-            const { name, studentId, studentemail, course, phone, fathername, mothername, phone2, email } = req.body;
+            const { name, studentId, studentemail, batch, course, phone, fathername, mothername, phone2, email } = req.body;
 
             const allowedCourses = [
                 "AI",
@@ -613,7 +687,7 @@ else
                 "ES"
             ];
 
-            if (!name || !studentId || !studentemail || !course || !phone || !fathername || !mothername || !phone2)
+            if (!name || !studentId || !studentemail || !batch || !course || !phone || !fathername || !mothername || !phone2)
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
             }
@@ -667,7 +741,7 @@ else
 
             const gen_password = generate_Password_for_student(studentId);
 
-            const newrecord = new StudentSignupModel({ name: name, studentID: studentId, password: gen_password, phone: phone, phone2: phone2, teacher_email: email, email: studentemail, course: course, father: fathername, mother: mothername, usertype: "normal" })
+            const newrecord = new StudentSignupModel({ name: name, studentID: studentId, password: gen_password, phone: phone, phone2: phone2, teacher_email: email, email: studentemail, batch: batch, course: course, father: fathername, mother: mothername, usertype: "normal" })
 
             const result = await newrecord.save();
 
@@ -692,7 +766,7 @@ else
     {
         try 
         {
-            const { name, studentId, studentemail, course, phone, fathername, mothername, phone2, email } = req.body;
+            const { name, studentId, studentemail, batch, course, phone, fathername, mothername, phone2, email } = req.body;
 
             const allowedCourses = [
                 "AI",
@@ -700,7 +774,7 @@ else
                 "ES"
             ];
 
-            if (!name || !studentId || !studentemail || !course || !phone || !fathername || !mothername || !phone2)
+            if (!name || !studentId || !studentemail || !batch || !course || !phone || !fathername || !mothername || !phone2)
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
             }
@@ -754,7 +828,7 @@ else
 
             const gen_password = generate_Password_for_student(studentId);
 
-            const newrecord = new StudentSignupModel({ name: name, studentID: studentId, password: gen_password, course: course, phone: phone, phone2: phone2, teacher_email: email, email: studentemail, father: fathername, mother: mothername, usertype: "normal" })
+            const newrecord = new StudentSignupModel({ name: name, studentID: studentId, password: gen_password, batch: batch, course: course, phone: phone, phone2: phone2, teacher_email: email, email: studentemail, father: fathername, mother: mothername, usertype: "normal" })
 
             const result = await newrecord.save();
 
@@ -921,7 +995,7 @@ else
     {
         try
         {
-            const { name, phone, phone2, course, sid, fathername, mothername, studentemail } = req.body;
+            const { name, phone, phone2, batch, course, sid, fathername, mothername, studentemail } = req.body;
 
             const allowedCourses = [
                 "AI",
@@ -929,7 +1003,7 @@ else
                 "ES"
             ];
 
-            if (!name || !phone || !course || !phone2 || !fathername || !mothername || !studentemail)
+            if (!name || !phone || !batch || !course || !phone2 || !fathername || !mothername || !studentemail)
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
             }
@@ -969,7 +1043,7 @@ else
                 return res.status(400).json({ statuscode: 0, msg: "Alternative Phone Number must be 10 digits" });
             }
 
-            const result = await StudentSignupModel.updateOne({ _id: sid }, { $set: { name: name, course: course, phone: phone, phone2: phone2, father: fathername, mother: mothername, email: studentemail } })
+            const result = await StudentSignupModel.updateOne({ _id: sid }, { $set: { name: name, batch: batch, course: course, phone: phone, phone2: phone2, father: fathername, mother: mothername, email: studentemail } })
 
             if (result.modifiedCount === 1) 
             {
@@ -993,7 +1067,7 @@ else
     {
         try
         {
-            const { name, course, phone, phone2, sid, fathername, mothername, studentemail } = req.body;
+            const { name, batch, course, phone, phone2, sid, fathername, mothername, studentemail } = req.body;
 
             const allowedCourses = [
                 "AI",
@@ -1001,7 +1075,7 @@ else
                 "ES"
             ];
 
-            if (!name || !phone || !course || !phone2 || !fathername || !mothername || !studentemail)
+            if (!name || !phone || !batch || !course || !phone2 || !fathername || !mothername || !studentemail)
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
             }
@@ -1042,7 +1116,7 @@ else
                 return res.status(400).json({ statuscode: 0, msg: "Alternative Phone Number must be 10 digits" });
             }
 
-            const result = await StudentSignupModel.updateOne({ _id: sid }, { $set: { name: name, course: course, phone: phone, phone2: phone2, father: fathername, mother: mothername, email: studentemail } })
+            const result = await StudentSignupModel.updateOne({ _id: sid }, { $set: { name: name, batch: batch, course: course, phone: phone, phone2: phone2, father: fathername, mother: mothername, email: studentemail } })
 
             if (result.modifiedCount === 1) 
             {
@@ -1329,6 +1403,29 @@ else
             else 
             {
                 res.status(200).send({ statuscode: 1, allsyllabus_list: result, msg: "Syllabus Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_all_TimeTableList_for_student", async (req, res) =>
+    {
+        try
+        {
+            const result = await TimeTableModel.find()
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, allTimeTable_list: result, msg: "Syllabus Found Successfully" })
             }
 
         }
@@ -1863,11 +1960,11 @@ else
     // student server ends
 
 
-    app.get("/api/fetch_students_acc_to_Course/:course", async (req, res) =>
+    app.get("/api/fetch_students_acc_to_batch_Course/:batch/:course", async (req, res) =>
     {
         try
         {
-            const result = await StudentSignupModel.find({ course: req.params.course })
+            const result = await StudentSignupModel.find({ batch: req.params.batch, course: req.params.course })
 
             if (result.length === 0) 
             {
@@ -1888,7 +1985,7 @@ else
 
 
     const AttendanceSchema = new mongoose.Schema({
-        teacherEmail: { type: String, required: true, trim: true }, course: { type: String, required: true, trim: true }, semester: { type: String, required: true, trim: true }, subjectCode: { type: String, required: true, trim: true }, attendanceDate: { type: String, required: true },
+        teacherEmail: { type: String, required: true, trim: true }, batch: { type: String, required: true, trim: true }, course: { type: String, required: true, trim: true }, semester: { type: String, required: true, trim: true }, subjectCode: { type: String, required: true, trim: true }, attendanceDate: { type: String, required: true },
         students:
             [
                 {
@@ -1901,6 +1998,9 @@ else
 
     }, { versionKey: false });
 
+    AttendanceSchema.index({ teacherEmail: 1, batch: 1, course: 1, semester: 1, subjectCode: 1, attendanceDate: 1 });
+    AttendanceSchema.index({ batch: 1, course: 1, semester: 1, "students.studentID": 1 });
+
     const AttendanceModel = mongoose.model("Attendance", AttendanceSchema, "Attendance");
 
 
@@ -1908,7 +2008,7 @@ else
     {
         try
         {
-            const { email, course, semester, subjectCode, date, students } = req.body;
+            const { email, batch, course, semester, subjectCode, date, students } = req.body;
 
             if (!email || !course || !semester || !subjectCode || !date)
             {
@@ -1920,7 +2020,7 @@ else
                 return res.status(400).json({ statuscode: 0, msg: "Students attendance not found" });
             }
 
-            const newrecord = new AttendanceModel({ teacherEmail: email, course: course, semester: semester, subjectCode: subjectCode, attendanceDate: date, students: students });
+            const newrecord = new AttendanceModel({ teacherEmail: email, batch: batch, course: course, semester: semester, subjectCode: subjectCode, attendanceDate: date, students: students });
 
             const result = await newrecord.save();
 
@@ -1942,13 +2042,13 @@ else
     });
 
 
-    app.get("/api/fetch_my_attendance_acc_to_sem/:course/:semester/:studentID", async (req, res) =>
+    app.get("/api/fetch_my_attendance_acc_to_sem/:batch/:course/:semester/:studentID", async (req, res) =>
     {
         try
         {
-            const { course, semester, studentID } = req.params;
+            const { batch, course, semester, studentID } = req.params;
 
-            const attendance = await AttendanceModel.find({ course, semester, "students.studentID": studentID });
+            const attendance = await AttendanceModel.find({ batch, course, semester, "students.studentID": studentID });
 
             if (attendance.length === 0)
             {
@@ -2004,14 +2104,14 @@ else
     {
         try
         {
-            const { email, course, semester, subjectCode, date } = req.body;
+            const { email, batch, course, semester, subjectCode, date } = req.body;
 
-            if (!email || !course || !semester || !subjectCode || !date)
+            if (!email || !batch || !course || !semester || !subjectCode || !date)
             {
                 return res.status(400).send({ statuscode: 0, msg: "All fields are required" });
             }
 
-            const result = await AttendanceModel.find({ teacherEmail: email, course, semester, subjectCode, attendanceDate: date })
+            const result = await AttendanceModel.find({ teacherEmail: email, batch, course, semester, subjectCode, attendanceDate: date })
 
             if (result.length === 0) 
             {
@@ -2050,6 +2150,216 @@ else
             res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
+
+    app.get("/api/fetch_unique_attendance_by_teacher/:aid", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await AttendanceModel.findOne({ _id: req.params.aid })
+
+            if (result === null) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Data Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, attendance_data: result })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.put("/api/update_Attendnace_by_teacher", async (req, res) =>
+    {
+        try
+        {
+            const { email, batch, course, semester, subjectCode, date, students, aid } = req.body;
+
+            if (!email || !batch || !course || !semester || !subjectCode || !date || !aid)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            if (!students || students.length === 0)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Students attendance not found" });
+            }
+
+            const result = await AttendanceModel.updateOne({ _id: aid }, { $set: { teacherEmail: email, batch: batch, course: course, semester: semester, subjectCode: subjectCode, attendanceDate: date, students: students } })
+
+            if (result.modifiedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Attendance Updated Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Attendance Not Updated Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
+    const TimeTableSchema = new mongoose.Schema({ Course: { type: String, required: true, trim: true }, Semester: { type: String, required: true, trim: true }, TimeTable_pdf: { type: String, required: true }, Teacheremail: { type: String, required: true }, Addedon: { type: Date } }, { versionKey: false });
+
+    TimeTableSchema.index({ Teacheremail: 1 });
+
+    const TimeTableModel = mongoose.model("TimeTable", TimeTableSchema, "TimeTable")
+
+    app.post('/api/add_timetable_by_teacher', uploadTimeTable.single('pdf'), async (req, res) =>
+    {
+        try
+        {
+            const { course, semester, email } = req.body;
+
+            const deleteFile = () =>
+            {
+                if (req.file)
+                {
+                    // const fullPath = `uploads/syllabus/${req.file.filename}`;
+                    const fullPath = path.join(__dirname, "uploads", "timetable", req.file.filename);
+                    if (fs.existsSync(fullPath))
+                    {
+                        fs.unlinkSync(fullPath);
+                    }
+                }
+            };
+
+            if (!course || !semester || !email || !req.file)
+            {
+                deleteFile();
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            const existingTimeTable = await TimeTableModel.findOne({ Course: course, Semester: semester });
+            if (existingTimeTable)
+            {
+                deleteFile();
+                return res.status(409).json({ statuscode: 0, msg: "Time-Table Already Added of this Course and Semester" });
+            }
+
+            const filePath = req.file.filename;
+            // const filePath = `${req.file.filename}`;
+
+            const currentDateUTC = new Date(); // Get the current Date in GMt/UTC
+            const ISTOffset = 5.5 * 60 * 60 * 1000; // IST offset in milliseconds (5 hours 30 minutes)
+            const currentDateIST = new Date(currentDateUTC.getTime() + ISTOffset)  // convert to IST
+
+            const newrecord = new TimeTableModel({ Course: course, Semester: semester, TimeTable_pdf: filePath, Teacheremail: email, Addedon: currentDateIST })
+
+            const result = await newrecord.save()
+
+            if (result) 
+            {
+                return res.status(201).json({ statuscode: 1, msg: "TimeTable Added successfully" });
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "TimeTable not Added successfully" });
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
+    app.get("/api/fetch_all_TimeTableList_by_teacher", async (req, res) =>
+    {
+        try
+        {
+            const result = await TimeTableModel.find()
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Time Table Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, allTimeTable_list: result, msg: "Time-Table Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.delete("/api/delete_timetable_by_teacher/:tid", async (req, res) =>
+    {
+        try
+        {
+            const data = await TimeTableModel.findById(req.params.tid)
+
+            if (!data)
+            {
+                return res.status(404).send({ statuscode: 0, msg: "Syllabus not found" });
+            }
+
+            // const filePath = "." + `uploads/syllabus/${data.syllabus_pdf}`;
+            // const filePath = `uploads/syllabus/${data.syllabus_pdf}`;
+
+            const filePath = path.join(__dirname, "uploads", "timetable", data.TimeTable_pdf);
+
+            if (fs.existsSync(filePath))
+            {
+                fs.unlinkSync(filePath);
+            }
+
+            const result = await TimeTableModel.deleteOne({ _id: req.params.tid });
+
+            if (result.deletedCount === 1) 
+            {
+                res.status(200).send({ statuscode: 1, msg: "Time-Table Deleted Successfully" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 0, msg: "Time-Table Not Deleted Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_TimeTableList_added_by_me_teacher/:email", async (req, res) =>
+    {
+        try
+        {
+            const result = await TimeTableModel.find({ Teacheremail: req.params.email })
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Time-Table Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, my_TimeTable_list: result, msg: "Time-Table Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
 
 
 

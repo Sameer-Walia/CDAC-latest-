@@ -69,7 +69,7 @@ function Syllabus()
                     <div className="breadcrumb">
                         <Link to="/" className="crumb">Home</Link>
                         <span className="separator">›</span>
-                        <span className="crumb">Academics </span>
+                        <span className="crumb">Student Corner</span>
                         <span className="separator">›</span>
                         <span className="crumb active">Syllabus</span>
                     </div>
@@ -119,7 +119,7 @@ function Syllabus()
 
                     </div>
 
-                    <div className="sidebar">
+                    {/* <div className="sidebar">
                         <h3 className="sidebar-title">Academics</h3>
                         <ul>
                             <li><Link to="/academic_overview">Academic Overview</Link></li>
@@ -133,7 +133,7 @@ function Syllabus()
                             <li className="active"><Link to="/syllabus">Syllabus</Link> </li>
                             <li><Link to="/fees_structure">Fee Structure</Link> </li>
                         </ul>
-                    </div>
+                    </div> */}
                 </div>
 
             </div>

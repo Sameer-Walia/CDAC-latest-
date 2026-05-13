@@ -17,6 +17,7 @@ function SearchAttendence_ByTeacher()
 
     const { email } = useSelector((state) => state.teacher)
 
+    const [batch, setbatch] = useState("")
     const [course, setCourse] = useState("");
     const [semester, setSemester] = useState("");
     const [subjectCode, setSubjectCode] = useState("");
@@ -55,6 +56,11 @@ function SearchAttendence_ByTeacher()
         {
             setloading(true)
 
+            if (batch === "")
+            {
+                return toast.error("Please Select Batch")
+            }
+
             if (course === "")
             {
                 return toast.error("Please Select Course")
@@ -72,7 +78,7 @@ function SearchAttendence_ByTeacher()
                 return toast.error("Please Select Date")
             }
 
-            const data = { email, course, semester, subjectCode, date }
+            const data = { email, batch, course, semester, subjectCode, date }
 
             const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/search_attendance_by_teacher`, data);
 
@@ -111,6 +117,7 @@ function SearchAttendence_ByTeacher()
                 if (resp.data.statuscode === 1)
                 {
                     toast.success(resp.data.msg)
+                    handleSearch()
                 }
                 else 
                 {
@@ -151,6 +158,32 @@ function SearchAttendence_ByTeacher()
                     <h1 className="hd text-center">Search Attendance</h1>
 
                     <div className="attendance-filter-box">
+
+                        <div className="filter-group">
+                            <label>Batch</label>
+                            <select
+                                onChange={(e) =>
+                                {
+                                    setbatch(e.target.value)
+                                    setCourse("");
+                                    setSemester("");
+                                    setSubjectCode("");
+                                }}
+                                required>
+                                <option value="">Select Batch</option>
+                                <option value="2025-2027">2025-2027</option>
+                                <option value="2026-2028">2026-2028</option>
+                                <option value="2027-2029">2027-2029</option>
+                                <option value="2028-2030">2028-2030</option>
+                                <option value="2029-2031">2029-2031</option>
+                                <option value="2030-2032">2030-2032</option>
+                                <option value="2031-2033">2031-2033</option>
+                                <option value="2032-2034">2032-2034</option>
+                                <option value="2033-2035">2033-2035</option>
+                                <option value="2034-2036">2034-2036</option>
+                            </select>
+                        </div>
+
 
                         <div className="filter-group">
                             <label>Course</label>
@@ -223,12 +256,12 @@ function SearchAttendence_ByTeacher()
                     {
                         attendance_data.length > 0 ?
 
-
                             <div id="teacher_list" className="table-container">
                                 <table className="teacher-table mt-4">
                                     <thead className="text-center">
                                         <tr>
                                             <th>S.NO.</th>
+                                            <th>Batch</th>
                                             <th>Course</th>
                                             <th>Semester</th>
                                             <th>Subject Code</th>
@@ -244,6 +277,7 @@ function SearchAttendence_ByTeacher()
                                             attendance_data.map((item, index) =>
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
+                                                    <td>{item.batch}</td>
                                                     <td>{item.course}</td>
                                                     <td>{item.semester}</td>
                                                     <td>{item.subjectCode}</td>

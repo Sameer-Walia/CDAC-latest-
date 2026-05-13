@@ -79,6 +79,13 @@ function TeacherSidebar({ collapse, setCollapse })
                             </Link>
                         </li>
 
+                        <li data-title="timetable" className={activeTab === "timetable" ? "active" : ""}>
+                            <Link to="/all_timetable_list_to_teacher" onClick={() => handleTabClick("timetable")}>
+                                <span className="icon">📝</span>
+                                <span className="text">Time Table</span>
+                            </Link>
+                        </li>
+
                         <li data-title="all_marks_list" className={activeTab === "all_marks_list" ? "active" : ""}>
                             <Link to="/all_students_marks_list_to_teacher" onClick={() => handleTabClick("all_marks_list")}>
                                 <span className="icon">📝</span>
@@ -90,6 +97,14 @@ function TeacherSidebar({ collapse, setCollapse })
                             <Link to="/mark_attendance_by_teacher" onClick={() => handleTabClick("mark_attendance")}>
                                 <span className="icon">📋</span>
                                 <span className="text">Attendance</span>
+                            </Link>
+                        </li>
+
+
+                        <li data-title="Thesis" className={activeTab === "Thesis" ? "active" : ""}>
+                            <Link to="/mark_attendance_by_teacher" onClick={() => handleTabClick("Thesis")}>
+                                <span className="icon">📋</span>
+                                <span className="text">Thesis</span>
                             </Link>
                         </li>
 

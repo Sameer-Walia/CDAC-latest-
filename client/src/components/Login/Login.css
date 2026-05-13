@@ -337,3 +337,41 @@
 }
 
 
+/* thanks page css start */
+
+#authpage .thanks-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    background: #f9fafc;
+    padding: 20px;
+}
+
+#authpage .thanks-container {
+    max-width: 800px;
+    text-align: center;
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+#authpage .thanks-heading {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 16px;
+}
+
+#authpage .thanks-subheading {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #444;
+    margin-bottom: 24px;
+}
+
+#authpage .thanks-message {
+    font-size: 1.1rem;
+    color: #2c7a7b;
+}

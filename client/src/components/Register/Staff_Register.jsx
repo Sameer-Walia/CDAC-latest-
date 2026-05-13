@@ -37,12 +37,17 @@ function Staff_Register()
                     const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_teacher_by_itself`, reqdata)
                     if (resp.data.statuscode === 1)
                     {
+                        navi("/thanks")
                         toast.success(resp.data.msg)
-                        navi("/staff_login")
                     }
-                    else
+                    else if (resp.data.statuscode === 2)
                     {
-                        toast.error(resp.data.msg)
+                        navi("/nothanks")
+                        toast.warn(resp.data.msg)
+                    }
+                    else if (resp.data.statuscode === 0)
+                    {
+                        toast.warn(resp.data.msg)
                     }
                 }
                 catch (e) 
@@ -133,7 +138,7 @@ function Staff_Register()
                     <input type="checkbox" name="cbx1" onChange={(e) => setterms(e.target.checked)} /><i> </i>I accept the terms and conditions
                 </label>
 
-                <button type="submit" className="register-button mt-3" disabled={loading}>
+                <button type="submit" className="register-button " disabled={loading}>
                     {loading ? "Signing up..." : "SIGN UP"}
                 </button>
 

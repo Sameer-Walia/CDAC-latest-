@@ -142,6 +142,7 @@ function StudentAdded_ByAdmin()
                                     <th>Name</th>
                                     <th>ID</th>
                                     <th>Password</th>
+                                    <th>Batch</th>
                                     <th>Course</th>
                                     <th>Email</th>
                                     <th>Father Name</th>
@@ -161,6 +162,7 @@ function StudentAdded_ByAdmin()
                                             <td>{item.name}</td>
                                             <td>{item.studentID}</td>
                                             <td>{item.password}</td>
+                                            <td>{item.batch}</td>
                                             <td>{item.course}</td>
                                             <td>{item.email}</td>
                                             <td>{item.father}</td>

@@ -76,6 +76,14 @@ import My_Marks from "./Backend/Student/My_Marks";
 import MarkAttendence_ByTeacher from "./Backend/Teacher/MarkAttendence_ByTeacher";
 import My_Attendance from "./Backend/Student/My_Attendance";
 import SearchAttendence_ByTeacher from "./Backend/Teacher/SearchAttendence_ByTeacher";
+import ExploreAttendence_ByTeacher from "./Backend/Teacher/ExploreAttendence_ByTeacher";
+import Thanks from "./Register/Thanks";
+import NoThanks from "./Register/NoThanks";
+import ActivateAccount from "./Register/ActivateAccount";
+import AllTimeTableList_ToTeacher from "./Backend/Teacher/AllTimeTableList_ToTeacher";
+import AddTimeTable_ByTeacher from "./Backend/Teacher/AddTimeTable_ByTeacher";
+import TimeTableAdded_ByTeacher from "./Backend/Teacher/TimeTableAdded_ByTeacher";
+import TimeTable from "./Academics/TimeTable";
 
 
 function Siteroutes()
@@ -134,8 +142,13 @@ function Siteroutes()
                 <Route path="/seat_distribution" element={<SeatDistribution />}></Route>
 
 
-
                 {/* backend start */}
+
+
+                <Route path="/thanks" element={<Thanks />}></Route>
+                <Route path="/nothanks" element={<NoThanks />}></Route>
+                <Route path="/activateaccount" element={<ActivateAccount />}></Route>
+
 
                 {/* admin */}
                 <Route path="/adminPanel" element={<TeacherList />}></Route>
@@ -174,6 +187,11 @@ function Siteroutes()
                 <Route path="/update_marks_by_teacher/:mid" element={<UpdateMarks_ByTeacher />}></Route>
                 <Route path="/mark_attendance_by_teacher" element={<MarkAttendence_ByTeacher />}></Route>
                 <Route path="/search_attendence_by_teacher" element={<SearchAttendence_ByTeacher />}></Route>
+                <Route path="/explore_attendance_by_teacher/:aid" element={<ExploreAttendence_ByTeacher />}></Route>
+                <Route path="/all_timetable_list_to_teacher" element={<AllTimeTableList_ToTeacher />}></Route>
+                <Route path="/add_timetable" element={<AddTimeTable_ByTeacher />}></Route>
+                <Route path="/timetable_add_by_me_teacher" element={<TimeTableAdded_ByTeacher />}></Route>
+
 
 
 
@@ -181,6 +199,7 @@ function Siteroutes()
                 <Route path="/upload_fees_by_student" element={<UploadFees_ByStudent />}></Route>
                 <Route path="/my_marks" element={<My_Marks />}></Route>
                 <Route path="/my_attendance" element={<My_Attendance />}></Route>
+                <Route path="/timetable" element={<TimeTable />}></Route>
 
             </Routes>
         </div>

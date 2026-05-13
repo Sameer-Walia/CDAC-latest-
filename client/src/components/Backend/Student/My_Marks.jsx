@@ -121,7 +121,7 @@ function My_Marks()
                     <div className="breadcrumb">
                         <Link to="/studenthome" className="crumb">Home</Link>
                         <span className="separator">›</span>
-                        <span className="crumb">About Us</span>
+                        <span className="crumb">Student Corner</span>
                         <span className="separator">›</span>
                         <span className="crumb active">Marks List</span>
                     </div>

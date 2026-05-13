@@ -16,7 +16,6 @@ function Staff_Login()
     const [hcaptcha, sethcaptcha] = useState(false);
     const dispatch = useDispatch()
 
-
     const navi = useNavigate();
 
     useEffect(() =>
@@ -47,22 +46,29 @@ function Staff_Login()
             const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/staff_login`, logindata)
             if (resp.data.statuscode === 1) 
             {
-                dispatch(TeacherLogin(resp.data.teacherdata))
-                sessionStorage.setItem("teacherdata", JSON.stringify(resp.data.teacherdata));
-                if (resp.data.teacherdata.usertype === "admin")
+                if (resp.data.teacherdata.actstatus === true)
                 {
-                    toast.success(resp.data.msg)
-                    navi("/adminhome")
-                }
-                else if (resp.data.teacherdata.usertype === "teacher")
-                {
-                    toast.success(resp.data.msg)
-                    navi("/teacherhome")
+                    dispatch(TeacherLogin(resp.data.teacherdata))
+                    sessionStorage.setItem("teacherdata", JSON.stringify(resp.data.teacherdata));
+                    if (resp.data.teacherdata.usertype === "admin")
+                    {
+                        toast.success(resp.data.msg)
+                        navi("/adminhome")
+                    }
+                    else if (resp.data.teacherdata.usertype === "teacher")
+                    {
+                        toast.success(resp.data.msg)
+                        navi("/teacherhome")
+                    }
+                    else
+                    {
+                        toast.success(resp.data.msg)
+                        navi("/")
+                    }
                 }
                 else
                 {
-                    toast.success(resp.data.msg)
-                    navi("/")
+                    toast.error("Your account is not activated , please check your email and activate your account")
                 }
             }
             else 

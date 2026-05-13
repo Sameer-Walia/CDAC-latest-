@@ -14,6 +14,7 @@ function UpdateStudent_byAdmin()
     const [studentId, setstudentId] = useState("")
     const [studentpassword, setstudentpassword] = useState("")
     const [studentemail, setstudentemail] = useState("")
+    const [batch, setbatch] = useState("")
     const [course, setCourse] = useState("")
     const [phone, setphone] = useState("")
     const [fathername, setfathername] = useState("")
@@ -51,6 +52,7 @@ function UpdateStudent_byAdmin()
                 setstudentId(student.studentID)
                 setstudentpassword(student.password)
                 setstudentemail(student.email);
+                setbatch(student.batch);
                 setCourse(student.course);
                 setphone(student.phone);
                 setphone2(student.phone2);
@@ -78,7 +80,7 @@ function UpdateStudent_byAdmin()
         try
         {
             setloading(true)
-            const student_data = { name, phone, phone2, course, sid, fathername, mothername, studentemail }
+            const student_data = { name, phone, phone2, batch, course, sid, fathername, mothername, studentemail }
             const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_student_data_by_admin`, student_data);
 
             if (resp.data.statuscode === 1)
@@ -182,6 +184,23 @@ function UpdateStudent_byAdmin()
                                 <label>Email</label>
                                 <input type="email" placeholder="Enter student email" value={studentemail || ""}
                                     onChange={(e) => setstudentemail(e.target.value)} />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Select Batch</label>
+                                <select onChange={(e) => setbatch(e.target.value)} value={batch || ""} required>
+                                    <option value="">-- Select Batch --</option>
+                                    <option value="2025-2027">2025-2027</option>
+                                    <option value="2026-2028">2026-2028</option>
+                                    <option value="2027-2029">2027-2029</option>
+                                    <option value="2028-2030">2028-2030</option>
+                                    <option value="2029-2031">2029-2031</option>
+                                    <option value="2030-2032">2030-2032</option>
+                                    <option value="2031-2033">2031-2033</option>
+                                    <option value="2032-2034">2032-2034</option>
+                                    <option value="2033-2035">2033-2035</option>
+                                    <option value="2034-2036">2034-2036</option>
+                                </select>
                             </div>
 
                             <div className="form-group">

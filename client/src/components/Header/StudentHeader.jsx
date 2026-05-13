@@ -91,7 +91,7 @@ function StudentHeader()
                                     <li><Link to="/overview">Overview</Link></li>
                                     <li><Link to="/recognition">Recognition & Approval</Link></li>
                                     <li><Link to="/departmental_activities">Departmental Activities</Link></li>
-                                    <li><Link to="">Photo Gallery</Link></li>
+                                    {/* <li><Link to="">Photo Gallery</Link></li> */}
                                     <li><Link to="/holidays_list">Holiday List</Link></li>
                                     <li><Link to="/contact">Contact Information</Link></li>
                                 </ul>
@@ -119,7 +119,7 @@ function StudentHeader()
                                         </ul>
                                     </li>
                                     <li><Link to="/academic_calendar">Academic Calendar</Link></li>
-                                    <li><Link to="/syllabus">Syllabus</Link></li>
+                                    {/* <li><Link to="/syllabus">Syllabus</Link></li> */}
                                     <li><Link to="/fees_structure">Fee Structure</Link></li>
                                 </ul>
                             </li>
@@ -184,7 +184,7 @@ function StudentHeader()
                                     <li><Link to="/studentcounselling">Student Counselling</Link></li>
                                     <li><a href="http://acsd.ac.in/readdata/Date%20sheet.pdf" target="_blank" rel="noopener noreferrer">Exam Date Sheet</a></li>
                                     <li><Link to="#">Exam Results</Link></li>
-                                    <li><a href="http://acsd.ac.in/readdata/TIME%20TABLE17.pdf" target="_blank" rel="noopener noreferrer">Time Table</a></li>
+                                    <li><Link to="/timetable">Time Table</Link></li>
                                     <li><Link to="/syllabus">Syllabus</Link></li>
                                     <li><Link to="/upload_fees_by_student">Upload Fees</Link></li>
                                     <li><Link to="/my_marks">Marks</Link></li>

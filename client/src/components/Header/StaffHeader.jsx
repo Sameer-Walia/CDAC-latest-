@@ -20,18 +20,7 @@ function StaffHeader()
     {
         sessionStorage.clear()
         // const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/logout`)
-        if (usertype === "admin")
-        {
-            navi("/staff_login")
-        }
-        else if (usertype === "teacher")
-        {
-            navi("/staff_login")
-        }
-        else
-        {
-            navi("/")
-        }
+        navi("/staff_login")
         dispatch(TeacherLogOut())
         toast.info("You have successfully Logged Out")
     }
@@ -112,7 +101,7 @@ function StaffHeader()
                                     <li><Link to="/overview">Overview</Link></li>
                                     <li><Link to="/recognition">Recognition & Approval</Link></li>
                                     <li><Link to="/departmental_activities">Departmental Activities</Link></li>
-                                    <li><Link to="">Photo Gallery</Link></li>
+                                    {/* <li><Link to="">Photo Gallery</Link></li> */}
                                     <li><Link to="/holidays_list">Holiday List</Link></li>
                                     <li><Link to="/contact">Contact Information</Link></li>
                                 </ul>
@@ -140,7 +129,7 @@ function StaffHeader()
                                         </ul>
                                     </li>
                                     <li><Link to="/academic_calendar">Academic Calendar</Link></li>
-                                    <li><Link to="/syllabus">Syllabus</Link></li>
+                                    {/* <li><Link to="/syllabus">Syllabus</Link></li> */}
                                     <li><Link to="/fees_structure">Fee Structure</Link></li>
                                 </ul>
                             </li>
@@ -205,7 +194,7 @@ function StaffHeader()
                                     <li><Link to="/studentcounselling">Student Counselling</Link></li>
                                     <li><a href="http://acsd.ac.in/readdata/Date%20sheet.pdf" target="_blank" rel="noopener noreferrer">Exam Date Sheet</a></li>
                                     <li><Link to="#">Exam Results</Link></li>
-                                    <li><a href="http://acsd.ac.in/readdata/TIME%20TABLE17.pdf" target="_blank" rel="noopener noreferrer">Time Table</a></li>
+                                    <li><Link to="/timetable">Time Table</Link></li>
                                     <li><Link to="/syllabus">Syllabus</Link></li>
                                 </ul>
                             </li>
