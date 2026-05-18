@@ -1413,28 +1413,7 @@ else
         }
     })
 
-    app.get("/api/fetch_all_TimeTableList_for_student", async (req, res) =>
-    {
-        try
-        {
-            const result = await TimeTableModel.find()
 
-            if (result.length === 0) 
-            {
-                res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
-            }
-            else 
-            {
-                res.status(200).send({ statuscode: 1, allTimeTable_list: result, msg: "Syllabus Found Successfully" })
-            }
-
-        }
-        catch (e)
-        {
-            console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
-        }
-    })
 
     app.delete("/api/delete_syllabus_by_teacher/:sid", async (req, res) =>
     {
@@ -2212,6 +2191,7 @@ else
     const TimeTableSchema = new mongoose.Schema({ Course: { type: String, required: true, trim: true }, Semester: { type: String, required: true, trim: true }, TimeTable_pdf: { type: String, required: true }, Teacheremail: { type: String, required: true }, Addedon: { type: Date } }, { versionKey: false });
 
     TimeTableSchema.index({ Teacheremail: 1 });
+    TimeTableSchema.index({ Course: 1, Semester: 1 });
 
     const TimeTableModel = mongoose.model("TimeTable", TimeTableSchema, "TimeTable")
 
@@ -2306,7 +2286,7 @@ else
 
             if (!data)
             {
-                return res.status(404).send({ statuscode: 0, msg: "Syllabus not found" });
+                return res.status(404).send({ statuscode: 0, msg: "Time-Table not found" });
             }
 
             // const filePath = "." + `uploads/syllabus/${data.syllabus_pdf}`;
@@ -2359,6 +2339,58 @@ else
             res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
+
+
+    app.get("/api/fetch_all_TimeTableList_for_student", async (req, res) =>
+    {
+        try
+        {
+            const result = await TimeTableModel.find()
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, allTimeTable_list: result, msg: "Syllabus Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    // thesis start
+
+    app.get("/api/fetchTeacheremail", async (req, res) =>
+    {
+        try
+        {
+            const result = await TeacherSignupModel.find().select("name email _id");
+
+            if (result.length === 0) 
+            {
+                res.status(200).send({ statuscode: 0, msg: "No Data Found" })
+            }
+            else 
+            {
+                res.status(200).send({ statuscode: 1, allteacher_email: result, msg: "Data Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
 
 
 
