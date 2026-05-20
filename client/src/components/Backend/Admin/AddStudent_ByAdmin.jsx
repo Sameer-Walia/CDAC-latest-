@@ -13,7 +13,6 @@ function AddStudent_ByAdmin()
     const navi = useNavigate();
     const { email } = useSelector((state) => state.teacher)
 
-
     const [name, setname] = useState("")
     const [studentId, setstudentId] = useState("")
     const [studentemail, setstudentemail] = useState("")
@@ -39,7 +38,7 @@ function AddStudent_ByAdmin()
         }
         else
         {
-            if (!name || !studentId || !email || !batch || !course || !studentemail || !phone || !fathername || !mothername || !phone2)
+            if (!name?.trim() || !studentId?.trim() || !email?.trim() || !batch?.trim() || !course?.trim() || !studentemail?.trim() || !phone?.trim() || !fathername?.trim() || !mothername?.trim() || !phone2?.trim())
             {
                 return toast.error("All fields are required");
             }

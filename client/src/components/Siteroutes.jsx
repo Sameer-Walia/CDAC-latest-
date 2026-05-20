@@ -85,6 +85,7 @@ import AddTimeTable_ByTeacher from "./Backend/Teacher/AddTimeTable_ByTeacher";
 import TimeTableAdded_ByTeacher from "./Backend/Teacher/TimeTableAdded_ByTeacher";
 import TimeTable from "./Academics/TimeTable";
 import My_Thesis from "./Backend/Student/My_Thesis";
+import AllThesisList_ToTeacher from "./Backend/Teacher/AllThesisList_ToTeacher";
 
 
 function Siteroutes()
@@ -192,7 +193,7 @@ function Siteroutes()
                 <Route path="/all_timetable_list_to_teacher" element={<AllTimeTableList_ToTeacher />}></Route>
                 <Route path="/add_timetable" element={<AddTimeTable_ByTeacher />}></Route>
                 <Route path="/timetable_add_by_me_teacher" element={<TimeTableAdded_ByTeacher />}></Route>
-
+                <Route path="/all_thesis_list_to_teacher" element={<AllThesisList_ToTeacher />}></Route>
 
 
 

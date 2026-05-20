@@ -175,6 +175,34 @@ else
         }
     });
 
+    // thesis upload
+    const thesisStorage = multer.diskStorage({
+        destination: (req, file, cb) =>
+        {
+            cb(null, 'uploads/thesis');
+        },
+        filename: (req, file, cb) =>
+        {
+            cb(null, Date.now() + '-' + file.originalname);
+        }
+    });
+
+    const uploadThesis = multer({
+        storage: thesisStorage,
+        limits: { fileSize: 3 * 1024 * 1024 },
+        fileFilter: (req, file, cb) =>
+        {
+            if (file.mimetype === "application/pdf")
+            {
+                cb(null, true);
+            }
+            else
+            {
+                cb(new Error("Only PDF allowed"), false);
+            }
+        }
+    });
+
     app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  //Allow files inside uploads/ to be opened directly via URL.
 
     mongoose.connect('mongodb://127.0.0.1:27017/CDAC').then(() => console.log('Connected to MongoDB'));
@@ -333,11 +361,11 @@ else
             const updateresult = await TeacherSignupModel.updateOne({ token: req.body.code }, { $set: { actstatus: true } });
             if (updateresult.modifiedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Account Activated Successfully , please login now" })
+                return res.status(200).send({ statuscode: 1, msg: "Account Activated Successfully , please login now" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Teacher Not Updated Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Teacher Not Updated Successfully" })
             }
         }
         catch (e)
@@ -376,17 +404,17 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "Incorrect Email/Password" })
+                return res.status(200).send({ statuscode: 0, msg: "Incorrect Email/Password" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, teacherdata: result, msg: "Login Successfully" })
+                return res.status(200).send({ statuscode: 1, teacherdata: result, msg: "Login Successfully" })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -399,18 +427,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Teacher Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Teacher Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, allteachers_list: result, msg: "Teachers Found Successfully" })
+                return res.status(200).send({ statuscode: 1, allteachers_list: result, msg: "Teachers Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -427,18 +455,18 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Profile Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Profile Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, profile: result, msg: "Profile Found Successfully" })
+                return res.status(200).send({ statuscode: 1, profile: result, msg: "Profile Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -455,18 +483,18 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Profile Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Profile Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, profile: result, msg: "Profile Found Successfully" })
+                return res.status(200).send({ statuscode: 1, profile: result, msg: "Profile Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -485,18 +513,18 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Teacher Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Teacher Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, teacher_data: result, msg: "Teacher Found Successfully" })
+                return res.status(200).send({ statuscode: 1, teacher_data: result, msg: "Teacher Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -509,18 +537,18 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Teacher Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Teacher Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, teacher_data: result })
+                return res.status(200).send({ statuscode: 1, teacher_data: result })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -549,18 +577,18 @@ else
 
             if (result.modifiedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Teacher Updated Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Teacher Updated Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Teacher Not Updated Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Teacher Not Updated Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -589,18 +617,18 @@ else
 
             if (result.modifiedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "profile Updated Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "profile Updated Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "profile Not Updated Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "profile Not Updated Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -630,18 +658,18 @@ else
 
             if (result.modifiedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "profile Updated Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "profile Updated Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "profile Not Updated Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "profile Not Updated Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -653,17 +681,17 @@ else
             const result = await TeacherSignupModel.deleteOne({ _id: req.params.tid })
             if (result.deletedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Teacher Deleted Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Teacher Deleted Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Teacher Not Deleted Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Teacher Not Deleted Successfully" })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -857,18 +885,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Students Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Students Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, allstudents_list: result, msg: "Students Found Successfully" })
+                return res.status(200).send({ statuscode: 1, allstudents_list: result, msg: "Students Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -882,18 +910,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Students Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Students Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, students_addedbyMe: result, msg: "Students Found Successfully" })
+                return res.status(200).send({ statuscode: 1, students_addedbyMe: result, msg: "Students Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -904,21 +932,19 @@ else
             const result = await StudentSignupModel.deleteOne({ _id: req.params.sid })
             if (result.deletedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Student Deleted Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Student Deleted Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Student Not Deleted Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Student Not Deleted Successfully" })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
-
-
 
 
     app.delete("/api/delete_student_by_teacher/:sid", async (req, res) =>
@@ -928,17 +954,17 @@ else
             const result = await StudentSignupModel.deleteOne({ _id: req.params.sid })
             if (result.deletedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Student Deleted Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Student Deleted Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Student Not Deleted Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Student Not Deleted Successfully" })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -951,18 +977,18 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Student Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Student Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, student_data: result })
+                return res.status(200).send({ statuscode: 1, student_data: result })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -976,18 +1002,18 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Student Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Student Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, student_data: result })
+                return res.status(200).send({ statuscode: 1, student_data: result })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1047,18 +1073,18 @@ else
 
             if (result.modifiedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Student Updated Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Student Updated Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Student Not Updated Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Student Not Updated Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1120,18 +1146,18 @@ else
 
             if (result.modifiedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Student Updated Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Student Updated Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Student Not Updated Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Student Not Updated Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1145,18 +1171,18 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No student Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No student Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, student_data: result, msg: "Student Found Successfully" })
+                return res.status(200).send({ statuscode: 1, student_data: result, msg: "Student Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1169,18 +1195,18 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No student Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No student Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, student_data: result, msg: "Student Found Successfully" })
+                return res.status(200).send({ statuscode: 1, student_data: result, msg: "Student Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1193,18 +1219,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Students Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Students Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, allstudents_list: result, msg: "Students Found Successfully" })
+                return res.status(200).send({ statuscode: 1, allstudents_list: result, msg: "Students Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1218,18 +1244,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Students Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Students Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, students_addedbyMe: result, msg: "Students Found Successfully" })
+                return res.status(200).send({ statuscode: 1, students_addedbyMe: result, msg: "Students Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1258,7 +1284,7 @@ else
 
             if (result === null)
             {
-                res.status(200).send({ statuscode: 0, msg: "No Students Found with this Id" })
+                return res.status(200).send({ statuscode: 0, msg: "No Students Found with this Id" })
             }
             else
             {
@@ -1276,13 +1302,13 @@ else
                     if (error)
                     {
                         console.log(error);
-                        res.status(200).send({ statuscode: 2, msg: "Mail Not Sent Successfully" })
+                        return res.status(200).send({ statuscode: 2, msg: "Mail Not Sent Successfully" })
 
                     }
                     else
                     {
                         console.log("Email sent: " + info.response);
-                        res.status(200).send({ statuscode: 1, msg: "Mail Sent Successfully" })
+                        return res.status(200).send({ statuscode: 1, msg: "Mail Sent Successfully" })
                     }
                 });
             }
@@ -1290,7 +1316,7 @@ else
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1363,7 +1389,7 @@ else
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     });
 
@@ -1375,18 +1401,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, allsyllabus_list: result, msg: "Syllabus Found Successfully" })
+                return res.status(200).send({ statuscode: 1, allsyllabus_list: result, msg: "Syllabus Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1398,18 +1424,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, allsyllabus_list: result, msg: "Syllabus Found Successfully" })
+                return res.status(200).send({ statuscode: 1, allsyllabus_list: result, msg: "Syllabus Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1440,17 +1466,17 @@ else
 
             if (result.deletedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Syllabus Deleted Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Syllabus Deleted Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Syllabus Not Deleted Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Syllabus Not Deleted Successfully" })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1462,18 +1488,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, my_syllabus_list: result, msg: "Syllabus Found Successfully" })
+                return res.status(200).send({ statuscode: 1, my_syllabus_list: result, msg: "Syllabus Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1518,7 +1544,7 @@ else
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     });
 
@@ -1530,18 +1556,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Students Marks Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Students Marks Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, students_marks_list: result, msg: "Students Marks Found Successfully" })
+                return res.status(200).send({ statuscode: 1, students_marks_list: result, msg: "Students Marks Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1553,18 +1579,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Marks Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Marks Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, marks_addedbyMe: result, msg: "Marks Found Successfully" })
+                return res.status(200).send({ statuscode: 1, marks_addedbyMe: result, msg: "Marks Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1575,17 +1601,17 @@ else
             const result = await MarksUploadModel.deleteOne({ _id: req.params.sid })
             if (result.deletedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Marks Deleted Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Marks Deleted Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Marks Not Deleted Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Marks Not Deleted Successfully" })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1598,18 +1624,18 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Marks Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Marks Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, student_marks: result })
+                return res.status(200).send({ statuscode: 1, student_marks: result })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1634,18 +1660,18 @@ else
 
             if (result.modifiedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Marks Updated Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Marks Updated Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Marks Not Updated Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Marks Not Updated Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1670,17 +1696,17 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "Incorrect StudentID/Password" })
+                return res.status(200).send({ statuscode: 0, msg: "Incorrect StudentID/Password" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, studentdata: result, msg: "Login Successfully" })
+                return res.status(200).send({ statuscode: 1, studentdata: result, msg: "Login Successfully" })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1701,13 +1727,28 @@ else
         {
             const { semester, studentID, email, name, course } = req.body;
 
+            const deleteFile = () =>
+            {
+                if (req.file)
+                {
+                    // const fullPath = `uploads/fees/${req.file.filename}`;
+                    const fullPath = path.join(__dirname, "uploads", "fees", req.file.filename);
+                    if (fs.existsSync(fullPath))
+                    {
+                        fs.unlinkSync(fullPath);
+                    }
+                }
+            };
+
             if (!semester || !req.file)
             {
+                deleteFile();
                 return res.status(400).json({ statuscode: 0, msg: "All fields required" });
             }
 
             if (!req.file)
             {
+                deleteFile();
                 return res.status(400).json({ statuscode: 0, msg: "Please select pdf" });
             }
 
@@ -1735,9 +1776,11 @@ else
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     });
+
+
 
     app.get("/api/fetch_all_fees_list_by_admin", async (req, res) =>
     {
@@ -1747,18 +1790,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Fees-List Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Fees-List Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, all_Fees_list: result, msg: "Fees-List Found Successfully" })
+                return res.status(200).send({ statuscode: 1, all_Fees_list: result, msg: "Fees-List Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1785,17 +1828,17 @@ else
 
             if (result.deletedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Fees Details Deleted Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Fees Details Deleted Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Fees Details Not Deleted Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Fees Details Not Deleted Successfully" })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1814,17 +1857,17 @@ else
 
             if (result.modifiedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Status Updated Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Status Updated Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Status Not Updated Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Status Not Updated Successfully" })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     });
 
@@ -1843,18 +1886,18 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "Not Found" })
+                return res.status(200).send({ statuscode: 0, msg: "Not Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, fees_status: result, msg: "Found Successfully" })
+                return res.status(200).send({ statuscode: 1, fees_status: result, msg: "Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1873,18 +1916,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Fees-List Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Fees-List Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, student_Fees_list: result, msg: "Fees-List Found Successfully" })
+                return res.status(200).send({ statuscode: 1, student_Fees_list: result, msg: "Fees-List Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1898,18 +1941,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Fees-List Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Fees-List Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, sem_Fees_list: result, msg: "Fees-List Found Successfully" })
+                return res.status(200).send({ statuscode: 1, sem_Fees_list: result, msg: "Fees-List Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1921,18 +1964,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Students Marks Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Students Marks Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, my_marks_list: result, msg: "Students Marks Found Successfully" })
+                return res.status(200).send({ statuscode: 1, my_marks_list: result, msg: "Students Marks Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -1947,18 +1990,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Students Found " })
+                return res.status(200).send({ statuscode: 0, msg: "No Students Found " })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, course_students_list: result, msg: "Students Found Successfully" })
+                return res.status(200).send({ statuscode: 1, course_students_list: result, msg: "Students Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -2016,7 +2059,7 @@ else
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     });
 
@@ -2075,7 +2118,7 @@ else
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     });
 
@@ -2094,18 +2137,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Attendance Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Attendance Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, attendance_data: result, msg: "Attendance Found Successfully" })
+                return res.status(200).send({ statuscode: 1, attendance_data: result, msg: "Attendance Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -2116,17 +2159,17 @@ else
             const result = await AttendanceModel.deleteOne({ _id: req.params.aid })
             if (result.deletedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Attendance Deleted Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Attendance Deleted Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Attendance Not Deleted Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Attendance Not Deleted Successfully" })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -2139,17 +2182,17 @@ else
 
             if (result === null) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Data Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Data Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, attendance_data: result })
+                return res.status(200).send({ statuscode: 1, attendance_data: result })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -2173,18 +2216,18 @@ else
 
             if (result.modifiedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Attendance Updated Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Attendance Updated Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Attendance Not Updated Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Attendance Not Updated Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     });
 
@@ -2251,7 +2294,7 @@ else
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     });
 
@@ -2263,18 +2306,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Time Table Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Time Table Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, allTimeTable_list: result, msg: "Time-Table Found Successfully" })
+                return res.status(200).send({ statuscode: 1, allTimeTable_list: result, msg: "Time-Table Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -2303,17 +2346,17 @@ else
 
             if (result.deletedCount === 1) 
             {
-                res.status(200).send({ statuscode: 1, msg: "Time-Table Deleted Successfully" })
+                return res.status(200).send({ statuscode: 1, msg: "Time-Table Deleted Successfully" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 0, msg: "Time-Table Not Deleted Successfully" })
+                return res.status(200).send({ statuscode: 0, msg: "Time-Table Not Deleted Successfully" })
             }
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -2325,18 +2368,18 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Time-Table Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Time-Table Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, my_TimeTable_list: result, msg: "Time-Table Found Successfully" })
+                return res.status(200).send({ statuscode: 1, my_TimeTable_list: result, msg: "Time-Table Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
@@ -2349,23 +2392,27 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Syllabus Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, allTimeTable_list: result, msg: "Syllabus Found Successfully" })
+                return res.status(200).send({ statuscode: 1, allTimeTable_list: result, msg: "Syllabus Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
 
     // thesis start
+
+    const ThesisUploadSchema = new mongoose.Schema({ teacher_email: { type: String, required: true, trim: true }, teacher_name: { type: String, required: true }, thesis_title: { type: String, required: true }, domain: { type: String, required: true }, month: { type: String, required: true }, thesis_pdf: { type: String, required: true }, Addedon: { type: Date }, student_batch: { type: String, required: true }, student_course: { type: String, required: true }, student_ID: { type: String, required: true }, student_name: { type: String, required: true }, status: { type: String, required: true } }, { versionKey: false });
+
+    const ThesisUploadModel = mongoose.model("Thesis", ThesisUploadSchema, "Thesis")
 
     app.get("/api/fetchTeacheremail", async (req, res) =>
     {
@@ -2375,25 +2422,192 @@ else
 
             if (result.length === 0) 
             {
-                res.status(200).send({ statuscode: 0, msg: "No Data Found" })
+                return res.status(200).send({ statuscode: 0, msg: "No Data Found" })
             }
             else 
             {
-                res.status(200).send({ statuscode: 1, allteacher_email: result, msg: "Data Found Successfully" })
+                return res.status(200).send({ statuscode: 1, allteacher_email: result, msg: "Data Found Successfully" })
             }
 
         }
         catch (e)
         {
             console.log(e.message)
-            res.status(500).send({ statuscode: -1, msg: "Server error" })
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
 
 
+    app.post('/api/upload_thesis_by_student', uploadThesis.single('pdf'), async (req, res) =>
+    {
+        try
+        {
+            const { teacheremail, teachername, title, domain, month, batch, course, studentID, name } = req.body;
+
+            const deleteFile = () =>
+            {
+                if (req.file)
+                {
+                    const fullPath = path.join(__dirname, "uploads", "thesis", req.file.filename);
+                    if (fs.existsSync(fullPath))
+                    {
+                        fs.unlinkSync(fullPath);
+                    }
+                }
+            };
+
+            if (!teacheremail?.trim() || !teachername?.trim() || !title?.trim() || !domain?.trim() || !month?.trim() || !batch?.trim() || !course?.trim() || !studentID?.trim() || !name?.trim() || !req.file)
+            {
+                deleteFile();
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            if (!req.file)
+            {
+                deleteFile();
+                return res.status(400).json({ statuscode: 0, msg: "Please select pdf" });
+            }
+
+            if (req.file.mimetype !== "application/pdf")
+            {
+                deleteFile();
+                return res.status(400).json({ statuscode: 0, msg: "Only PDF files allowed" });
+            }
+            if (req.file.size > 3 * 1024 * 1024)
+            {
+                deleteFile();
+                return res.status(400).json({ statuscode: 0, msg: "PDF size exceeds 3 MB" });
+            }
+            const allowedMonths = ["January", "February", "March", "April", "May", "June"];
+            if (!allowedMonths.includes(month))
+            {
+                deleteFile();
+                return res.status(400).json({ statuscode: 0, msg: "Invalid month selected" });
+            }
+
+            const filePath = req.file.filename;
+
+            const currentDateUTC = new Date();
+            const ISTOffset = 5.5 * 60 * 60 * 1000;
+            const currentDateIST = new Date(currentDateUTC.getTime() + ISTOffset)
+
+            const newrecord = new ThesisUploadModel({ teacher_email: teacheremail, teacher_name: teachername, thesis_title: title, domain: domain, month: month, thesis_pdf: filePath, Addedon: currentDateIST, student_batch: batch, student_course: course, student_ID: studentID, student_name: name, status: "pending" })
+
+            const result = await newrecord.save()
+
+            if (result) 
+            {
+                return res.status(201).json({ statuscode: 1, msg: "Thesis Pdf Uploaded Successfully" });
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "Thesis Pdf not Uploaded Successfully" });
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
+    app.get("/api/fetch_thesis_Title_by_student", async (req, res) =>
+    {
+        try
+        {
+            const result = await ThesisUploadModel.findOne({ student_ID: req.query.sid }).select("thesis_title")
+
+            if (result === null) 
+            {
+                return res.status(200).send({ statuscode: 0 })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 1, thesis_title: result.thesis_title })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/fetch_all_thesis_by_teacher/:tid", async (req, res) =>
+    {
+        try
+        {
+            const result = await ThesisUploadModel.find({ teacher_email: req.params.tid })
+
+            if (result.length === 0) 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "No Thesis Found" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 1, allthesis_list: result, msg: "Thesis Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.delete("/api/delete_student_thesis_by_teacher/:id", async (req, res) =>
+    {
+        try
+        {
+            const result = await ThesisUploadModel.deleteOne({ _id: req.params.id })
+            if (result.deletedCount === 1) 
+            {
+                return res.status(200).send({ statuscode: 1, msg: "Student Thesis Deleted Successfully" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "Student Thesis Not Deleted Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
 
 
+    app.put("/api/update_thesis_status_by_teacher", async (req, res) =>
+    {
+        try
+        {
+            const { id, newStatus } = req.body;
 
+            if (!id || !newStatus)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            const result = await ThesisUploadModel.updateOne({ _id: id }, { $set: { status: newStatus } })
+
+            if (result.modifiedCount === 1) 
+            {
+                return res.status(200).send({ statuscode: 1, msg: "Status Updated Successfully" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "Status Not Updated Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
 
 
     app.listen(port, () =>
