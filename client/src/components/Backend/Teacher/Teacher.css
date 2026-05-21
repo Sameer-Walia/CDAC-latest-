@@ -1012,6 +1012,11 @@
 }
 
 #Teacher_page .status-select.Verified {
+    background-color: #f5eebd;
+    color: #c49c0d;
+}
+
+#Teacher_page .status-select.Approved {
     background-color: #e6f4ea;
     color: #188038;
 }

@@ -6,52 +6,50 @@ import { Link, useNavigate } from "react-router-dom";
 import TeacherSidebar from "./TeacherSidebar";
 import { useSelector } from "react-redux";
 
-function AllThesisList_ToTeacher()
+function SearchThesisbyID_ByTeacher()
 {
     const [collapse, setCollapse] = useState(false);
     const [loading, setloading] = useState(false);
-    const { email } = useSelector((state) => state.teacher)
-    const [student_thesis, setstudents_thesis] = useState([]);
+    const [studentid, setstudentid] = useState("");
+    const [student_thesis, setstudent_thesis] = useState([]);
     const navi = useNavigate();
 
     const [popupData, setpopupData] = useState("");
     const [popupTitle, setpopupTitle] = useState("");
     const [showPopup, setshowPopup] = useState(false);
+    const { email } = useSelector((state) => state.teacher)
+
 
     useEffect(() =>
     {
-        document.title = "Thesis-List"
+        document.title = "Search Student Thesis"
     }, [])
 
-    useEffect(() =>
-    {
-        if (email)
-        {
-            fetchallStudents_Thesis()
-        }
-    }, [email])
-
-    async function fetchallStudents_Thesis()
+    async function handleSearch()
     {
         try
         {
-            if (!email?.trim())
+            if (!studentid.trim())
             {
-                return toast.error("Invalid Email")
+                return toast.error("Enter student ID")
             }
+            if (!email)
+            {
+                return toast.error("Teacher Email Not Found")
+            }
+            setstudent_thesis([]);
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_thesis_by_teacher/${email}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_thesis_by_id_by_teacher/${studentid}/${email}`);
 
             if (resp.data.statuscode === 1)
             {
-                setstudents_thesis(resp.data.allthesis_list)
+                setstudent_thesis(resp.data.student_thesis)
             }
             else 
             {
                 toast.warn(resp.data.msg)
-                setstudents_thesis([]);
+                setstudent_thesis([]);
             }
-
         }
         catch (e)
         {
@@ -67,17 +65,17 @@ function AllThesisList_ToTeacher()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
+            const confirmDelete = window.confirm("Are you sure to Delete")
 
-            if (resp === true)
+            if (confirmDelete)
             {
+                setloading(true)
                 const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_teacher/${id}`)
 
                 if (resp.data.statuscode === 1)
                 {
                     toast.success(resp.data.msg)
-                    fetchallStudents_Thesis()
+                    handleSearch()
                 }
                 else 
                 {
@@ -87,7 +85,7 @@ function AllThesisList_ToTeacher()
         }
         catch (e)
         {
-            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
+            toast.error("Error Occured " + (e.response?.data?.msg || e.message))
         }
         finally
         {
@@ -107,7 +105,7 @@ function AllThesisList_ToTeacher()
             if (resp.data.statuscode === 1)
             {
                 toast.success(resp.data.msg);
-                fetchallStudents_Thesis()
+                handleSearch()
             }
             else
             {
@@ -123,6 +121,7 @@ function AllThesisList_ToTeacher()
             setloading(false)
         }
     };
+
 
 
     return (
@@ -143,21 +142,13 @@ function AllThesisList_ToTeacher()
 
                 <TeacherSidebar collapse={collapse} setCollapse={setCollapse} />
 
-
                 <div className={`teacher_maincontent ${collapse ? "expand" : ""}`}>
-                    <div className="header-row">
-                        <h1 className="hd">Thesis List</h1>
-                        <button
-                            className="search-btn"
-                            onClick={() => navi("/search_thesis_by_BatchCourse_by_teacher")}
-                        >
-                            🔍 Batch & Course
-                        </button>
-                        <button
-                            className="search-btn"
-                            onClick={() => navi("/search_thesis_by_ID_by_teacher")}
-                        >
-                            🔍 StudentID
+                    <h1 className="hd text-center">Search Student Thesis</h1>
+                    <div className="search-email-box">
+                        <input type="text" placeholder="Enter Student Id..." value={studentid} onChange={(e) => setstudentid(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSearch()} />
+
+                        <button onClick={handleSearch} disabled={loading}>
+                            {loading ? "🔍 Searching..." : "🔍 Search"}
                         </button>
                     </div>
                     <div id="teacher_list" className="table-container">
@@ -260,7 +251,7 @@ function AllThesisList_ToTeacher()
                                     )
                                     :
                                     <tr>
-                                        <td colSpan="12" style={{ textAlign: "center" }}>
+                                        <td colSpan="13" style={{ textAlign: "center" }}>
                                             No Data Found
                                         </td>
                                     </tr>
@@ -282,10 +273,11 @@ function AllThesisList_ToTeacher()
                             </div>
                         }
                     </div>
+
                 </div>
             </div>
         </div>
     );
 }
 
-export default AllThesisList_ToTeacher;
+export default SearchThesisbyID_ByTeacher

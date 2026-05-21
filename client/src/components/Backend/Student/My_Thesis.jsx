@@ -7,6 +7,8 @@ import Footer from '../../Footer/Footer';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRef } from 'react';
+import "./student.css";
+
 
 function My_Thesis()
 {
@@ -25,6 +27,13 @@ function My_Thesis()
     const [month, setmonth] = useState("");
     const [pdf, setPdf] = useState(null);
     const fileInputRef = useRef(null);
+
+    const [popupData, setpopupData] = useState("");
+    const [popupTitle, setpopupTitle] = useState("");
+    const [showPopup, setshowPopup] = useState(false);
+
+    const [mythesistable, setmythesistable] = useState([]);
+
 
     useEffect(() =>
     {
@@ -160,6 +169,7 @@ function My_Thesis()
                     fileInputRef.current.value = '';
                 }
                 fetchthesisTitle();
+                fetchmythesisDetailsTable()
             }
             else
             {
@@ -174,6 +184,45 @@ function My_Thesis()
         finally
         {
             setloading(false);
+        }
+    }
+
+    useEffect(() =>
+    {
+        if (studentID)
+        {
+            fetchmythesisDetailsTable()
+        }
+    }, [studentID])
+
+    async function fetchmythesisDetailsTable()
+    {
+        try
+        {
+            if (!studentID?.trim())
+            {
+                return toast.error("Invalid Student ID")
+            }
+            setloading(true)
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_my_ThesisTable_by_student/${studentID}`);
+
+            if (resp.data.statuscode === 1)
+            {
+                setmythesistable(resp.data.mythesis_table)
+            }
+            else 
+            {
+                setmythesistable([]);
+            }
+
+        }
+        catch (e)
+        {
+            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
+        }
+        finally
+        {
+            setloading(false)
         }
     }
 
@@ -317,6 +366,121 @@ function My_Thesis()
 
                     </div>
                 </form>
+
+                <div className="pt-5">
+                    <div className="text-center">
+                        <h1 className="progress-title">Progress Report</h1>
+                    </div>
+                    <div id="student_marks_table" className="table-responsive mt-4">
+                        <table className="table custom-table text-center align-middle">
+                            <thead>
+                                <tr>
+                                    <th>S.NO.</th>
+                                    <th>Guide Name</th>
+                                    <th>Batch</th>
+                                    <th>Course</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Title</th>
+                                    <th>Domain</th>
+                                    <th>Month</th>
+                                    <th>AddedOn</th>
+                                    <th>View</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {mythesistable && mythesistable.length > 0 ?
+                                    mythesistable.map((item, index) =>
+                                        <tr key={item._id}>
+                                            <td>{index + 1}</td>
+                                            <td>{item.teacher_name}</td>
+                                            <td>{item.student_batch}</td>
+                                            <td>{item.student_course}</td>
+                                            <td>{item.student_ID}</td>
+                                            <td>{item.student_name}</td>
+                                            <td>
+                                                <span
+                                                    className="clickable-text"
+                                                    onClick={() =>
+                                                    {
+                                                        setpopupTitle("Thesis Title");
+                                                        setpopupData(item.thesis_title);
+                                                        setshowPopup(true);
+                                                    }}
+                                                >
+                                                    {item.thesis_title.slice(0, 5)}...
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <span
+                                                    className="clickable-text"
+                                                    onClick={() =>
+                                                    {
+                                                        setpopupTitle("Domain");
+                                                        setpopupData(item.domain);
+                                                        setshowPopup(true);
+                                                    }}
+                                                >
+                                                    {item.domain.slice(0, 5)}...
+                                                </span>
+                                            </td>
+                                            <td>{item.month}</td>
+                                            <td>
+                                                {new Date(item.Addedon).toLocaleString("en-IN", {
+                                                    timeZone: "UTC",
+                                                    day: "2-digit",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                    hour12: true,
+                                                })}
+                                            </td>
+                                            <td>
+                                                <a
+                                                    href={`${import.meta.env.VITE_API_URL}/uploads/thesis/${item.thesis_pdf}`}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                >
+                                                    View PDF
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <span className={`status-select ${item.status}`}>
+                                                    {item.status}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    )
+                                    :
+                                    <tr>
+                                        <td colSpan="12" style={{ textAlign: "center" }}>
+                                            No Data Found
+                                        </td> 
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        {
+                            showPopup &&
+                            <div className="popup-overlay">
+                                <div className="popup-box">
+                                    <h3>{popupTitle}</h3>
+
+                                    <p>{popupData}</p>
+
+                                    <button onClick={() => setshowPopup(false)}>
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
 
             </div>
 

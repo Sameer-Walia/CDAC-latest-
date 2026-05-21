@@ -86,6 +86,12 @@ import TimeTableAdded_ByTeacher from "./Backend/Teacher/TimeTableAdded_ByTeacher
 import TimeTable from "./Academics/TimeTable";
 import My_Thesis from "./Backend/Student/My_Thesis";
 import AllThesisList_ToTeacher from "./Backend/Teacher/AllThesisList_ToTeacher";
+import SearchThesisbyID_ByTeacher from "./Backend/Teacher/SearchThesisbyID_ByTeacher";
+import SearchThesisbyBatchCourse_ByTeacher from "./Backend/Teacher/SearchThesisbyBatchCourse_ByTeacher";
+import AllThesisList_ToAdmin from "./Backend/Admin/AllThesisList_ToAdmin";
+import SearchThesisbyID_ByAdmin from "./Backend/Admin/SearchThesisbyID_ByAdmin";
+import SearchThesisbyBatchCourse_ByAdmin from "./Backend/Admin/SearchThesisbyBatchCourse_ByAdmin";
+import SearchThesisbyGuideEmail_ByAdmin from "./Backend/Admin/SearchThesisbyGuideEmail_ByAdmin";
 
 
 function Siteroutes()
@@ -168,6 +174,11 @@ function Siteroutes()
                 <Route path="/all_fees_list_to_admin" element={<AllFeesList_ToAdmin />}></Route>
                 <Route path="/search_fees_by_sem_for_admin" element={<SearchFeesListAccToSem_ByAdmin />}></Route>
                 <Route path="/search_fees_by_studentid_for_admin" element={<SearchFeesListOfStudent_ByAdmin />}></Route>
+                <Route path="/all_thesis_list_to_admin" element={<AllThesisList_ToAdmin />}></Route>
+                <Route path="/search_thesis_by_ID_by_admin" element={<SearchThesisbyID_ByAdmin />}></Route>
+                <Route path="/search_thesis_by_BatchCourse_by_admin" element={<SearchThesisbyBatchCourse_ByAdmin />}></Route>
+                <Route path="/search_thesis_by_guideEmail_by_admin" element={<SearchThesisbyGuideEmail_ByAdmin />}></Route>
+
 
 
                 {/* teacher */}
@@ -194,6 +205,8 @@ function Siteroutes()
                 <Route path="/add_timetable" element={<AddTimeTable_ByTeacher />}></Route>
                 <Route path="/timetable_add_by_me_teacher" element={<TimeTableAdded_ByTeacher />}></Route>
                 <Route path="/all_thesis_list_to_teacher" element={<AllThesisList_ToTeacher />}></Route>
+                <Route path="/search_thesis_by_ID_by_teacher" element={<SearchThesisbyID_ByTeacher />}></Route>
+                <Route path="/search_thesis_by_BatchCourse_by_teacher" element={<SearchThesisbyBatchCourse_ByTeacher />}></Route>
 
 
 

@@ -74,7 +74,7 @@ function AdminSidebar({ collapse, setCollapse })
 
                         <li data-title="Users" className={activeTab === "studentlist" ? "active" : ""}>
                             <Link to="/all_students_list_to_admin" onClick={() => handleTabClick("studentlist")}>
-                                <span className="icon">👤</span>
+                                <span className="icon">🎓</span>
                                 <span className="text">Students</span>
                             </Link>
                         </li>
@@ -86,16 +86,24 @@ function AdminSidebar({ collapse, setCollapse })
                             </Link>
                         </li>
 
+                        <li data-title="admin_Thesis" className={activeTab === "admin_Thesis" ? "active" : ""}>
+                            <Link to="/all_thesis_list_to_admin" onClick={() => handleTabClick("admin_Thesis")}>
+                                <span className="icon">📄</span>
+                                <span className="text">Thesis</span>
+                            </Link>
+                        </li>
+
+
                         <li data-title="adminprofile" className={activeTab === "adminprofile" ? "active" : ""}>
                             <Link to="/adminprofile" onClick={() => handleTabClick("adminprofile")}>
-                                <span className="icon">💬</span>
+                                <span className="icon">👤</span>
                                 <span className="text">My Profile</span>
                             </Link>
                         </li>
 
                         <li data-title="changepassword_for_admin" className={activeTab === "changepassword" ? "active" : ""}>
                             <Link to="/changepassword_for_admin" onClick={() => handleTabClick("changepassword")}>
-                                <span className="icon">📊</span>
+                                <span className="icon">🔒</span>
                                 <span className="text">Change Password</span>
                             </Link>
                         </li>

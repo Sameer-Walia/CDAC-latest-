@@ -109,7 +109,7 @@ function TeacherSidebar({ collapse, setCollapse })
 
                         <li data-title="teacherprofile" className={activeTab === "teacherprofile" ? "active" : ""}>
                             <Link to="/teacherprofile" onClick={() => handleTabClick("teacherprofile")}>
-                                <span className="icon">👨‍🏫</span>
+                                <span className="icon">👤</span>
                                 <span className="text">My Profile</span>
                             </Link>
                         </li>

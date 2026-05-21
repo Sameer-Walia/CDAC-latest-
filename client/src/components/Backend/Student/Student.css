@@ -417,3 +417,193 @@
 
 
 /* mark attendance css end  */
+
+
+
+/* select-box status css start */
+
+#student_page .status-select {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: none;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+#student_page .status-select.Pending {
+    background-color: #ffe5e5;
+    color: #d93025;
+}
+
+#student_page .status-select.Verified {
+    background-color: #f5eebd;
+    color: #c49c0d;
+}
+
+#student_page .status-select.Approved {
+    background-color: #e6f4ea;
+    color: #188038;
+}
+
+
+#student_page .status-select:hover {
+    transform: scale(1.05);
+}
+
+#student_page .status-select:focus {
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* select-box status css end */
+
+
+
+
+/* pop-up box css start */
+
+#student_page .clickable-text {
+    color: #3b8dbd;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    display: inline-block;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#student_page .clickable-text:hover {
+    color: #1d4ed8;
+    transform: scale(1.03);
+    text-decoration: underline;
+}
+
+
+#student_page .popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 9999;
+    animation: fadeIn 0.25s ease;
+}
+
+
+#student_page .popup-box {
+    width: 500px;
+    max-width: 95%;
+    background: linear-gradient(145deg, #ffffff, #f8fafc);
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.4);
+    position: relative;
+    animation: popupScale 0.3s ease;
+}
+
+#student_page .popup-box h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 18px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+#student_page .popup-box p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #334155;
+    word-break: break-word;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+#student_page .popup-box p::-webkit-scrollbar {
+    width: 6px;
+}
+
+#student_page .popup-box p::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+#student_page .popup-box button {
+    margin-top: 25px;
+    border: none;
+    outline: none;
+    background: linear-gradient(to right, #2563eb, #3b8dbd);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+#student_page .popup-box button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes popupScale {
+    from {
+        opacity: 0;
+        transform: scale(0.85) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* pop-up box css end */
+
+
+
+/* progress-title css start */
+
+#student_page .progress-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e293b;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+#student_page .progress-title::after {
+    content: "";
+    width: 70%;
+    height: 4px;
+    background: linear-gradient(to right, #2563eb, #60a5fa);
+    position: absolute;
+    left: 15%;
+    bottom: -8px;
+    border-radius: 10px;
+}
+
+/* progress-title css end */

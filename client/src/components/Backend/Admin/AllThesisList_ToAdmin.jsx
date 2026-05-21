@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import "./Teacher.css";
+import "./admin.css";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import TeacherSidebar from "./TeacherSidebar";
 import { useSelector } from "react-redux";
+import AdminSidebar from "./AdminSidebar";
 
-function AllThesisList_ToTeacher()
+function AllThesisList_ToAdmin()
 {
     const [collapse, setCollapse] = useState(false);
     const [loading, setloading] = useState(false);
@@ -25,22 +25,15 @@ function AllThesisList_ToTeacher()
 
     useEffect(() =>
     {
-        if (email)
-        {
-            fetchallStudents_Thesis()
-        }
-    }, [email])
+        fetchallStudents_Thesis()
+    }, [])
 
     async function fetchallStudents_Thesis()
     {
         try
         {
-            if (!email?.trim())
-            {
-                return toast.error("Invalid Email")
-            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_thesis_by_teacher/${email}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_thesis_by_admin`);
 
             if (resp.data.statuscode === 1)
             {
@@ -67,12 +60,12 @@ function AllThesisList_ToTeacher()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
+            const confirmDelete = window.confirm("Are you sure to Delete")
 
-            if (resp === true)
+            if (confirmDelete)
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_teacher/${id}`)
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_admin/${id}`)
 
                 if (resp.data.statuscode === 1)
                 {
@@ -102,7 +95,7 @@ function AllThesisList_ToTeacher()
             setloading(true)
 
             const data = { id, newStatus }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_teacher`, data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_admin`, data);
 
             if (resp.data.statuscode === 1)
             {
@@ -124,9 +117,14 @@ function AllThesisList_ToTeacher()
         }
     };
 
+    function handleEdit(id)
+    {
+        navi(`/update_studentThesis_by_admin/${id}`)
+    }
+
 
     return (
-        <div id="Teacher_page">
+        <div id="admin_page">
 
             {loading && (
                 <div className="overlay">
@@ -139,23 +137,29 @@ function AllThesisList_ToTeacher()
                 </div>
             )}
 
-            <div className="teacher_container">
+            <div className="admin_container">
 
-                <TeacherSidebar collapse={collapse} setCollapse={setCollapse} />
+                <AdminSidebar collapse={collapse} setCollapse={setCollapse} />
 
 
-                <div className={`teacher_maincontent ${collapse ? "expand" : ""}`}>
+                <div className={`admin_maincontent ${collapse ? "expand" : ""}`}>
                     <div className="header-row">
                         <h1 className="hd">Thesis List</h1>
                         <button
                             className="search-btn"
-                            onClick={() => navi("/search_thesis_by_BatchCourse_by_teacher")}
+                            onClick={() => navi("/search_thesis_by_guideEmail_by_admin")}
+                        >
+                            🔍 Guide Email
+                        </button>
+                        <button
+                            className="search-btn"
+                            onClick={() => navi("/search_thesis_by_BatchCourse_by_admin")}
                         >
                             🔍 Batch & Course
                         </button>
                         <button
                             className="search-btn"
-                            onClick={() => navi("/search_thesis_by_ID_by_teacher")}
+                            onClick={() => navi("/search_thesis_by_ID_by_admin")}
                         >
                             🔍 StudentID
                         </button>
@@ -165,6 +169,8 @@ function AllThesisList_ToTeacher()
                             <thead>
                                 <tr>
                                     <th>S.NO.</th>
+                                    <th>Guide Name</th>
+                                    <th>Guide Email</th>
                                     <th>Batch</th>
                                     <th>Course</th>
                                     <th>ID</th>
@@ -176,6 +182,7 @@ function AllThesisList_ToTeacher()
                                     <th>View</th>
                                     <th>Status</th>
                                     <th>Change Status</th>
+                                    <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
@@ -185,6 +192,20 @@ function AllThesisList_ToTeacher()
                                     student_thesis.map((item, index) =>
                                         <tr key={item._id}>
                                             <td>{index + 1}</td>
+                                            <td>{item.teacher_name}</td>
+                                            <td>
+                                                <span
+                                                    className="clickable-text"
+                                                    onClick={() =>
+                                                    {
+                                                        setpopupTitle("Guide Email");
+                                                        setpopupData(item.teacher_email);
+                                                        setshowPopup(true);
+                                                    }}
+                                                >
+                                                    {item.teacher_email.slice(0, 5)}...
+                                                </span>
+                                            </td>
                                             <td>{item.student_batch}</td>
                                             <td>{item.student_course}</td>
                                             <td>{item.student_ID}</td>
@@ -246,7 +267,16 @@ function AllThesisList_ToTeacher()
                                                 >
                                                     <option value="Pending">Pending</option>
                                                     <option value="Verified">Verified</option>
+                                                    <option value="Approved">Approved</option>
                                                 </select>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    className="edit-btn"
+                                                    onClick={() => handleEdit(item._id)}
+                                                >
+                                                    ✏️
+                                                </button>
                                             </td>
                                             <td>
                                                 <button
@@ -284,8 +314,8 @@ function AllThesisList_ToTeacher()
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
-export default AllThesisList_ToTeacher;
+export default AllThesisList_ToAdmin;

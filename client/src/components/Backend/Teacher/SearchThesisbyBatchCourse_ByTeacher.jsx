@@ -6,52 +6,60 @@ import { Link, useNavigate } from "react-router-dom";
 import TeacherSidebar from "./TeacherSidebar";
 import { useSelector } from "react-redux";
 
-function AllThesisList_ToTeacher()
+function SearchThesisbyBatchCourse_ByTeacher()
 {
     const [collapse, setCollapse] = useState(false);
     const [loading, setloading] = useState(false);
-    const { email } = useSelector((state) => state.teacher)
-    const [student_thesis, setstudents_thesis] = useState([]);
+    const [studentid, setstudentid] = useState("");
+    const [student_thesis, setstudent_thesis] = useState([]);
     const navi = useNavigate();
 
     const [popupData, setpopupData] = useState("");
     const [popupTitle, setpopupTitle] = useState("");
     const [showPopup, setshowPopup] = useState(false);
+    const { email } = useSelector((state) => state.teacher)
+
+    const [batch, setbatch] = useState("")
+    const [course, setCourse] = useState("");
 
     useEffect(() =>
     {
-        document.title = "Thesis-List"
+        document.title = "Search Student Thesis"
     }, [])
 
     useEffect(() =>
     {
-        if (email)
+        if (batch, course)
         {
-            fetchallStudents_Thesis()
+            fetchThesis_acctoBatchCourse()
         }
-    }, [email])
+    }, [batch, course])
 
-    async function fetchallStudents_Thesis()
+    async function fetchThesis_acctoBatchCourse()
     {
         try
         {
-            if (!email?.trim())
+            if (!batch)
             {
-                return toast.error("Invalid Email")
+                return toast.error("Select Batch ")
             }
+            if (!course)
+            {
+                return toast.error("Select Course")
+            }
+            setstudent_thesis([]);
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_thesis_by_teacher/${email}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_thesis_by_BatchCourse_by_teacher/${batch}/${course}/${email}`);
 
             if (resp.data.statuscode === 1)
             {
-                setstudents_thesis(resp.data.allthesis_list)
+                setstudent_thesis(resp.data.student_thesis)
             }
             else 
             {
                 toast.warn(resp.data.msg)
-                setstudents_thesis([]);
+                setstudent_thesis([]);
             }
-
         }
         catch (e)
         {
@@ -77,7 +85,7 @@ function AllThesisList_ToTeacher()
                 if (resp.data.statuscode === 1)
                 {
                     toast.success(resp.data.msg)
-                    fetchallStudents_Thesis()
+                    fetchThesis_acctoBatchCourse()
                 }
                 else 
                 {
@@ -87,7 +95,7 @@ function AllThesisList_ToTeacher()
         }
         catch (e)
         {
-            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
+            toast.error("Error Occured " + (e.response?.data?.msg || e.message))
         }
         finally
         {
@@ -107,7 +115,7 @@ function AllThesisList_ToTeacher()
             if (resp.data.statuscode === 1)
             {
                 toast.success(resp.data.msg);
-                fetchallStudents_Thesis()
+                fetchThesis_acctoBatchCourse()
             }
             else
             {
@@ -123,6 +131,7 @@ function AllThesisList_ToTeacher()
             setloading(false)
         }
     };
+
 
 
     return (
@@ -143,23 +152,51 @@ function AllThesisList_ToTeacher()
 
                 <TeacherSidebar collapse={collapse} setCollapse={setCollapse} />
 
-
                 <div className={`teacher_maincontent ${collapse ? "expand" : ""}`}>
-                    <div className="header-row">
-                        <h1 className="hd">Thesis List</h1>
-                        <button
-                            className="search-btn"
-                            onClick={() => navi("/search_thesis_by_BatchCourse_by_teacher")}
-                        >
-                            🔍 Batch & Course
-                        </button>
-                        <button
-                            className="search-btn"
-                            onClick={() => navi("/search_thesis_by_ID_by_teacher")}
-                        >
-                            🔍 StudentID
-                        </button>
+                    <h1 className="hd text-center">Search Student Thesis</h1>
+
+                    <div className="attendance-filter-box">
+                        <div className="filter-group">
+                            <label>Batch</label>
+                            <select
+                                onChange={(e) =>
+                                {
+                                    setbatch(e.target.value)
+                                    setCourse("");
+                                }}
+                                required>
+                                <option value="">Select Batch</option>
+                                <option value="2025-2027">2025-2027</option>
+                                <option value="2026-2028">2026-2028</option>
+                                <option value="2027-2029">2027-2029</option>
+                                <option value="2028-2030">2028-2030</option>
+                                <option value="2029-2031">2029-2031</option>
+                                <option value="2030-2032">2030-2032</option>
+                                <option value="2031-2033">2031-2033</option>
+                                <option value="2032-2034">2032-2034</option>
+                                <option value="2033-2035">2033-2035</option>
+                                <option value="2034-2036">2034-2036</option>
+                            </select>
+                        </div>
+
+                        <div className="filter-group">
+                            <label>Course</label>
+                            <select
+                                value={course}
+                                onChange={(e) =>
+                                {
+                                    setCourse(e.target.value);
+                                }}
+                                required
+                            >
+                                <option value="">Select Course</option>
+                                <option value="AI"> M.Tech – Artificial Intelligence (AI)</option>
+                                <option value="VLSI">M.Tech - VLSI Design</option>
+                                <option value="ES"> M.Tech - Embedded Systems (ES)</option>
+                            </select>
+                        </div>
                     </div>
+
                     <div id="teacher_list" className="table-container">
                         <table className="teacher-table mt-4">
                             <thead>
@@ -282,10 +319,11 @@ function AllThesisList_ToTeacher()
                             </div>
                         }
                     </div>
+
                 </div>
             </div>
         </div>
     );
 }
 
-export default AllThesisList_ToTeacher;
+export default SearchThesisbyBatchCourse_ByTeacher

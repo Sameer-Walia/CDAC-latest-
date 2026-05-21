@@ -2491,7 +2491,7 @@ else
             const ISTOffset = 5.5 * 60 * 60 * 1000;
             const currentDateIST = new Date(currentDateUTC.getTime() + ISTOffset)
 
-            const newrecord = new ThesisUploadModel({ teacher_email: teacheremail, teacher_name: teachername, thesis_title: title, domain: domain, month: month, thesis_pdf: filePath, Addedon: currentDateIST, student_batch: batch, student_course: course, student_ID: studentID, student_name: name, status: "pending" })
+            const newrecord = new ThesisUploadModel({ teacher_email: teacheremail, teacher_name: teachername, thesis_title: title, domain: domain, month: month, thesis_pdf: filePath, Addedon: currentDateIST, student_batch: batch, student_course: course, student_ID: studentID, student_name: name, status: "Pending" })
 
             const result = await newrecord.save()
 
@@ -2608,6 +2608,226 @@ else
             return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     });
+
+    app.get("/api/search_thesis_by_id_by_teacher/:studentid/:teacheremail", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await ThesisUploadModel.find({ student_ID: req.params.studentid, teacher_email: req.params.teacheremail })
+
+            if (result.length === 0) 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "No student Thesis Found" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 1, student_thesis: result, msg: "Student Thesis Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/search_thesis_by_BatchCourse_by_teacher/:batch/:course/:teacheremail", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await ThesisUploadModel.find({ student_batch: req.params.batch, student_course: req.params.course, teacher_email: req.params.teacheremail })
+
+            if (result.length === 0) 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "No student Thesis Found" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 1, student_thesis: result, msg: "Student Thesis Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.get("/api/fetch_my_ThesisTable_by_student/:sid", async (req, res) =>
+    {
+        try
+        {
+            const result = await ThesisUploadModel.find({ student_ID: req.params.sid })
+
+            if (result.length === 0) 
+            {
+                return res.status(200).send({ statuscode: 0 })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 1, mythesis_table: result })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.get("/api/fetch_all_thesis_by_admin", async (req, res) =>
+    {
+        try
+        {
+            const result = await ThesisUploadModel.find()
+
+            if (result.length === 0) 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "No Thesis Found" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 1, allthesis_list: result, msg: "Thesis Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.delete("/api/delete_student_thesis_by_admin/:id", async (req, res) =>
+    {
+        try
+        {
+            const result = await ThesisUploadModel.deleteOne({ _id: req.params.id })
+            if (result.deletedCount === 1) 
+            {
+                return res.status(200).send({ statuscode: 1, msg: "Student Thesis Deleted Successfully" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "Student Thesis Not Deleted Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.put("/api/update_thesis_status_by_admin", async (req, res) =>
+    {
+        try
+        {
+            const { id, newStatus } = req.body;
+
+            if (!id || !newStatus)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            const result = await ThesisUploadModel.updateOne({ _id: id }, { $set: { status: newStatus } })
+
+            if (result.modifiedCount === 1) 
+            {
+                return res.status(200).send({ statuscode: 1, msg: "Status Updated Successfully" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "Status Not Updated Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
+    app.get("/api/search_thesis_by_id_by_admin/:studentid", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await ThesisUploadModel.find({ student_ID: req.params.studentid })
+
+            if (result.length === 0) 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "No student Thesis Found" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 1, student_thesis: result, msg: "Student Thesis Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/search_thesis_by_BatchCourse_by_teacher/:batch/:course", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await ThesisUploadModel.find({ student_batch: req.params.batch, student_course: req.params.course })
+
+            if (result.length === 0) 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "No student Thesis Found" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 1, student_thesis: result, msg: "Student Thesis Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.get("/api/search_thesis_by_guideemail_by_admin/:guideemail", async (req, res) =>
+    {
+        try
+        {
+
+            const result = await ThesisUploadModel.find({ teacher_email: req.params.guideemail })
+
+            if (result.length === 0) 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "No student Thesis Found" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 1, student_thesis: result, msg: "Student Thesis Found Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
 
 
     app.listen(port, () =>

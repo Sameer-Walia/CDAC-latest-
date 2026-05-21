@@ -22,14 +22,12 @@ function SearchStudent_ByTeacher()
     {
         try
         {
-            setloading(true)
-
-            if (studentid === "")
+            if (!studentid.trim())
             {
-                toast.error("Enter student ID")
-                return
+                return toast.error("Enter student ID")
             }
-
+            setstudent_data(null);
+            setloading(true)
             const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_student_by_teacher/${studentid}`);
 
             if (resp.data.statuscode === 1)
@@ -63,11 +61,10 @@ function SearchStudent_ByTeacher()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            const confirmDelete = window.confirm("Are you sure to Delete")
+            if (confirmDelete)
             {
+                setloading(true)
                 const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_by_teacher/${id}`)
 
                 if (resp.data.statuscode === 1)
@@ -114,7 +111,7 @@ function SearchStudent_ByTeacher()
                 <div className={`teacher_maincontent ${collapse ? "expand" : ""}`}>
                     <h1 className="hd text-center">Search Student</h1>
                     <div className="search-email-box">
-                        <input type="text" placeholder="Enter Student Id..." value={studentid} onChange={(e) => setstudentid(e.target.value)} />
+                        <input type="text" placeholder="Enter Student Id..." value={studentid} onChange={(e) => setstudentid(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSearch()} />
                         <button onClick={handleSearch} disabled={loading}>
                             {loading ? "🔍 Searching..." : "🔍 Search"}
                         </button>
