@@ -28,11 +28,11 @@ function SearchThesisbyGuideEmail_ByAdmin()
     {
         try
         {
+            setstudent_thesis([]);
             if (!guideemail.trim())
             {
-                return toast.error("Enter student ID")
+                return toast.error("Enter Guide Email")
             }
-            setstudent_thesis([]);
             setloading(true)
             const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_thesis_by_guideemail_by_admin/${guideemail}`);
 
@@ -117,6 +117,11 @@ function SearchThesisbyGuideEmail_ByAdmin()
         }
     };
 
+    function handleEdit(id)
+    {
+        navi(`/update_studentThesis_by_admin/${id}`)
+    }
+
 
 
     return (
@@ -140,7 +145,7 @@ function SearchThesisbyGuideEmail_ByAdmin()
                 <div className={`admin_maincontent ${collapse ? "expand" : ""}`}>
                     <h1 className="hd text-center">Search Student Thesis</h1>
                     <div className="search-email-box">
-                        <input type="text" placeholder="Enter Guide Email..." value={guideemail} onChange={(e) => setguideemail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSearch()} />
+                        <input type="email" placeholder="Enter Guide Email..." value={guideemail} onChange={(e) => setguideemail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSearch()} />
 
                         <button onClick={handleSearch} disabled={loading}>
                             {loading ? "🔍 Searching..." : "🔍 Search"}
@@ -158,12 +163,13 @@ function SearchThesisbyGuideEmail_ByAdmin()
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Title</th>
-                                    <th>Domain</th>
+                                    <th>Description</th>
+                                    <th>Remarks</th>
                                     <th>Month</th>
-                                    <th>AddedOn</th>
                                     <th>View</th>
                                     <th>Status</th>
                                     <th>Change Status</th>
+                                    <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
@@ -210,26 +216,30 @@ function SearchThesisbyGuideEmail_ByAdmin()
                                                     className="clickable-text"
                                                     onClick={() =>
                                                     {
-                                                        setpopupTitle("Domain");
-                                                        setpopupData(item.domain);
+                                                        setpopupTitle("Description");
+                                                        setpopupData(item.description);
                                                         setshowPopup(true);
                                                     }}
                                                 >
-                                                    {item.domain.slice(0, 5)}...
+                                                    {item.description.slice(0, 5)}...
                                                 </span>
                                             </td>
-                                            <td>{item.month}</td>
+
                                             <td>
-                                                {new Date(item.Addedon).toLocaleString("en-IN", {
-                                                    timeZone: "UTC",
-                                                    day: "2-digit",
-                                                    month: "short",
-                                                    year: "numeric",
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                    hour12: true,
-                                                })}
+                                                <span
+                                                    className="clickable-text"
+                                                    onClick={() =>
+                                                    {
+                                                        setpopupTitle("Remarks");
+                                                        setpopupData(item.remarks);
+                                                        setshowPopup(true);
+                                                    }}
+                                                >
+                                                    {item.remarks.slice(0, 5)}...
+                                                </span>
                                             </td>
+
+                                            <td>{item.month}</td>
                                             <td>
                                                 <a
                                                     href={`${import.meta.env.VITE_API_URL}/uploads/thesis/${item.thesis_pdf}`}
@@ -250,6 +260,14 @@ function SearchThesisbyGuideEmail_ByAdmin()
                                                     <option value="Verified">Verified</option>
                                                     <option value="Approved">Approved</option>
                                                 </select>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    className="edit-btn"
+                                                    onClick={() => handleEdit(item._id)}
+                                                >
+                                                    ✏️
+                                                </button>
                                             </td>
                                             <td>
                                                 <button

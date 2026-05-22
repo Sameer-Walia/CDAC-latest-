@@ -23,7 +23,7 @@ function My_Thesis()
     const [teachername, setteachername] = useState("");
     const [title, settitle] = useState("");
     const [isTitleLocked, setisTitleLocked] = useState(false);
-    const [domain, setdomain] = useState("");
+    const [description, setdescription] = useState("");
     const [month, setmonth] = useState("");
     const [pdf, setPdf] = useState(null);
     const fileInputRef = useRef(null);
@@ -113,7 +113,7 @@ function My_Thesis()
         e.preventDefault();
         try
         {
-            if (!teacheremail?.trim() || !teachername?.trim() || !title?.trim() || !domain?.trim() || !month?.trim())
+            if (!teacheremail?.trim() || !teachername?.trim() || !title?.trim() || !description?.trim() || !month?.trim())
             {
                 return toast.error("All fields are required");
             }
@@ -140,7 +140,7 @@ function My_Thesis()
             formData.append("teacheremail", teacheremail);
             formData.append("teachername", teachername);
             formData.append("title", title);
-            formData.append("domain", domain);
+            formData.append("description", description);
             formData.append("month", month);
 
             formData.append("batch", batch);
@@ -161,7 +161,7 @@ function My_Thesis()
                 setteacheremail("");
                 setteachername("");
                 settitle("");
-                setdomain("");
+                setdescription("");
                 setmonth("");
                 setPdf(null);
                 if (fileInputRef.current) 
@@ -307,8 +307,8 @@ function My_Thesis()
                         </div>
 
                         <div className="filter-group">
-                            <label>Domain</label>
-                            <input type="text" value={domain} onChange={(e) => setdomain(e.target.value)} placeholder="Enter Domain " required />
+                            <label>Description</label>
+                            <input type="text" value={description} onChange={(e) => setdescription(e.target.value)} placeholder="Enter Description " required />
                         </div>
 
                         <div className="filter-group">
@@ -382,9 +382,9 @@ function My_Thesis()
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Title</th>
-                                    <th>Domain</th>
+                                    <th>Description</th>
+                                    <th>Remarks</th>
                                     <th>Month</th>
-                                    <th>AddedOn</th>
                                     <th>View</th>
                                     <th>Status</th>
                                 </tr>
@@ -419,25 +419,27 @@ function My_Thesis()
                                                     onClick={() =>
                                                     {
                                                         setpopupTitle("Domain");
-                                                        setpopupData(item.domain);
+                                                        setpopupData(item.description);
                                                         setshowPopup(true);
                                                     }}
                                                 >
-                                                    {item.domain.slice(0, 5)}...
+                                                    {item.description?.slice(0, 5)}...
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    className="clickable-text"
+                                                    onClick={() =>
+                                                    {
+                                                        setpopupTitle("Remarks");
+                                                        setpopupData(item.remarks);
+                                                        setshowPopup(true);
+                                                    }}
+                                                >
+                                                    {item.remarks?.slice(0, 5)}...
                                                 </span>
                                             </td>
                                             <td>{item.month}</td>
-                                            <td>
-                                                {new Date(item.Addedon).toLocaleString("en-IN", {
-                                                    timeZone: "UTC",
-                                                    day: "2-digit",
-                                                    month: "short",
-                                                    year: "numeric",
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                    hour12: true,
-                                                })}
-                                            </td>
                                             <td>
                                                 <a
                                                     href={`${import.meta.env.VITE_API_URL}/uploads/thesis/${item.thesis_pdf}`}
@@ -458,7 +460,7 @@ function My_Thesis()
                                     <tr>
                                         <td colSpan="12" style={{ textAlign: "center" }}>
                                             No Data Found
-                                        </td> 
+                                        </td>
                                     </tr>
                                 }
                             </tbody>

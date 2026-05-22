@@ -117,6 +117,11 @@ function SearchThesisbyID_ByAdmin()
         }
     };
 
+    function handleEdit(id)
+    {
+        navi(`/update_studentThesis_by_admin/${id}`)
+    }
+
 
 
     return (
@@ -158,12 +163,13 @@ function SearchThesisbyID_ByAdmin()
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Title</th>
-                                    <th>Domain</th>
+                                    <th>Description</th>
+                                    <th>Remarks</th>
                                     <th>Month</th>
-                                    <th>AddedOn</th>
                                     <th>View</th>
                                     <th>Status</th>
                                     <th>Change Status</th>
+                                    <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
@@ -210,26 +216,30 @@ function SearchThesisbyID_ByAdmin()
                                                     className="clickable-text"
                                                     onClick={() =>
                                                     {
-                                                        setpopupTitle("Domain");
-                                                        setpopupData(item.domain);
+                                                        setpopupTitle("Description");
+                                                        setpopupData(item.description);
                                                         setshowPopup(true);
                                                     }}
                                                 >
-                                                    {item.domain.slice(0, 5)}...
+                                                    {item.description.slice(0, 5)}...
                                                 </span>
                                             </td>
-                                            <td>{item.month}</td>
+
                                             <td>
-                                                {new Date(item.Addedon).toLocaleString("en-IN", {
-                                                    timeZone: "UTC",
-                                                    day: "2-digit",
-                                                    month: "short",
-                                                    year: "numeric",
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                    hour12: true,
-                                                })}
+                                                <span
+                                                    className="clickable-text"
+                                                    onClick={() =>
+                                                    {
+                                                        setpopupTitle("Remarks");
+                                                        setpopupData(item.remarks);
+                                                        setshowPopup(true);
+                                                    }}
+                                                >
+                                                    {item.remarks.slice(0, 5)}...
+                                                </span>
                                             </td>
+
+                                            <td>{item.month}</td>
                                             <td>
                                                 <a
                                                     href={`${import.meta.env.VITE_API_URL}/uploads/thesis/${item.thesis_pdf}`}
@@ -253,6 +263,14 @@ function SearchThesisbyID_ByAdmin()
                                             </td>
                                             <td>
                                                 <button
+                                                    className="edit-btn"
+                                                    onClick={() => handleEdit(item._id)}
+                                                >
+                                                    ✏️
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button
                                                     className="delete-btn"
                                                     onClick={() => handleDelete(item._id)}
                                                 >
@@ -263,7 +281,7 @@ function SearchThesisbyID_ByAdmin()
                                     )
                                     :
                                     <tr>
-                                        <td colSpan="13" style={{ textAlign: "center" }}>
+                                        <td colSpan="15" style={{ textAlign: "center" }}>
                                             No Data Found
                                         </td>
                                     </tr>

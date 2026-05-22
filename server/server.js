@@ -2410,7 +2410,16 @@ else
 
     // thesis start
 
-    const ThesisUploadSchema = new mongoose.Schema({ teacher_email: { type: String, required: true, trim: true }, teacher_name: { type: String, required: true }, thesis_title: { type: String, required: true }, domain: { type: String, required: true }, month: { type: String, required: true }, thesis_pdf: { type: String, required: true }, Addedon: { type: Date }, student_batch: { type: String, required: true }, student_course: { type: String, required: true }, student_ID: { type: String, required: true }, student_name: { type: String, required: true }, status: { type: String, required: true } }, { versionKey: false });
+    const ThesisUploadSchema = new mongoose.Schema({ teacher_email: { type: String, required: true, trim: true }, teacher_name: { type: String, required: true }, thesis_title: { type: String, required: true }, description: { type: String, required: true }, month: { type: String, required: true }, thesis_pdf: { type: String, required: true }, Addedon: { type: Date }, student_batch: { type: String, required: true }, student_course: { type: String, required: true }, student_ID: { type: String, required: true }, student_name: { type: String, required: true }, status: { type: String, required: true }, remarks: { type: String, required: true } }, { versionKey: false });
+
+    // Single indexes
+    ThesisUploadSchema.index({ student_ID: 1 });
+    ThesisUploadSchema.index({ teacher_email: 1 });
+
+    // Compound indexes
+    ThesisUploadSchema.index({ student_ID: 1, teacher_email: 1 });
+    ThesisUploadSchema.index({ student_batch: 1, student_course: 1 });
+    ThesisUploadSchema.index({ student_batch: 1, student_course: 1, teacher_email: 1 });
 
     const ThesisUploadModel = mongoose.model("Thesis", ThesisUploadSchema, "Thesis")
 
@@ -2442,7 +2451,7 @@ else
     {
         try
         {
-            const { teacheremail, teachername, title, domain, month, batch, course, studentID, name } = req.body;
+            const { teacheremail, teachername, title, description, month, batch, course, studentID, name } = req.body;
 
             const deleteFile = () =>
             {
@@ -2456,7 +2465,7 @@ else
                 }
             };
 
-            if (!teacheremail?.trim() || !teachername?.trim() || !title?.trim() || !domain?.trim() || !month?.trim() || !batch?.trim() || !course?.trim() || !studentID?.trim() || !name?.trim() || !req.file)
+            if (!teacheremail?.trim() || !teachername?.trim() || !title?.trim() || !description?.trim() || !month?.trim() || !batch?.trim() || !course?.trim() || !studentID?.trim() || !name?.trim() || !req.file)
             {
                 deleteFile();
                 return res.status(400).json({ statuscode: 0, msg: "All fields required" });
@@ -2491,7 +2500,7 @@ else
             const ISTOffset = 5.5 * 60 * 60 * 1000;
             const currentDateIST = new Date(currentDateUTC.getTime() + ISTOffset)
 
-            const newrecord = new ThesisUploadModel({ teacher_email: teacheremail, teacher_name: teachername, thesis_title: title, domain: domain, month: month, thesis_pdf: filePath, Addedon: currentDateIST, student_batch: batch, student_course: course, student_ID: studentID, student_name: name, status: "Pending" })
+            const newrecord = new ThesisUploadModel({ teacher_email: teacheremail, teacher_name: teachername, thesis_title: title, description: description, month: month, thesis_pdf: filePath, Addedon: currentDateIST, student_batch: batch, student_course: course, student_ID: studentID, student_name: name, status: "Pending", remarks: "NA" })
 
             const result = await newrecord.save()
 
@@ -2827,6 +2836,66 @@ else
             return res.status(500).send({ statuscode: -1, msg: "Server error" })
         }
     })
+
+
+    app.get("/api/fetch_student_thesis_by_Admin/:tid", async (req, res) =>
+    {
+        try
+        {
+            const result = await ThesisUploadModel.findOne({ _id: req.params.tid })
+
+            if (result === null) 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "No Thesis Found" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 1, student_thesis: result })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.put("/api/update_student_thesis_by_admin", async (req, res) =>
+    {
+        try
+        {
+            const { tid, title, description, remarks } = req.body;
+
+
+            if (!tid?.trim() || !title?.trim() || !description?.trim() || !remarks?.trim())
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            const result = await ThesisUploadModel.updateOne({ _id: tid }, { $set: { thesis_title: title, description: description, remarks: remarks } })
+
+            if (result.modifiedCount === 1) 
+            {
+                return res.status(200).send({ statuscode: 1, msg: "Student Thesis Updated Successfully" })
+            }
+            else 
+            {
+                return res.status(200).send({ statuscode: 0, msg: "Student Thesis Not Updated Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).send({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+
+
 
 
 

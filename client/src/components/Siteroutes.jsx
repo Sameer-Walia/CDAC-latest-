@@ -92,6 +92,7 @@ import AllThesisList_ToAdmin from "./Backend/Admin/AllThesisList_ToAdmin";
 import SearchThesisbyID_ByAdmin from "./Backend/Admin/SearchThesisbyID_ByAdmin";
 import SearchThesisbyBatchCourse_ByAdmin from "./Backend/Admin/SearchThesisbyBatchCourse_ByAdmin";
 import SearchThesisbyGuideEmail_ByAdmin from "./Backend/Admin/SearchThesisbyGuideEmail_ByAdmin";
+import UpdateThesis_byAdmin from "./Backend/Admin/UpdateThesis_byAdmin";
 
 
 function Siteroutes()
@@ -178,6 +179,7 @@ function Siteroutes()
                 <Route path="/search_thesis_by_ID_by_admin" element={<SearchThesisbyID_ByAdmin />}></Route>
                 <Route path="/search_thesis_by_BatchCourse_by_admin" element={<SearchThesisbyBatchCourse_ByAdmin />}></Route>
                 <Route path="/search_thesis_by_guideEmail_by_admin" element={<SearchThesisbyGuideEmail_ByAdmin />}></Route>
+                <Route path="/update_studentThesis_by_admin/:tid" element={<UpdateThesis_byAdmin />}></Route>
 
 
 

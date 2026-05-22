@@ -132,6 +132,11 @@ function SearchThesisbyBatchCourse_ByAdmin()
         }
     };
 
+    function handleEdit(id)
+    {
+        navi(`/update_studentThesis_by_admin/${id}`)
+    }
+
 
 
     return (
@@ -209,9 +214,9 @@ function SearchThesisbyBatchCourse_ByAdmin()
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Title</th>
-                                    <th>Domain</th>
+                                    <th>Description</th>
+                                    <th>Remarks</th>
                                     <th>Month</th>
-                                    <th>AddedOn</th>
                                     <th>View</th>
                                     <th>Status</th>
                                     <th>Change Status</th>
@@ -262,26 +267,30 @@ function SearchThesisbyBatchCourse_ByAdmin()
                                                     className="clickable-text"
                                                     onClick={() =>
                                                     {
-                                                        setpopupTitle("Domain");
-                                                        setpopupData(item.domain);
+                                                        setpopupTitle("Description");
+                                                        setpopupData(item.description);
                                                         setshowPopup(true);
                                                     }}
                                                 >
-                                                    {item.domain.slice(0, 5)}...
+                                                    {item.description.slice(0, 5)}...
                                                 </span>
                                             </td>
-                                            <td>{item.month}</td>
+
                                             <td>
-                                                {new Date(item.Addedon).toLocaleString("en-IN", {
-                                                    timeZone: "UTC",
-                                                    day: "2-digit",
-                                                    month: "short",
-                                                    year: "numeric",
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                    hour12: true,
-                                                })}
+                                                <span
+                                                    className="clickable-text"
+                                                    onClick={() =>
+                                                    {
+                                                        setpopupTitle("Remarks");
+                                                        setpopupData(item.remarks);
+                                                        setshowPopup(true);
+                                                    }}
+                                                >
+                                                    {item.remarks.slice(0, 5)}...
+                                                </span>
                                             </td>
+
+                                            <td>{item.month}</td>
                                             <td>
                                                 <a
                                                     href={`${import.meta.env.VITE_API_URL}/uploads/thesis/${item.thesis_pdf}`}

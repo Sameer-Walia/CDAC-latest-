@@ -43,10 +43,10 @@ function EditAdminProfile()
             if (resp.data.statuscode === 1)
             {
                 const profile = resp.data.profile
-                setname(profile.name)
-                setphone(profile.phone)
-                setadminemail(profile.email)
-                setusertype(profile.usertype)
+                setname(profile?.name)
+                setphone(profile?.phone)
+                setadminemail(profile?.email)
+                setusertype(profile?.usertype)
             }
             else
             {
