@@ -282,3 +282,24 @@ h6 {
 
 
 /* Full screen overlay css ends */
+
+
+@media (max-width: 768px) {
+  .thanks-page {
+    margin-top: 30px;
+  }
+
+}
+
+
+/* resetpassword css start */
+
+
+
+
+
+
+
+
+
+/* resetpassword css end */

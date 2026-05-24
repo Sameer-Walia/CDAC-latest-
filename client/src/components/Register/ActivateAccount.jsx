@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 function ActivateAccount()
 {
 
+    const [loading, setloading] = useState(false);
     const [msg, setmsg] = useState()
     const [params] = useSearchParams();
     const code = params.get("code")
@@ -23,6 +24,11 @@ function ActivateAccount()
     {
         try 
         {
+            if (!code.trim())
+            {
+                return toast.error("Error Occured")
+            }
+            setloading(true)
             const apidata = { code }
             const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/activateuseraccount`, apidata)
 
@@ -39,12 +45,26 @@ function ActivateAccount()
         }
         catch (e) 
         {
-            toast.error("Error Occured " + e.message)
+            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
+        }
+        finally
+        {
+            setloading(false)
         }
     }
 
     return (
         <>
+            {loading && (
+                <div className="overlay">
+                    <div>
+                        <div className="spinner"></div>
+                        <p style={{ color: "white", marginTop: "10px" }}>
+                            Please wait...
+                        </p>
+                    </div>
+                </div>
+            )}
             <div id="authpage">
                 <div className="thanks-page">
                     <div className="thanks-container">

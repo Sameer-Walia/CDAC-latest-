@@ -30,6 +30,30 @@ function Staff_Register()
         {
             if (pass === cpass) 
             {
+                if (!name?.trim() || !phone?.trim() || !email?.trim() || !pass?.trim())
+                {
+                    return toast.error("All fields are required");
+                }
+
+                if (name.trim().length < 3)
+                {
+                    return toast.error("Name must be at least 3 characters");
+                }
+
+                if (!/^[0-9]{10}$/.test(phone))
+                {
+                    return toast.error("Phone must be 10 digits");
+                }
+
+                if (!/\S+@\S+\.\S+/.test(email))
+                {
+                    return toast.error("Invalid email format");
+                }
+
+                if (pass.length < 3)
+                {
+                    return toast.error("Password must be at least 3 characters");
+                }
                 const reqdata = { name, phone, email, pass }
                 try 
                 {
@@ -42,7 +66,7 @@ function Staff_Register()
                     }
                     else if (resp.data.statuscode === 2)
                     {
-                        navi("/nothanks")
+                        navi("/resend_email")
                         toast.warn(resp.data.msg)
                     }
                     else if (resp.data.statuscode === 0)
@@ -146,7 +170,7 @@ function Staff_Register()
                     Already registered? <Link to="/staff_login" className="login-link" >Login</Link>
                 </p>
 
-                <Link to="/resend_mail" className="login-link" >Resend Email</Link>
+                <Link to="/resend_email" className="login-link" >Resend Email</Link>
 
             </form>
 

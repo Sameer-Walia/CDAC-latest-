@@ -91,14 +91,12 @@ function AddMst2Marks_ByTeacher()
 
         if (!studentID || !course || !semester || !subjectCode || !obtainedMarks || !email || !type)
         {
-            toast.error("All fields are required");
-            return;
+            return toast.error("All fields are required");
         }
 
         if (Number(obtainedMarks) > 24)
         {
-            toast.error("Obtained marks cannot be greater than total marks");
-            return;
+            return toast.error("Obtained marks cannot be greater than total marks");
         }
 
         try
@@ -184,8 +182,18 @@ function AddMst2Marks_ByTeacher()
                                     </div>
 
                                     <div className="student_info">
+                                        <span>Batch:</span>
+                                        <p>{student_data?.batch || "-"}</p>
+                                    </div>
+
+                                    <div className="student_info">
                                         <span>Course:</span>
                                         <p>{student_data?.course || "-"}</p>
+                                    </div>
+
+                                    <div className="student_info">
+                                        <span>ID:</span>
+                                        <p>{student_data?.studentID || "-"}</p>
                                     </div>
 
                                     <div className="student_info">

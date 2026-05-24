@@ -31,6 +31,30 @@ function AddTeacher_ByAdmin()
 
         if (pass === cpass) 
         {
+            if (!name?.trim() || !phone?.trim() || !email?.trim() || !pass?.trim())
+            {
+                return toast.error("All fields are required");
+            }
+
+            if (name.trim().length < 3)
+            {
+                return toast.error("Name must be at least 3 characters");
+            }
+
+            if (!/^[0-9]{10}$/.test(phone))
+            {
+                return toast.error("Phone must be 10 digits");
+            }
+
+            if (!/\S+@\S+\.\S+/.test(email))
+            {
+                return toast.error("Invalid email format");
+            }
+
+            if (pass.length < 3)
+            {
+                return toast.error("Password must be at least 3 characters");
+            }
             const reqdata = { name, phone, email, pass }
             try 
             {
@@ -122,7 +146,7 @@ function AddTeacher_ByAdmin()
                                 {loading ? "Adding Teacher..." : "Add Teacher"}
                             </button>
 
-                            <button type="submit" className="register-button mt-3" disabled={loading}>
+                            <button onClick={() => navi("/resend_email")} className="register-button mt-3" disabled={loading}>
                                 {loading ? "Resending Mail..." : "Resend Mail"}
                             </button>
 

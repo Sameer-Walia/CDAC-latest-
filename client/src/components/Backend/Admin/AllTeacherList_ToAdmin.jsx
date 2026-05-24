@@ -118,14 +118,14 @@ function AllTeacherList_ToAdmin()
 
                         <button
                             className="search-btn"
-                            onClick={() => navi("/add_teacher_byAdmin")}
+                            onClick={() => navi("/add_teacher_by_admin")}
                         >
                             ➕ Add Teacher
                         </button>
 
                         <button
                             className="search-btn"
-                            onClick={() => navi("/search_teacher")}
+                            onClick={() => navi("/search_teacher_by_admin")}
                         >
                             🔍 Search Teacher
                         </button>

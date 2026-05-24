@@ -125,13 +125,13 @@ function StudentAdded_ByTeacher()
                         </button>
                         <button
                             className="search-btn"
-                            onClick={() => navi("/add_student")}
+                            onClick={() => navi("/add_student_by_teacher")}
                         >
                             ➕ Add Student
                         </button>
                         <button
                             className="search-btn"
-                            onClick={() => navi("/search_student")}
+                            onClick={() => navi("/search_student_by_teacher")}
                         >
                             🔍 Search Student
                         </button>

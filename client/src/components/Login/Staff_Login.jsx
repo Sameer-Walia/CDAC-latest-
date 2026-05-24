@@ -13,7 +13,7 @@ function Staff_Login()
     const [email, setemail] = useState("");
     const [pass, setpass] = useState("");
     const [loading, setloading] = useState(false);
-    const [hcaptcha, sethcaptcha] = useState(false);
+    const [captchaToken, setcaptchaToken] = useState("");
     const dispatch = useDispatch()
 
     const navi = useNavigate();
@@ -23,17 +23,9 @@ function Staff_Login()
         document.title = "Login Page"
     }, [])
 
-    function onChange(value) 
+    function onChange(value)
     {
-        console.log("Captcha value:", value);
-        if (value === null || value === "")
-        {
-            sethcaptcha(false)
-        }
-        else
-        {
-            sethcaptcha(true)
-        }
+        setcaptchaToken(value || "");
     }
 
     async function onlogin(e) 
@@ -129,7 +121,7 @@ function Staff_Login()
                 </div>
 
                 <br />
-                <div className="captcha-container"><ReCAPTCHA sitekey="6LfERsgrAAAAALuRJGrIb-al3osvxot0jCNfyLgU" onChange={onChange} /></div>
+                {/* <div className="captcha-container"><ReCAPTCHA sitekey="6LfERsgrAAAAALuRJGrIb-al3osvxot0jCNfyLgU" onChange={onChange} /></div> */}
 
                 <button type="submit" className="register-button mt-3" disabled={loading}>
                     {loading ? "Signing in..." : "SIGN IN"}
@@ -138,7 +130,7 @@ function Staff_Login()
                 <p className="register-text ">
                     New Here? <Link to="/staff_register" className="login-link" >Sign Up</Link>
                 </p>
-                <Link to="/forgotpassword" className="login-link" >Forgot Password</Link>
+                <Link to="/forgot_password_by_teacher" className="login-link" >Forgot Password</Link>
 
             </form>
 

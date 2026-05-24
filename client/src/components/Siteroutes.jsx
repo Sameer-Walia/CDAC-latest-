@@ -41,7 +41,7 @@ import Privacy_policy from "./Privacy_policy";
 import SeatDistribution from "./Admissions/SeatDistribution";
 import Student_Login from "./Login/Student_Login";
 import TeacherList from "./Backend/Admin/AllTeacherList_ToAdmin";
-import SearchTeacher from "./Backend/Admin/SearchTeacher_ByAdmin";
+import SearchTeacher_ByAdmin from "./Backend/Admin/SearchTeacher_ByAdmin";
 import UpdateTeacher from "./Backend/Admin/UpdateTeacher_ByAdmin";
 import AllStudentList_ToTeacher from "./Backend/Teacher/AllStudentList_ToTeacher";
 import AddStudent_ByTeacher from "./Backend/Teacher/AddStudent_ByTeacher";
@@ -50,7 +50,7 @@ import SearchStudent_ByTeacher from "./Backend/Teacher/SearchStudent_ByTeacher";
 import AllStudentList from "./Backend/Admin/AllStudentList_ToAdmin";
 import AddStudent_byadmin from "./Backend/Admin/AddStudent_ByAdmin";
 import UpdateStudent_byAdmin from "./Backend/Admin/UpdateStudent_byAdmin";
-import SearchStudent_byAdmins from "./Backend/Admin/SearchStudent_ByAdmin";
+import SearchStudent_byAdmin from "./Backend/Admin/SearchStudent_ByAdmin";
 import AddTeacher_byadmin from "./Backend/Admin/AddTeacher_ByAdmin";
 import StudentAdded_ByTeacher from "./Backend/Teacher/StudentAdded_ByTeacher";
 import StudentAddedByAdmin from "./Backend/Admin/StudentAdded_ByAdmin";
@@ -78,7 +78,7 @@ import My_Attendance from "./Backend/Student/My_Attendance";
 import SearchAttendence_ByTeacher from "./Backend/Teacher/SearchAttendence_ByTeacher";
 import ExploreAttendence_ByTeacher from "./Backend/Teacher/ExploreAttendence_ByTeacher";
 import Thanks from "./Register/Thanks";
-import NoThanks from "./Register/NoThanks";
+import Resend_email from "./Register/Resend_email";
 import ActivateAccount from "./Register/ActivateAccount";
 import AllTimeTableList_ToTeacher from "./Backend/Teacher/AllTimeTableList_ToTeacher";
 import AddTimeTable_ByTeacher from "./Backend/Teacher/AddTimeTable_ByTeacher";
@@ -93,6 +93,10 @@ import SearchThesisbyID_ByAdmin from "./Backend/Admin/SearchThesisbyID_ByAdmin";
 import SearchThesisbyBatchCourse_ByAdmin from "./Backend/Admin/SearchThesisbyBatchCourse_ByAdmin";
 import SearchThesisbyGuideEmail_ByAdmin from "./Backend/Admin/SearchThesisbyGuideEmail_ByAdmin";
 import UpdateThesis_byAdmin from "./Backend/Admin/UpdateThesis_byAdmin";
+import AdminRoutesProtector from "./AdminRoutesProtector";
+import TeacherRoutesProtector from "./TeacherRoutesProtector";
+import ForgotPassword_ByTeacher from "./ForgotPassword_ByTeacher";
+import ResetPassword_ByTeacher from "./ResetPassword_ByTeacher";
 
 
 function Siteroutes()
@@ -109,8 +113,6 @@ function Siteroutes()
         <div>
             <Routes>
                 <Route path="/" element={<Home />}></Route>
-                <Route path="/adminhome" element={<AdminHome />}></Route>
-                <Route path="/teacherhome" element={<TeacherHome />}></Route>
                 <Route path="/studenthome" element={<StudentHome />}></Route>
                 <Route path="/staff_login" element={<Authpage />}></Route>
                 <Route path="/staff_register" element={<Authpage />}></Route>
@@ -155,60 +157,66 @@ function Siteroutes()
 
 
                 <Route path="/thanks" element={<Thanks />}></Route>
-                <Route path="/nothanks" element={<NoThanks />}></Route>
+                <Route path="/resend_email" element={<Resend_email />}></Route>
                 <Route path="/activateaccount" element={<ActivateAccount />}></Route>
+                <Route path="/activateaccount" element={<ActivateAccount />}></Route>
+                <Route path="/forgot_password_by_teacher" element={<ForgotPassword_ByTeacher />}></Route>
+                <Route path="/reset_password_by_teacher/:code" element={<ResetPassword_ByTeacher />}></Route>
 
 
                 {/* admin */}
-                <Route path="/adminPanel" element={<TeacherList />}></Route>
-                <Route path="/update_teacher_by_admin/:tid" element={<UpdateTeacher />}></Route>
-                <Route path="/search_teacher" element={<SearchTeacher />}></Route>
-                <Route path="/all_students_list_to_admin" element={<AllStudentList />}></Route>
-                <Route path="/add_student_byadmin" element={<AddStudent_byadmin />}></Route>
-                <Route path="/add_teacher_byAdmin" element={<AddTeacher_byadmin />}></Route>
-                <Route path="/update_student_by_admin/:sid" element={<UpdateStudent_byAdmin />}></Route>
-                <Route path="/search_student_byAdmin" element={<SearchStudent_byAdmins />}></Route>
-                <Route path="/student_add_by_Admin" element={<StudentAddedByAdmin />}></Route>
-                <Route path="/adminprofile" element={<AdminProfile />}></Route>
-                <Route path="/edit_profile_of_admin" element={<EditAdminProfile />}></Route>
-                <Route path="/changepassword_for_admin" element={<ChangePassword_ByAdmin />}></Route>
-                <Route path="/all_fees_list_to_admin" element={<AllFeesList_ToAdmin />}></Route>
-                <Route path="/search_fees_by_sem_for_admin" element={<SearchFeesListAccToSem_ByAdmin />}></Route>
-                <Route path="/search_fees_by_studentid_for_admin" element={<SearchFeesListOfStudent_ByAdmin />}></Route>
-                <Route path="/all_thesis_list_to_admin" element={<AllThesisList_ToAdmin />}></Route>
-                <Route path="/search_thesis_by_ID_by_admin" element={<SearchThesisbyID_ByAdmin />}></Route>
-                <Route path="/search_thesis_by_BatchCourse_by_admin" element={<SearchThesisbyBatchCourse_ByAdmin />}></Route>
-                <Route path="/search_thesis_by_guideEmail_by_admin" element={<SearchThesisbyGuideEmail_ByAdmin />}></Route>
-                <Route path="/update_studentThesis_by_admin/:tid" element={<UpdateThesis_byAdmin />}></Route>
+                <Route path="/adminhome" element={<AdminRoutesProtector compname={AdminHome} />}></Route>
+                <Route path="/adminPanel" element={<AdminRoutesProtector compname={TeacherList} />}></Route>
+                <Route path="/update_teacher_by_admin/:tid" element={<AdminRoutesProtector compname={UpdateTeacher} />}></Route>
+                <Route path="/search_teacher_by_admin" element={<AdminRoutesProtector compname={SearchTeacher_ByAdmin} />}></Route>
+                <Route path="/all_students_list_to_admin" element={<AdminRoutesProtector compname={AllStudentList} />}></Route>
+                {/* <Route path="/all_students_list_to_admin" element={<AllStudentList />}></Route> */}
+                <Route path="/add_student_by_admin" element={<AdminRoutesProtector compname={AddStudent_byadmin} />}></Route>
+                <Route path="/add_teacher_by_admin" element={<AdminRoutesProtector compname={AddTeacher_byadmin} />}></Route>
+                <Route path="/update_student_by_admin/:sid" element={<AdminRoutesProtector compname={UpdateStudent_byAdmin} />}></Route>
+                <Route path="/search_student_by_admin" element={<AdminRoutesProtector compname={SearchStudent_byAdmin} />}></Route>
+                <Route path="/student_add_by_admin" element={<AdminRoutesProtector compname={StudentAddedByAdmin} />}></Route>
+                <Route path="/adminprofile" element={<AdminRoutesProtector compname={AdminProfile} />}></Route>
+                <Route path="/edit_profile_of_admin" element={<AdminRoutesProtector compname={EditAdminProfile} />}></Route>
+                <Route path="/changepassword_for_admin" element={<AdminRoutesProtector compname={ChangePassword_ByAdmin} />}></Route>
+                <Route path="/all_fees_list_to_admin" element={<AdminRoutesProtector compname={AllFeesList_ToAdmin} />}></Route>
+                <Route path="/search_fees_by_sem_for_admin" element={<AdminRoutesProtector compname={SearchFeesListAccToSem_ByAdmin} />}></Route>
+                <Route path="/search_fees_by_studentid_for_admin" element={<AdminRoutesProtector compname={SearchFeesListOfStudent_ByAdmin} />}></Route>
+                <Route path="/all_thesis_list_to_admin" element={<AdminRoutesProtector compname={AllThesisList_ToAdmin} />}></Route>
+                <Route path="/search_thesis_by_ID_by_admin" element={<AdminRoutesProtector compname={SearchThesisbyID_ByAdmin} />}></Route>
+                <Route path="/search_thesis_by_BatchCourse_by_admin" element={<AdminRoutesProtector compname={SearchThesisbyBatchCourse_ByAdmin} />}></Route>
+                <Route path="/search_thesis_by_guideEmail_by_admin" element={<AdminRoutesProtector compname={SearchThesisbyGuideEmail_ByAdmin} />}></Route>
+                <Route path="/update_studentThesis_by_admin/:tid" element={<AdminRoutesProtector compname={UpdateThesis_byAdmin} />}></Route>
 
 
 
                 {/* teacher */}
-                <Route path="/teacherPanel" element={<AllStudentList_ToTeacher />}></Route>
-                <Route path="/add_student" element={<AddStudent_ByTeacher />}></Route>
-                <Route path="/update_student_by_teacher/:sid" element={<UpdateStudent_ByTeacher />}></Route>
-                <Route path="/search_student" element={<SearchStudent_ByTeacher />}></Route>
-                <Route path="/student_add_by_teacher" element={<StudentAdded_ByTeacher />}></Route>
-                <Route path="/teacherprofile" element={<TeacherProfile />}></Route>
-                <Route path="/edit_profile_of_teacher" element={<EditTeacherProfile />}></Route>
-                <Route path="/changepassword_for_teacher" element={<ChangePassword_ByTeacher />}></Route>
-                <Route path="/all_syllabus_list_to_teacher" element={<AllSyllabusList_ToTeacher />}></Route>
-                <Route path="/add_syllabus" element={<AddSyllabus_ByTeacher />}></Route>
-                <Route path="/syllabus_add_by_me_teacher" element={<SyllabusAdded_ByTeacher />}></Route>
-                <Route path="/all_students_marks_list_to_teacher" element={<AllMarksList_ToTeacher />}></Route>
-                <Route path="/marks_added_by_me_teacher" element={<MarksAdded_ByTeacher />}></Route>
-                <Route path="/add_mst_1_marks_by_teacher" element={<AddMst1Marks_ByTeacher />}></Route>
-                <Route path="/add_mst_2_marks_by_teacher" element={<AddMst2Marks_ByTeacher />}></Route>
-                <Route path="/update_marks_by_teacher/:mid" element={<UpdateMarks_ByTeacher />}></Route>
-                <Route path="/mark_attendance_by_teacher" element={<MarkAttendence_ByTeacher />}></Route>
-                <Route path="/search_attendence_by_teacher" element={<SearchAttendence_ByTeacher />}></Route>
-                <Route path="/explore_attendance_by_teacher/:aid" element={<ExploreAttendence_ByTeacher />}></Route>
-                <Route path="/all_timetable_list_to_teacher" element={<AllTimeTableList_ToTeacher />}></Route>
-                <Route path="/add_timetable" element={<AddTimeTable_ByTeacher />}></Route>
-                <Route path="/timetable_add_by_me_teacher" element={<TimeTableAdded_ByTeacher />}></Route>
-                <Route path="/all_thesis_list_to_teacher" element={<AllThesisList_ToTeacher />}></Route>
-                <Route path="/search_thesis_by_ID_by_teacher" element={<SearchThesisbyID_ByTeacher />}></Route>
-                <Route path="/search_thesis_by_BatchCourse_by_teacher" element={<SearchThesisbyBatchCourse_ByTeacher />}></Route>
+                <Route path="/teacherhome" element={<TeacherRoutesProtector compname={TeacherHome} />}></Route>
+                <Route path="/teacherPanel" element={<TeacherRoutesProtector compname={AllStudentList_ToTeacher} />}></Route>
+                <Route path="/add_student_by_teacher" element={<TeacherRoutesProtector compname={AddStudent_ByTeacher} />}></Route>
+                <Route path="/update_student_by_teacher/:sid" element={<TeacherRoutesProtector compname={UpdateStudent_ByTeacher} />}></Route>
+                <Route path="/search_student_by_teacher" element={<TeacherRoutesProtector compname={SearchStudent_ByTeacher} />}></Route>
+                <Route path="/student_add_by_teacher" element={<TeacherRoutesProtector compname={StudentAdded_ByTeacher} />}></Route>
+                <Route path="/teacherprofile" element={<TeacherRoutesProtector compname={TeacherProfile} />}></Route>
+                <Route path="/edit_profile_of_teacher" element={<TeacherRoutesProtector compname={EditTeacherProfile} />}></Route>
+                <Route path="/changepassword_for_teacher" element={<TeacherRoutesProtector compname={ChangePassword_ByTeacher} />}></Route>
+                <Route path="/all_syllabus_list_to_teacher" element={<TeacherRoutesProtector compname={AllSyllabusList_ToTeacher} />}></Route>
+                <Route path="/add_syllabus" element={<TeacherRoutesProtector compname={AddSyllabus_ByTeacher} />}></Route>
+                <Route path="/syllabus_add_by_me_teacher" element={<TeacherRoutesProtector compname={SyllabusAdded_ByTeacher} />}></Route>
+                <Route path="/all_students_marks_list_to_teacher" element={<TeacherRoutesProtector compname={AllMarksList_ToTeacher} />}></Route>
+                <Route path="/marks_added_by_me_teacher" element={<TeacherRoutesProtector compname={MarksAdded_ByTeacher} />}></Route>
+                <Route path="/add_mst_1_marks_by_teacher" element={<TeacherRoutesProtector compname={AddMst1Marks_ByTeacher} />}></Route>
+                <Route path="/add_mst_2_marks_by_teacher" element={<TeacherRoutesProtector compname={AddMst2Marks_ByTeacher} />}></Route>
+                <Route path="/update_marks_by_teacher/:mid" element={<TeacherRoutesProtector compname={UpdateMarks_ByTeacher} />}></Route>
+                <Route path="/mark_attendance_by_teacher" element={<TeacherRoutesProtector compname={MarkAttendence_ByTeacher} />}></Route>
+                <Route path="/search_attendence_by_teacher" element={<TeacherRoutesProtector compname={SearchAttendence_ByTeacher} />}></Route>
+                <Route path="/explore_attendance_by_teacher/:aid" element={<TeacherRoutesProtector compname={ExploreAttendence_ByTeacher} />}></Route>
+                <Route path="/all_timetable_list_to_teacher" element={<TeacherRoutesProtector compname={AllTimeTableList_ToTeacher} />}></Route>
+                <Route path="/add_timetable" element={<TeacherRoutesProtector compname={AddTimeTable_ByTeacher} />}></Route>
+                <Route path="/timetable_add_by_me_teacher" element={<TeacherRoutesProtector compname={TimeTableAdded_ByTeacher} />}></Route>
+                <Route path="/all_thesis_list_to_teacher" element={<TeacherRoutesProtector compname={AllThesisList_ToTeacher} />}></Route>
+                <Route path="/search_thesis_by_ID_by_teacher" element={<TeacherRoutesProtector compname={SearchThesisbyID_ByTeacher} />}></Route>
+                <Route path="/search_thesis_by_BatchCourse_by_teacher" element={<TeacherRoutesProtector compname={SearchThesisbyBatchCourse_ByTeacher} />}></Route>
 
 
 

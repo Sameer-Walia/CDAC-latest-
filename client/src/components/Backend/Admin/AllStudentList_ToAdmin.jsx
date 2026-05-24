@@ -112,19 +112,19 @@ function AllStudentList_ToAdmin()
                         <h1 className="hd">Students List</h1>
                         <button
                             className="search-btn"
-                            onClick={() => navi("/student_add_by_Admin")}
+                            onClick={() => navi("/student_add_by_admin")}
                         >
                             ➕ Added By Me
                         </button>
                         <button
                             className="search-btn"
-                            onClick={() => navi("/add_student_byadmin")}
+                            onClick={() => navi("/add_student_by_admin")}
                         >
                             ➕ Add Student
                         </button>
                         <button
                             className="search-btn"
-                            onClick={() => navi("/search_student_byAdmin")}
+                            onClick={() => navi("/search_student_by_admin")}
                         >
                             🔍 Search Student
                         </button>

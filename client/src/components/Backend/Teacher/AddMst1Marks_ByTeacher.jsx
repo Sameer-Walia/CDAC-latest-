@@ -183,14 +183,19 @@ function AddMst1Marks_ByTeacher()
                                         <p>{student_data?.name || "-"}</p>
                                     </div>
 
-                                    {/* <div className="student_info">
+                                    <div className="student_info">
                                         <span>Batch:</span>
                                         <p>{student_data?.batch || "-"}</p>
-                                    </div> */}
+                                    </div>
 
                                     <div className="student_info">
                                         <span>Course:</span>
                                         <p>{student_data?.course || "-"}</p>
+                                    </div>
+
+                                     <div className="student_info">
+                                        <span>ID:</span>
+                                        <p>{student_data?.studentID || "-"}</p>
                                     </div>
 
                                     <div className="student_info">

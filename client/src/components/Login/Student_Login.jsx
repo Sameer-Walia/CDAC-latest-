@@ -14,31 +14,19 @@ function Student_Login()
     const [studentID, setstudentID] = useState("");
     const [pass, setpass] = useState("");
     const [loading, setloading] = useState(false);
-    const [hcaptcha, sethcaptcha] = useState(false);
+    const [captchaToken, setcaptchaToken] = useState("");
     const dispatch = useDispatch()
 
-
-    // const usercokkie = new Cookies()
-
     const navi = useNavigate();
-    // const dispatch = useDispatch()
 
     useEffect(() =>
     {
         document.title = "Login Page"
     }, [])
 
-    function onChange(value) 
+    function onChange(value)
     {
-        console.log("Captcha value:", value);
-        if (value === null || value === "")
-        {
-            sethcaptcha(false)
-        }
-        else
-        {
-            sethcaptcha(true)
-        }
+        setcaptchaToken(value || "");
     }
 
     async function onlogin(e) 
@@ -120,7 +108,7 @@ function Student_Login()
                             </div>
 
                             <br />
-                            <div className="captcha-container"><ReCAPTCHA sitekey="6LfERsgrAAAAALuRJGrIb-al3osvxot0jCNfyLgU" onChange={onChange} /></div>
+                            {/* <div className="captcha-container"><ReCAPTCHA sitekey="6LfERsgrAAAAALuRJGrIb-al3osvxot0jCNfyLgU" onChange={onChange} /></div> */}
 
                             {
                                 loading ?
@@ -129,7 +117,7 @@ function Student_Login()
                                     </div> : <input type="submit" className="register-button mt-3" value="SIGN IN" />
                             }
 
-                            <Link to="/forgotpassword" className="login-link mt-4" >Forgot Password</Link>
+                            <Link to="/forgot_password_by_student" className="login-link mt-4" >Forgot Password</Link>
 
                         </form>
 
