@@ -4,6 +4,11 @@ import "./Placement.css"
 
 function Contact_Po()
 {
+    useEffect(() =>
+    {
+        document.title = "Contact PO"
+    }, [])
+
     return (
         <div>
             <div id="placement_page" className="p-4">

@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom"
 import Footer from "../Footer/Footer"
+import { useEffect } from "react"
 
 function Academic_Calender()
 {
+
+    useEffect(() =>
+    {
+        document.title = "Academic Calendar"
+    }, [])
+
     return (
         <div>
             <div id="academics_page" className="p-4">

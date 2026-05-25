@@ -1,9 +1,15 @@
 import Footer from '../Footer/Footer'
 import { Link } from 'react-router-dom'
 import "./Facilities.css"
+import { useEffect } from 'react'
 
 function Hostel()
 {
+    useEffect(() =>
+    {
+        document.title = "Hostel"
+    }, [])
+
     return (
         <div>
             <div id="facilities_page" className="p-4">

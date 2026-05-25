@@ -14,7 +14,7 @@ function StudentHome()
 {
     useEffect(() =>
     {
-        document.title = "Admin Home Page"
+        document.title = "Student Home Page"
     }, [])
 
 

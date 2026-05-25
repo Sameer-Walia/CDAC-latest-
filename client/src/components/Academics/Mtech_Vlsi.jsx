@@ -1,9 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../Footer/Footer'
+import { useEffect } from 'react'
 
 function Mtech_Vlsi()
 {
+    useEffect(() =>
+    {
+        document.title = "M.Tech - VLSI Design"
+    }, [])
+
     return (
         <div>
             <div id="academics_page" className="p-4">

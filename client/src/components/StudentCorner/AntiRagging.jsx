@@ -1,9 +1,16 @@
 import { Link } from 'react-router-dom'
 import Footer from '../Footer/Footer'
 import "./StudentCorner.css"
+import { useEffect } from 'react';
 
 function AntiRagging()
 {
+    useEffect(() =>
+    {
+        document.title = "Anti Ragging";
+    }, []);
+
+
     return (
         <div>
             <div id="studentcorner_page" className="p-4">

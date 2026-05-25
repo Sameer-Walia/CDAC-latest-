@@ -6,7 +6,7 @@ function Thanks()
 
     useEffect(() =>
     {
-        document.title = "Thanks";
+        document.title = "Thanks Page";
     }, []);
 
     return (

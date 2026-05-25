@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import "./AboutUs.css";
+import { useEffect } from "react";
 
 function Departmental_Activities()
 {
+
+    useEffect(() =>
+    {
+        document.title = "Departmental Activities"
+    }, [])
+
     return (
         <div>
             <div id="about_page" className="p-4">
@@ -14,7 +21,7 @@ function Departmental_Activities()
                         <span className="separator">›</span>
                         <span className="crumb">About Us</span>
                         <span className="separator">›</span>
-                        <span className="crumb active">Recognition & Approval</span>
+                        <span className="crumb active">Departmental Activities</span>
                     </div>
                 </div>
 

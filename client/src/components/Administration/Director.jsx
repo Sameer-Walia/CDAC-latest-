@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom'
 import Footer from '../Footer/Footer'
 import "./Administration.css"
+import { useEffect } from 'react'
 
 function Director()
 {
+    useEffect(() =>
+    {
+        document.title = "Director"
+    }, [])
+
     return (
         <div>
             <div id="adminstration_page" className="p-4">

@@ -4,6 +4,11 @@ import "./Academics.css";
 
 function Academic_Overview()
 {
+    useEffect(() =>
+    {
+        document.title = "Academic Overview"
+    }, [])
+
     return (
         <div>
             <div id="academics_page" className="p-4">

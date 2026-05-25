@@ -14,7 +14,7 @@ function AllMarksList_ToTeacher()
 
     useEffect(() =>
     {
-        document.title = "Marks-List"
+        document.title = "ALL Marks-List"
     }, [])
 
     useEffect(() =>

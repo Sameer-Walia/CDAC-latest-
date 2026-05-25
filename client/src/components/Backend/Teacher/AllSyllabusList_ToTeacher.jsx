@@ -15,7 +15,7 @@ function AllSyllabusList_ToTeacher()
 
     useEffect(() =>
     {
-        document.title = "Syllabus-upload"
+        document.title = "All Syllabus List"
     }, [])
 
     useEffect(() =>

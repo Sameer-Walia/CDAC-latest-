@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom'
 import Footer from '../Footer/Footer'
 import "./Placement.css"
+import { useEffect } from 'react'
 
 function PoMessage()
 {
+    useEffect(() =>
+    {
+        document.title = "PO's Message"
+    }, [])
+
     return (
         <div>
             <div id="placement_page" className="p-4">

@@ -19,7 +19,7 @@ function AllStudentList_ToTeacher()
 
     useEffect(() =>
     {
-        document.title = "Students-List"
+        document.title = "All Students-List"
     }, [])
 
     useEffect(() =>

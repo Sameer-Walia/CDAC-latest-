@@ -23,7 +23,7 @@ function EditTeacherProfile()
 
     useEffect(() =>
     {
-        document.title = "Edit Profile"
+        document.title = "Edit Teacher Profile"
     }, [])
 
     useEffect(() =>

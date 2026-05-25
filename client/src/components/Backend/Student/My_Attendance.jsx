@@ -22,7 +22,7 @@ function My_Attendance()
 
     useEffect(() =>
     {
-        document.title = "Attendance"
+        document.title = "My Attendance"
     }, [])
 
     useEffect(() =>

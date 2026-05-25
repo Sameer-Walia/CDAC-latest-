@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom'
 import Footer from '../Footer/Footer'
 import "./People.css"
+import { useEffect } from 'react'
 
 function Director()
 {
+    useEffect(() =>
+    {
+        document.title = "Head/Coordinator of Department"
+    }, [])
+
     return (
         <div>
             <div id="people_page" className="p-4">

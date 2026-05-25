@@ -19,7 +19,7 @@ function AllTeacherList_ToAdmin()
 
     useEffect(() =>
     {
-        document.title = "Teachers-List"
+        document.title = "All Teachers-List"
     }, [])
 
     useEffect(() =>

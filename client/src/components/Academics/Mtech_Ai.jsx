@@ -1,9 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../Footer/Footer'
+import { useEffect } from 'react'
 
 function Mtech_Ai()
 {
+
+    useEffect(() =>
+    {
+        document.title = "M.Tech -AI"
+    }, [])
+
     return (
         <div>
             <div id="academics_page" className="p-4">

@@ -4,6 +4,11 @@ import "./Facilities.css"
 
 function Laboratories()
 {
+    useEffect(() =>
+    {
+        document.title = "Laboratories"
+    }, [])
+
     return (
         <div>
             <div id="facilities_page" className="p-4">

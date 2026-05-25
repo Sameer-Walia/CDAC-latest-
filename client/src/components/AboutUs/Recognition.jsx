@@ -4,6 +4,11 @@ import "./AboutUs.css";
 
 function Recognition()
 {
+    useEffect(() =>
+    {
+        document.title = "Recognition & Approval"
+    }, [])
+
     return (
         <div>
             <div id="about_page" className="p-4">

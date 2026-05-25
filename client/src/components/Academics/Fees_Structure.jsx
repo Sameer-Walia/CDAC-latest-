@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
 import Footer from "../Footer/Footer";
+import { useEffect } from "react";
 
 function Fees_Structure()
 {
+    useEffect(() =>
+    {
+        document.title = "Fee Structure"
+    }, [])
+
     return (
         <div>
             <div id="academics_page" className="p-4">

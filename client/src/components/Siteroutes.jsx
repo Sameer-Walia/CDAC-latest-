@@ -97,6 +97,7 @@ import AdminRoutesProtector from "./AdminRoutesProtector";
 import TeacherRoutesProtector from "./TeacherRoutesProtector";
 import ForgotPassword_ByTeacher from "./ForgotPassword_ByTeacher";
 import ResetPassword_ByTeacher from "./ResetPassword_ByTeacher";
+import ForgotPassword_ByStudent from "./ForgotPassword_ByStudent";
 
 
 function Siteroutes()
@@ -162,6 +163,7 @@ function Siteroutes()
                 <Route path="/activateaccount" element={<ActivateAccount />}></Route>
                 <Route path="/forgot_password_by_teacher" element={<ForgotPassword_ByTeacher />}></Route>
                 <Route path="/reset_password_by_teacher/:code" element={<ResetPassword_ByTeacher />}></Route>
+                <Route path="/forgot_password_by_student" element={<ForgotPassword_ByStudent />}></Route>
 
 
                 {/* admin */}

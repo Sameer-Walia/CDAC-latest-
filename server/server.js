@@ -3231,7 +3231,7 @@ else
                         from: 'sameerwalia13@gmail.com',
                         to: teacheremail,
                         subject: 'Reset Password Mail from CDAC',
-                        html: `Dear ${user.name}<br/><br/>Click on the Following Link to Reset your Password :-.<br/><br/><a href='http://localhost:5173/reset_password_by_teacher/${passtoken}'>Reset Password<a/>`
+                        html: `Dear ${user.name}<br/><br/>Click on the Following Link to Reset your Password :-.<br/><br/><a href='http://localhost:5173/reset_password_by_teacher/${passtoken}'>Reset Password<a/><br/><br/>This Link Is Valid For 15 Minutes Only.<br/><br/>If you did not request for password reset, please ignore this email.`
                     };
 
                     transporter.sendMail(mailOptions, (error, info) =>
@@ -3354,6 +3354,43 @@ else
             return res.status(500).json({ statuscode: -1, msg: "Server error" })
         }
     })
+
+
+    app.post("/api/forgot_password_by_student", async (req, res) => 
+    {
+        try 
+        {
+            const { studentID } = req.body;
+
+            const mailOptions = {
+                from: 'sameerwalia13@gmail.com',
+                to: 'sameerwalia13@gmail.com',
+                subject: 'Password Request - CDAC',
+                html: `<p>Respected Sir/Madam,</p><p> My Student ID is <b>${studentID}</b>.</p><p>I have forgotten my password. Kindly send me my password again.</p><br/><p>Thank you.</p><p>Regards,<br/>CDAC Student</p>`
+            };
+
+            transporter.sendMail(mailOptions, (error, info) =>
+            {
+                if (error)
+                {
+                    console.log(error);
+                    return res.status(200).json({ statuscode: 0, msg: "Error sending Mail , try again" })
+                }
+                else
+                {
+                    console.log("Email sent: " + info.response);
+                    return res.status(200).json({ statuscode: 1, msg: "Mail sent successfully, We will revert back in 24 hours" })
+                }
+            });
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).json({ statuscode: -1, msg: "Server error" })
+        }
+    });
+
 
 
     app.listen(port, () =>

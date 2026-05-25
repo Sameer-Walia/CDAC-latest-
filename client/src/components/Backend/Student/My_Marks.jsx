@@ -30,7 +30,7 @@ function My_Marks()
 
     useEffect(() =>
     {
-        document.title = "Marks-List"
+        document.title = "My Marks-List"
     }, [])
 
     useEffect(() =>

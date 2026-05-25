@@ -4,6 +4,11 @@ import "./Facilities.css"
 
 function Library()
 {
+    useEffect(() =>
+    {
+        document.title = "Library"
+    }, [])
+
     return (
         <div>
             <div id="facilities_page" className="p-4">

@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom"
 import Footer from "../Footer/Footer"
 import "./Admissions.css"
+import { useEffect } from "react"
 
 function SeatDistribution()
 {
+    useEffect(() =>
+    {
+        document.title = "Seat Distribution"
+    }, [])
+
     return (
         <div>
             <div id="admissions_page" className="p-4">

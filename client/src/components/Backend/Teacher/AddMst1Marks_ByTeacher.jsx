@@ -44,7 +44,7 @@ function AddMst1Marks_ByTeacher()
 
     useEffect(() =>
     {
-        document.title = "Upload Marks"
+        document.title = "Upload MST-1 Marks"
     }, [])
 
     async function handleSearchStudent()

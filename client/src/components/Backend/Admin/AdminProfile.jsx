@@ -18,7 +18,7 @@ function AdminProfile()
 
     useEffect(() =>
     {
-        document.title = "My Profile"
+        document.title = "Admin Profile"
     }, [])
 
     useEffect(() =>

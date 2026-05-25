@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom"
 import Footer from "../Footer/Footer"
 import "./Academics.css";
+import { useEffect } from "react";
 
 function Programmes()
 {
+
+    useEffect(() =>
+    {
+        document.title = "Programmes"
+    }, [])
+
     return (
         <div>
             <div id="academics_page" className="p-4">

@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom"
 import Footer from "../Footer/Footer"
+import { useEffect } from "react"
 
 function Staff()
 {
+    useEffect(() =>
+    {
+        document.title = "Staff"
+    }, [])
+
     return (
         <div>
             <div id="people_page" className="p-4">

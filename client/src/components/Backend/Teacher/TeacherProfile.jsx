@@ -19,7 +19,7 @@ function TeacherProfile()
 
     useEffect(() =>
     {
-        document.title = "My Profile"
+        document.title = "Teacher Profile"
     }, [])
 
 

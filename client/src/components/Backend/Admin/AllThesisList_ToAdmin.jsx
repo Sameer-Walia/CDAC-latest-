@@ -20,7 +20,7 @@ function AllThesisList_ToAdmin()
 
     useEffect(() =>
     {
-        document.title = "Thesis-List"
+        document.title = "All Thesis-List"
     }, [])
 
     useEffect(() =>

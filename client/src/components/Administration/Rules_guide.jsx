@@ -1,9 +1,17 @@
 import React from 'react'
 import Footer from '../Footer/Footer'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 
 function Rules_guide()
 {
+
+    useEffect(() =>
+    {
+        document.title = "Rules & Guidelines"
+    }, [])
+
+
     return (
         <div>
             <div id="adminstration_page" className="p-4">

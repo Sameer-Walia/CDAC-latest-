@@ -6,6 +6,11 @@ import { toast } from "react-toastify";
 function ActivateAccount()
 {
 
+    useEffect(() =>
+    {
+        document.title = "Activate Account"
+    }, [])
+
     const [loading, setloading] = useState(false);
     const [msg, setmsg] = useState()
     const [params] = useSearchParams();

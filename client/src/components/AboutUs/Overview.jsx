@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import "./AboutUs.css";
+import { useEffect } from "react";
 
 function Overview()
 {
+
+    useEffect(() =>
+    {
+        document.title = "Overview"
+    }, [])
+
     return (
         <div>
             <div id="about_page" className="p-4">
