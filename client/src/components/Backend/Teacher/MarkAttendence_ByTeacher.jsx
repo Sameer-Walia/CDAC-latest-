@@ -60,18 +60,16 @@ function MarkAttendence_ByTeacher()
     {
         try
         {
-            setloading(true)
-
-            if (batch == "")
+            if (!batch?.trim())
             {
                 toast.error("Please Select Batch")
             }
-            if (course == "")
+            if (!course?.trim())
             {
                 toast.error("Please Select Course")
             }
-
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_students_acc_to_batch_Course/${batch}/${course}`);
+            setloading(true)
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_students_acc_to_batch_Course/${batch}/${course}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -101,35 +99,33 @@ function MarkAttendence_ByTeacher()
         e.preventDefault()
         try
         {
-            if (batch == "")
+            if (!batch?.trim())
             {
                 return toast.error("Please Select Batch")
             }
 
-            if (course == "")
+            if (!course?.trim())
             {
                 return toast.error("Please Select Course")
             }
 
-            if (semester == "")
+            if (!semester?.trim())
             {
                 return toast.error("Please Select Semester")
             }
 
-            if (subjectCode == "")
+            if (!subjectCode?.trim())
             {
                 return toast.error("Please Select Subject Code")
             }
 
-            if (date == "")
+            if (!date?.trim())
             {
                 return toast.error("Please Select Date")
             }
 
             setloading(true)
-
             const formData = new FormData(e.target);
-
             const students = course_students.map((item) => ({
                 studentID: item.studentID,
                 studentName: item.name,
@@ -139,7 +135,7 @@ function MarkAttendence_ByTeacher()
 
             const data = { email, batch, course, semester, subjectCode, date, students }
 
-            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/submit_Attendnace_by_teacher`, data);
+            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/submit_Attendnace_by_teacher`, data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

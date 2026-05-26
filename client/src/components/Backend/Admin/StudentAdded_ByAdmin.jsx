@@ -32,8 +32,12 @@ function StudentAdded_ByAdmin()
     {
         try
         {
+            if (!email)
+            {
+                return toast.error("Email not found")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_students_added_by_admin/${email}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_students_added_by_admin/${email}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -65,12 +69,12 @@ function StudentAdded_ByAdmin()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
+            const confirmdelete = window.confirm("Are you sure to Delete")
 
-            if (resp === true)
+            if (confirmdelete)
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_by_admin/${id}`)
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_by_admin/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {

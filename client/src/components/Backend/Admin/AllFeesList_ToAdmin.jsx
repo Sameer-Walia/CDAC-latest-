@@ -27,7 +27,7 @@ function AllFeesList_ToAdmin()
         try
         {
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_fees_list_by_admin`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_fees_list_by_admin`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -55,9 +55,8 @@ function AllFeesList_ToAdmin()
         try
         {
             setloading(true)
-
             const data = { id, newStatus }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_fees_status`, data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_fees_status_by_admin`, data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -83,12 +82,15 @@ function AllFeesList_ToAdmin()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            if (!id)
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_1_fees_by_admin/${id}`)
+                return toast.error("All fields Required")
+            }
+            const confirmdelete = window.confirm("Are you sure to Delete")
+            if (confirmdelete)
+            {
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_1_fees_by_admin/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {

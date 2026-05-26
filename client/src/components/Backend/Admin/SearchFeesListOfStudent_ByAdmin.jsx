@@ -18,17 +18,17 @@ function SearchFeesListOfStudent_ByAdmin()
         document.title = "Student-Wise Fees List"
     }, [])
 
-
     async function handleSearch()
     {
         try
         {
-
-
+            setstudentfeesListdata([]);
+            if (!studentid)
+            {
+                return toast.error("Enter Student ID")
+            }
             setloading(true)
-
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_feesList_acc_to_studentID_by_admin?sid=${studentid}`);
-
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_feesList_acc_to_studentID_by_admin?sid=${studentid}`, { withCredentials: true });
             if (resp.data.statuscode === 1)
             {
                 setstudentfeesListdata(resp.data.student_Fees_list)
@@ -53,10 +53,13 @@ function SearchFeesListOfStudent_ByAdmin()
     {
         try
         {
+            if (!id.trim() || !newStatus.trim())
+            {
+                return toast.error("All fields required");
+            }
             setloading(true)
-
             const data = { id, newStatus }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_fees_status`, data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_fees_status_by_admin`, data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -82,12 +85,11 @@ function SearchFeesListOfStudent_ByAdmin()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            const confirmdelete = window.confirm("Are you sure to Delete")
+            if (confirmdelete)
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_1_fees_by_admin/${id}`)
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_1_fees_by_admin/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {

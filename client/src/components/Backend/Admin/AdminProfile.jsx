@@ -33,8 +33,12 @@ function AdminProfile()
     {
         try 
         {
+            if (!email)
+            {
+                return toast.error("Email not found.")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_admin_profile/${email}`,)
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_admin_profile/${email}`, { withCredentials: true })
             if (resp.data.statuscode === 1)
             {
                 // toast.success(resp.data.msg)

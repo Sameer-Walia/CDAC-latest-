@@ -30,7 +30,6 @@ function UpdateTeacher_ByAdmin()
         {
             fetch_teacher_data()
         }
-
     }, [tid])
 
 
@@ -38,8 +37,12 @@ function UpdateTeacher_ByAdmin()
     {
         try
         {
+            if (!tid?.trim())
+            {
+                return toast.error("Cannot Fetch Teacher Data")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_teacher_data_by_admin/${tid}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_teacher_data_by_admin/${tid}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -52,7 +55,6 @@ function UpdateTeacher_ByAdmin()
             else 
             {
                 toast.warn(resp.data.msg)
-                setteacher(null);
             }
 
         }
@@ -71,9 +73,13 @@ function UpdateTeacher_ByAdmin()
         e.preventDefault()
         try
         {
+            if (!name?.trim() || !phone?.trim() || !usertype?.trim() || !tid?.trim())
+            {
+                return toast.error("All fields required")
+            }
             setloading(true)
             const teacher_data = { name, phone, usertype, tid }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_teacher_by_admin`, teacher_data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_teacher_by_admin`, teacher_data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

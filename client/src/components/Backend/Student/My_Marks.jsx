@@ -45,6 +45,10 @@ function My_Marks()
     {
         try
         {
+            if (!studentID?.trim())
+            {
+                return toast.error("Cannot Fetch Marks")
+            }
             setloading(true)
             const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_my_marks_by_student/${studentID}`);
 

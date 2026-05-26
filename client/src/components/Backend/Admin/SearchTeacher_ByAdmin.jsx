@@ -24,15 +24,13 @@ function SearchTeacher_ByAdmin()
     {
         try
         {
-            setloading(true)
-
-            if (email === "")
+            setteacher_data(null);
+            if (!email)
             {
-                toast.error("Enter Teacher Email")
-                return
+                return toast.error("Enter Teacher Email")
             }
-
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_teacher_by_admin/${email}`);
+            setloading(true)
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_teacher_by_admin/${email}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -64,12 +62,15 @@ function SearchTeacher_ByAdmin()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            if (!id)
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_teacher_by_admin/${id}`)
+                return toast.error("Teacher Not Found")
+            }
+            const confirmdelete = window.confirm("Are you sure to Delete")
+            if (confirmdelete)
+            {
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_teacher_by_admin/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {

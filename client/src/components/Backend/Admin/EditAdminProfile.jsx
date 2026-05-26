@@ -39,7 +39,7 @@ function EditAdminProfile()
         try 
         {
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_admin_profile/${email}`,)
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_admin_profile/${email}`, { withCredentials: true })
             if (resp.data.statuscode === 1)
             {
                 const profile = resp.data.profile
@@ -70,7 +70,7 @@ function EditAdminProfile()
         {
             setloading(true)
             const profile_data = { name, phone, email }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_admin_profile`, profile_data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/     `, profile_data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

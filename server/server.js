@@ -13,6 +13,9 @@ import { v4 as uuidv4 } from 'uuid';
 import rateLimit from 'express-rate-limit';
 import bcrypt from "bcrypt";
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+
 
 
 import path from "path";
@@ -50,8 +53,12 @@ else
     app.set("trust proxy", 1);
 
     app.use(helmet());
-    app.use(cors());
+    app.use(cors({
+        origin: "http://localhost:5173",
+        credentials: true
+    }));
     app.use(express.json());
+    app.use(cookieParser());
 
     // Rate Limiter
     const limiter = rateLimit({
@@ -228,13 +235,85 @@ else
 
     app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  //Allow files inside uploads/ to be opened directly via URL.
 
+    function verifyjsontoken(req, res, next)
+    {
+        let token = req.cookies.authToken
+        if (token)
+        {
+            try
+            {
+                const decoded = jwt.verify(token, process.env.JWT_SKEY)
+                console.log(decoded)
+                req.utype = decoded.role
+                req.id = decoded.id
+                return next()
+            }
+            catch (e)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Invalid Token" });
+            }
+        }
+
+        const refreshtoken = req.cookies.refreshToken;
+        if (!refreshtoken)
+        {
+            return res.status(400).json({ statuscode: 0, msg: "Session expired. Please log in again." });
+        }
+        try
+        {
+            const decoded = jwt.verify(refreshtoken, process.env.JWT_REFRESH_SKEY)
+            const newauthToken = jwt.sign({ id: decoded.id, role: decoded.role }, process.env.JWT_SKEY, { expiresIn: "15m" })
+
+            res.cookie("authToken", newauthToken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "lax",
+                maxAge: 15 * 60 * 1000,
+            });
+
+            req.utype = decoded.role
+            req.id = decoded.id
+            return next()
+        }
+        catch (e)
+        {
+            return res.status(400).json({ statuscode: 0, msg: "Invalid Refresh Token." });
+        }
+    }
+
+    function verifyadmin(req, res, next)
+    {
+        console.log(req.utype)
+        if (req.utype === "admin")
+        {
+            return next();
+        }
+        else
+        {
+            return res.status(400).json({ statuscode: 0, msg: "Only Admin can access." });
+        }
+    }
+
+    function verifyteacher(req, res, next)
+    {
+        console.log(req.utype)
+        if (req.utype === "teacher")
+        {
+            return next();
+        }
+        else
+        {
+            return res.status(400).json({ statuscode: 0, msg: "Only Teacher can access." });
+        }
+    }
+
     mongoose.connect('mongodb://127.0.0.1:27017/CDAC').then(() => console.log('Connected to MongoDB'));
 
     const TeacherSignupSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, phone: { type: String, required: true, trim: true }, email: { type: String, required: true, unique: true, lowercase: true, trim: true }, password: { type: String, required: true }, usertype: { type: String, required: true }, actstatus: { type: Boolean, required: true }, token: { type: String, required: true } }, { versionKey: false });
 
     const TeacherSignupModel = mongoose.model("TeacherSignup", TeacherSignupSchema, "TeacherSignup")
 
-    app.post("/api/add_teacher_by_admin", async (req, res) => 
+    app.post("/api/add_teacher_by_admin", verifyjsontoken, verifyadmin, async (req, res) => 
     {
         try 
         {
@@ -463,7 +542,27 @@ else
             {
                 if (bcrypt.compareSync(pass, result.password))
                 {
-                    return res.status(200).json({ statuscode: 1, teacherdata: result, msg: "Login Successfully" })
+                    const jsontoken = jwt.sign({ id: result._id, role: result.usertype }, process.env.JWT_SKEY, { expiresIn: "15m" })
+
+                    const refreshjsontoken = jwt.sign({ id: result._id, role: result.usertype }, process.env.JWT_REFRESH_SKEY, { expiresIn: "7d" })
+
+                    res.cookie("authToken", jsontoken, {
+                        httpOnly: true,
+                        secure: false,
+                        sameSite: "lax",
+                        maxAge: 15 * 60 * 1000,
+                    });
+
+                    res.cookie("refreshToken", refreshjsontoken, {
+                        httpOnly: true,
+                        secure: false,
+                        sameSite: "lax",
+                        maxAge: 7 * 24 * 60 * 60 * 1000,
+                    });
+
+                    const respdata = { _id: result._id, name: result.name, email: result.email, usertype: result.usertype, actstatus: result.actstatus }
+
+                    return res.status(200).json({ statuscode: 1, teacherdata: respdata, msg: "Login Successfully" })
                 }
                 else
                 {
@@ -478,8 +577,23 @@ else
         }
     })
 
+    app.post("/api/logout", (req, res) => 
+    {
+        try 
+        {
+            res.clearCookie("authToken");
+            res.clearCookie("refreshToken");
+            return res.status(200).json({ statuscode: 1 })
+        }
+        catch (e) 
+        {
+            res.send({ statuscode: -1 })
+            console.log(e.message)
+        }
+    });
 
-    app.get("/api/fetch_all_Teachers_to_admin", async (req, res) =>
+
+    app.get("/api/fetch_all_Teachers_to_admin", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -502,7 +616,7 @@ else
         }
     })
 
-    app.get("/api/fetch_admin_profile/:email", async (req, res) =>
+    app.get("/api/fetch_admin_profile/:email", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -530,7 +644,7 @@ else
         }
     })
 
-    app.get("/api/fetch_teacher_profile/:email", async (req, res) =>
+    app.get("/api/fetch_teacher_profile/:email", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -559,11 +673,10 @@ else
     })
 
 
-    app.get("/api/search_teacher_by_admin/:em", async (req, res) =>
+    app.get("/api/search_teacher_by_admin/:em", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
-
             if (!/\S+@\S+\.\S+/.test(req.params.em))
             {
                 return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
@@ -588,7 +701,7 @@ else
         }
     })
 
-    app.get("/api/fetch_teacher_data_by_admin/:tid", async (req, res) =>
+    app.get("/api/fetch_teacher_data_by_admin/:tid", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -612,7 +725,7 @@ else
         }
     })
 
-    app.put("/api/update_teacher_by_admin", async (req, res) =>
+    app.put("/api/update_teacher_by_admin", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -652,7 +765,7 @@ else
         }
     })
 
-    app.put("/api/update_admin_profile", async (req, res) =>
+    app.put("/api/update_admin_profile", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -693,23 +806,23 @@ else
     })
 
 
-    app.put("/api/update_teacher_profile", async (req, res) =>
+    app.put("/api/update_teacher_profile", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
             const { name, phone, email } = req.body;
 
-            if (!name || !phone || !email)
+            if (!name?.trim() || !phone?.trim() || !email?.trim())
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
             }
 
-            if (name.trim().length < 3)
+            if (name?.trim().trim().length < 3)
             {
                 return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
             }
 
-            if (!/^[0-9]{10}$/.test(phone))
+            if (!/^[0-9]{10}$/.test(phone?.trim()))
             {
                 return res.status(400).json({ statuscode: 0, msg: "Phone Number must be 10 digits" });
             }
@@ -734,7 +847,7 @@ else
     })
 
 
-    app.delete("/api/delete_teacher_by_admin/:tid", async (req, res) =>
+    app.delete("/api/delete_teacher_by_admin/:tid", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -755,7 +868,7 @@ else
         }
     })
 
-    app.put("/api/change_password_by_admin", async (req, res) => 
+    app.put("/api/change_password_by_admin", verifyjsontoken, verifyadmin, async (req, res) => 
     {
         try
         {
@@ -774,8 +887,8 @@ else
                     const updatepass = await TeacherSignupModel.updateOne({ email: email }, { $set: { password: encryp_newpass } })
                     if (updatepass.modifiedCount === 1) 
                     {
-                        // res.clearCookie("authToken");
-                        // res.clearCookie("refreshToken");
+                        res.clearCookie("authToken");
+                        res.clearCookie("refreshToken");
                         return res.status(200).json({ statuscode: 1, msg: "Password changed successfully" })
                     }
                     else 
@@ -797,7 +910,7 @@ else
     })
 
 
-    app.put("/api/change_password_by_teacher", async (req, res) => 
+    app.put("/api/change_password_by_teacher", verifyjsontoken, verifyteacher, async (req, res) => 
     {
         try
         {
@@ -816,8 +929,8 @@ else
                     const updatepass = await TeacherSignupModel.updateOne({ email: email }, { $set: { password: encryp_newpass } })
                     if (updatepass.modifiedCount === 1) 
                     {
-                        // res.clearCookie("authToken");
-                        // res.clearCookie("refreshToken");
+                        res.clearCookie("authToken");
+                        res.clearCookie("refreshToken");
                         return res.status(200).json({ statuscode: 1, msg: "Password changed successfully" })
                     }
                     else 
@@ -847,7 +960,7 @@ else
 
     const StudentSignupModel = mongoose.model("StudentSignup", StudentSignupSchema, "StudentSignup")
 
-    app.post("/api/add_student_by_admin", async (req, res) => 
+    app.post("/api/add_student_by_admin", verifyjsontoken, verifyadmin, async (req, res) => 
     {
         try 
         {
@@ -934,7 +1047,7 @@ else
     })
 
 
-    app.post("/api/add_student_by_teacher", async (req, res) => 
+    app.post("/api/add_student_by_teacher", verifyjsontoken, verifyteacher, async (req, res) => 
     {
         try 
         {
@@ -1021,7 +1134,7 @@ else
     })
 
 
-    app.get("/api/fetch_all_Students_by_teacher", async (req, res) =>
+    app.get("/api/fetch_all_Students_by_teacher", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -1046,11 +1159,16 @@ else
 
 
 
-    app.get("/api/fetch_students_added_by_me/:teacheremail", async (req, res) =>
+    app.get("/api/fetch_students_added_by_me/:teacheremail", verifyjsontoken, async (req, res) =>
     {
         try
         {
-            const result = await StudentSignupModel.find({ teacher_email: req.params.teacheremail })
+            const { teacheremail } = req.params
+            if (!teacheremail)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+            const result = await StudentSignupModel.find({ teacher_email: teacheremail })
 
             if (result.length === 0) 
             {
@@ -1069,7 +1187,34 @@ else
         }
     })
 
-    app.delete("/api/delete_student_by_admin/:sid", async (req, res) =>
+    app.delete("/api/delete_student_by_admin/:sid", verifyjsontoken, verifyadmin, async (req, res) =>
+    {
+        try
+        {
+            const { sid } = req.params
+            if (!sid)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+            const result = await StudentSignupModel.deleteOne({ _id: sid })
+            if (result.deletedCount === 1) 
+            {
+                return res.status(200).json({ statuscode: 1, msg: "Student Deleted Successfully" })
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "Student Not Deleted Successfully" })
+            }
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).json({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+
+    app.delete("/api/delete_student_by_teacher/:sid", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -1090,29 +1235,7 @@ else
         }
     })
 
-
-    app.delete("/api/delete_student_by_teacher/:sid", async (req, res) =>
-    {
-        try
-        {
-            const result = await StudentSignupModel.deleteOne({ _id: req.params.sid })
-            if (result.deletedCount === 1) 
-            {
-                return res.status(200).json({ statuscode: 1, msg: "Student Deleted Successfully" })
-            }
-            else 
-            {
-                return res.status(200).json({ statuscode: 0, msg: "Student Not Deleted Successfully" })
-            }
-        }
-        catch (e)
-        {
-            console.log(e.message)
-            return res.status(500).json({ statuscode: -1, msg: "Server error" })
-        }
-    })
-
-    app.get("/api/fetch_student_data_by_Admin/:sid", async (req, res) =>
+    app.get("/api/fetch_student_data_by_Admin/:sid", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -1137,13 +1260,11 @@ else
     })
 
 
-    app.get("/api/fetch_student_data_by_teacher/:sid", async (req, res) =>
+    app.get("/api/fetch_student_data_by_teacher/:sid", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
-
             const result = await StudentSignupModel.findOne({ _id: req.params.sid })
-
             if (result === null) 
             {
                 return res.status(200).json({ statuscode: 0, msg: "No Student Found" })
@@ -1161,7 +1282,7 @@ else
         }
     })
 
-    app.put("/api/update_student_data_by_admin", async (req, res) =>
+    app.put("/api/update_student_data_by_admin", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -1233,7 +1354,7 @@ else
     })
 
 
-    app.put("/api/update_student_data_by_teacher", async (req, res) =>
+    app.put("/api/update_student_data_by_teacher", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -1245,7 +1366,7 @@ else
                 "ES"
             ];
 
-            if (!name || !phone || !batch || !course || !phone2 || !fathername || !mothername || !studentemail)
+            if (!name?.trim() || !phone?.trim() || !batch?.trim() || !course?.trim() || !phone2?.trim() || !fathername?.trim() || !mothername?.trim() || !studentemail?.trim())
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
             }
@@ -1255,17 +1376,17 @@ else
                 return res.status(400).json({ statuscode: 0, msg: "Invalid course selected" });
             }
 
-            if (name.trim().length < 3)
+            if (name?.trim().length < 3)
             {
                 return res.status(400).json({ statuscode: 0, msg: "Name must be at least 3 characters" });
             }
 
-            if (fathername.trim().length < 3)
+            if (fathername?.trim().length < 3)
             {
                 return res.status(400).json({ statuscode: 0, msg: "Father Name must be at least 3 characters" });
             }
 
-            if (mothername.trim().length < 3)
+            if (mothername?.trim().length < 3)
             {
                 return res.status(400).json({ statuscode: 0, msg: "Mother Name must be at least 3 characters" });
             }
@@ -1274,7 +1395,6 @@ else
             {
                 return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
             }
-
 
             if (!/^[0-9]{10}$/.test(phone))
             {
@@ -1306,12 +1426,16 @@ else
     })
 
 
-    app.get("/api/search_student_by_teacher/:studentid", async (req, res) =>
+    app.get("/api/search_student_by_teacher/:studentid", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
-
-            const result = await StudentSignupModel.findOne({ studentID: req.params.studentid })
+            const { studentid } = req.params
+            if (!studentid)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Student ID not found" });
+            }
+            const result = await StudentSignupModel.findOne({ studentID: studentid })
 
             if (result === null) 
             {
@@ -1330,12 +1454,16 @@ else
         }
     })
 
-    app.get("/api/search_student_by_admin/:studentid", async (req, res) =>
+    app.get("/api/search_student_by_admin/:studentid", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
-
-            const result = await StudentSignupModel.findOne({ studentID: req.params.studentid })
+            const { studentid } = req.params
+            if (!studentid)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Student ID not found" });
+            }
+            const result = await StudentSignupModel.findOne({ studentID: studentid })
 
             if (result === null) 
             {
@@ -1355,7 +1483,7 @@ else
     })
 
 
-    app.get("/api/fetch_all_Students_by_admin", async (req, res) =>
+    app.get("/api/fetch_all_Students_by_admin", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -1380,11 +1508,16 @@ else
 
 
 
-    app.get("/api/fetch_students_added_by_admin/:admin_email", async (req, res) =>
+    app.get("/api/fetch_students_added_by_admin/:admin_email", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
-            const result = await StudentSignupModel.find({ teacher_email: req.params.admin_email })
+            const { admin_email } = req.params
+            if (!admin_email)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Admin Email not found" });
+            }
+            const result = await StudentSignupModel.find({ teacher_email: admin_email })
 
             if (result.length === 0) 
             {
@@ -1403,7 +1536,7 @@ else
         }
     })
 
-    app.post("/api/send_mail_to_student_by_admin", async (req, res) =>
+    app.post("/api/send_mail_to_student_by_admin", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -1471,7 +1604,7 @@ else
 
     const SyllabusModel = mongoose.model("Syllabus", SyllabusSchema, "Syllabus")
 
-    app.post('/api/add_syllabus_by_teacher', uploadSyllabus.single('pdf'), async (req, res) =>
+    app.post('/api/add_syllabus_by_teacher', verifyjsontoken, verifyteacher, uploadSyllabus.single('pdf'), async (req, res) =>
     {
         try
         {
@@ -1537,7 +1670,7 @@ else
         }
     });
 
-    app.get("/api/fetch_all_syllabusList_by_teacher", async (req, res) =>
+    app.get("/api/fetch_all_syllabusList_by_teacher", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -1585,12 +1718,12 @@ else
 
 
 
-    app.delete("/api/delete_syllabus_by_teacher/:sid", async (req, res) =>
+    app.delete("/api/delete_syllabus_by_teacher/:sid", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
-            const data = await SyllabusModel.findById(req.params.sid)
-
+            const { sid } = req.params
+            const data = await SyllabusModel.findById(sid)
             if (!data)
             {
                 return res.status(404).json({ statuscode: 0, msg: "Syllabus not found" });
@@ -1606,7 +1739,7 @@ else
                 fs.unlinkSync(filePath);
             }
 
-            const result = await SyllabusModel.deleteOne({ _id: req.params.sid });
+            const result = await SyllabusModel.deleteOne({ _id: sid });
 
             if (result.deletedCount === 1) 
             {
@@ -1624,7 +1757,7 @@ else
         }
     })
 
-    app.get("/api/fetch_syllabusList_added_by_me_teacher/:email", async (req, res) =>
+    app.get("/api/fetch_syllabusList_added_by_me_teacher/:email", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -1655,7 +1788,7 @@ else
     const MarksUploadModel = mongoose.model("MarksUpload", MarksUploadSchema, "MarksUpload")
 
 
-    app.post('/api/add_mst_marks_by_teacher', async (req, res) =>
+    app.post('/api/add_mst_marks_by_teacher', verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -1692,7 +1825,7 @@ else
         }
     });
 
-    app.get("/api/fetch_all_Students_marks_by_teacher", async (req, res) =>
+    app.get("/api/fetch_all_Students_marks_by_teacher", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -1715,7 +1848,7 @@ else
         }
     })
 
-    app.get("/api/fetch_marks_by_me_teacher/:teacheremail", async (req, res) =>
+    app.get("/api/fetch_marks_by_me_teacher/:teacheremail", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -1738,7 +1871,7 @@ else
         }
     })
 
-    app.delete("/api/delete_marks_by_teacher/:sid", async (req, res) =>
+    app.delete("/api/delete_marks_by_teacher/:sid", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -1759,11 +1892,10 @@ else
         }
     })
 
-    app.get("/api/fetch_marks_data_by_teacher/:mid", async (req, res) =>
+    app.get("/api/fetch_marks_data_by_teacher/:mid", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
-
             const result = await MarksUploadModel.findOne({ _id: req.params.mid })
 
             if (result === null) 
@@ -1783,14 +1915,13 @@ else
         }
     })
 
-    app.put("/api/update_student_marks_by_teacher", async (req, res) =>
+    app.put("/api/update_student_marks_by_teacher", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
             const { mid, studentID, type, course, semester, subjectCode, obtainedMarks, email } = req.body;
 
-
-            if (!studentID || !type || !course || !semester || !subjectCode || !obtainedMarks || !email || !mid)
+            if (!studentID?.trim() || !type?.trim() || !course?.trim() || !semester?.trim() || !subjectCode?.trim() || !obtainedMarks?.trim() || !email?.trim() || !mid?.trim())
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields required" });
             }
@@ -1926,7 +2057,7 @@ else
 
 
 
-    app.get("/api/fetch_all_fees_list_by_admin", async (req, res) =>
+    app.get("/api/fetch_all_fees_list_by_admin", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -1950,7 +2081,7 @@ else
     })
 
 
-    app.delete("/api/delete_1_fees_by_admin/:fid", async (req, res) =>
+    app.delete("/api/delete_1_fees_by_admin/:fid", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -1986,13 +2117,13 @@ else
         }
     })
 
-    app.put("/api/update_fees_status", async (req, res) =>
+    app.put("/api/update_fees_status_by_admin", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
             const { id, newStatus } = req.body;
 
-            if (!id || !newStatus)
+            if (!id.trim() || !newStatus.trim())
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields required" });
             }
@@ -2021,7 +2152,7 @@ else
         {
             const { studentID, semester } = req.params;
 
-            if (!semester)
+            if (!semester?.trim() || !studentID?.trim())
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields required" });
             }
@@ -2045,7 +2176,7 @@ else
         }
     })
 
-    app.get("/api/fetch_feesList_acc_to_studentID_by_admin", async (req, res) =>
+    app.get("/api/fetch_feesList_acc_to_studentID_by_admin", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -2075,7 +2206,7 @@ else
         }
     })
 
-    app.get("/api/fetch_feesList_acc_to_semester_by_admin/:sem", async (req, res) =>
+    app.get("/api/fetch_feesList_acc_to_semester_by_admin/:sem", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -2126,7 +2257,7 @@ else
     // student server ends
 
 
-    app.get("/api/fetch_students_acc_to_batch_Course/:batch/:course", async (req, res) =>
+    app.get("/api/fetch_students_acc_to_batch_Course/:batch/:course", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -2170,18 +2301,18 @@ else
     const AttendanceModel = mongoose.model("Attendance", AttendanceSchema, "Attendance");
 
 
-    app.post("/api/submit_Attendnace_by_teacher", async (req, res) =>
+    app.post("/api/submit_Attendnace_by_teacher", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
             const { email, batch, course, semester, subjectCode, date, students } = req.body;
 
-            if (!email || !course || !semester || !subjectCode || !date)
+            if (!email?.trim() || !course?.trim() || !semester?.trim() || !subjectCode?.trim() || !date?.trim())
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
             }
 
-            if (!students || students.length === 0)
+            if (!students?.trim() || students?.trim().length === 0)
             {
                 return res.status(400).json({ statuscode: 0, msg: "Students attendance not found" });
             }
@@ -2266,13 +2397,13 @@ else
         }
     });
 
-    app.post("/api/search_attendance_by_teacher", async (req, res) =>
+    app.post("/api/search_attendance_by_teacher", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
             const { email, batch, course, semester, subjectCode, date } = req.body;
 
-            if (!email || !batch || !course || !semester || !subjectCode || !date)
+            if (!email?.trim() || !batch?.trim() || !course?.trim() || !semester?.trim() || !subjectCode?.trim() || !date?.trim())
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
             }
@@ -2296,7 +2427,7 @@ else
         }
     })
 
-    app.delete("/api/delete_attendence_by_teacher/:aid", async (req, res) =>
+    app.delete("/api/delete_attendence_by_teacher/:aid", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -2317,7 +2448,7 @@ else
         }
     })
 
-    app.get("/api/fetch_unique_attendance_by_teacher/:aid", async (req, res) =>
+    app.get("/api/fetch_unique_attendance_by_teacher/:aid", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -2340,18 +2471,18 @@ else
         }
     })
 
-    app.put("/api/update_Attendnace_by_teacher", async (req, res) =>
+    app.put("/api/update_Attendnace_by_teacher", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
             const { email, batch, course, semester, subjectCode, date, students, aid } = req.body;
 
-            if (!email || !batch || !course || !semester || !subjectCode || !date || !aid)
+            if (!email?.trim() || !batch?.trim() || !course?.trim() || !semester?.trim() || !subjectCode?.trim() || !date?.trim() || !aid?.trim())
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
             }
 
-            if (!students || students.length === 0)
+            if (!students?.trim() || students?.trim().length === 0)
             {
                 return res.status(400).json({ statuscode: 0, msg: "Students attendance not found" });
             }
@@ -2382,7 +2513,7 @@ else
 
     const TimeTableModel = mongoose.model("TimeTable", TimeTableSchema, "TimeTable")
 
-    app.post('/api/add_timetable_by_teacher', uploadTimeTable.single('pdf'), async (req, res) =>
+    app.post('/api/add_timetable_by_teacher', verifyjsontoken, verifyteacher, uploadTimeTable.single('pdf'), async (req, res) =>
     {
         try
         {
@@ -2442,7 +2573,7 @@ else
         }
     });
 
-    app.get("/api/fetch_all_TimeTableList_by_teacher", async (req, res) =>
+    app.get("/api/fetch_all_TimeTableList_by_teacher", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -2465,7 +2596,7 @@ else
         }
     })
 
-    app.delete("/api/delete_timetable_by_teacher/:tid", async (req, res) =>
+    app.delete("/api/delete_timetable_by_teacher/:tid", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -2504,7 +2635,7 @@ else
         }
     })
 
-    app.get("/api/fetch_TimeTableList_added_by_me_teacher/:email", async (req, res) =>
+    app.get("/api/fetch_TimeTableList_added_by_me_teacher/:email", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -2669,7 +2800,12 @@ else
     {
         try
         {
-            const result = await ThesisUploadModel.findOne({ student_ID: req.query.sid }).select("thesis_title")
+            const { sid } = req.query;
+            if (!sid)
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Enter Student ID" });
+            }
+            const result = await ThesisUploadModel.findOne({ student_ID: sid }).select("thesis_title")
 
             if (result === null) 
             {
@@ -2688,7 +2824,7 @@ else
         }
     })
 
-    app.get("/api/fetch_all_thesis_by_teacher/:tid", async (req, res) =>
+    app.get("/api/fetch_all_thesis_by_teacher/:tid", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -2711,7 +2847,7 @@ else
         }
     })
 
-    app.delete("/api/delete_student_thesis_by_teacher/:id", async (req, res) =>
+    app.delete("/api/delete_student_thesis_by_teacher/:id", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -2733,13 +2869,13 @@ else
     })
 
 
-    app.put("/api/update_thesis_status_by_teacher", async (req, res) =>
+    app.put("/api/update_thesis_status_by_teacher", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
             const { id, newStatus } = req.body;
 
-            if (!id || !newStatus)
+            if (!id?.trim() || !newStatus?.trim())
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields required" });
             }
@@ -2762,7 +2898,7 @@ else
         }
     });
 
-    app.get("/api/search_thesis_by_id_by_teacher/:studentid/:teacheremail", async (req, res) =>
+    app.get("/api/search_thesis_by_id_by_teacher/:studentid/:teacheremail", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
@@ -2786,11 +2922,10 @@ else
         }
     })
 
-    app.get("/api/search_thesis_by_BatchCourse_by_teacher/:batch/:course/:teacheremail", async (req, res) =>
+    app.get("/api/search_thesis_by_BatchCourse_by_teacher/:batch/:course/:teacheremail", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {
-
             const result = await ThesisUploadModel.find({ student_batch: req.params.batch, student_course: req.params.course, teacher_email: req.params.teacheremail })
 
             if (result.length === 0) 
@@ -2835,7 +2970,7 @@ else
     })
 
 
-    app.get("/api/fetch_all_thesis_by_admin", async (req, res) =>
+    app.get("/api/fetch_all_thesis_by_admin", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -2858,7 +2993,7 @@ else
         }
     })
 
-    app.delete("/api/delete_student_thesis_by_admin/:id", async (req, res) =>
+    app.delete("/api/delete_student_thesis_by_admin/:id", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -2880,13 +3015,13 @@ else
     })
 
 
-    app.put("/api/update_thesis_status_by_admin", async (req, res) =>
+    app.put("/api/update_thesis_status_by_admin", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
             const { id, newStatus } = req.body;
 
-            if (!id || !newStatus)
+            if (!id?.trim() || !newStatus?.trim())
             {
                 return res.status(400).json({ statuscode: 0, msg: "All fields required" });
             }
@@ -2909,7 +3044,7 @@ else
         }
     });
 
-    app.get("/api/search_thesis_by_id_by_admin/:studentid", async (req, res) =>
+    app.get("/api/search_thesis_by_id_by_admin/:studentid", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -2933,12 +3068,18 @@ else
         }
     })
 
-    app.get("/api/search_thesis_by_BatchCourse_by_teacher/:batch/:course", async (req, res) =>
+    app.get("/api/search_thesis_by_BatchCourse_by_admin/:batch/:course", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
+            const { batch, course } = req.params
 
-            const result = await ThesisUploadModel.find({ student_batch: req.params.batch, student_course: req.params.course })
+            if (!batch?.trim() || !course?.trim())
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields required" });
+            }
+
+            const result = await ThesisUploadModel.find({ student_batch: batch, student_course: course })
 
             if (result.length === 0) 
             {
@@ -2957,7 +3098,7 @@ else
         }
     })
 
-    app.get("/api/search_thesis_by_guideemail_by_admin/:guideemail", async (req, res) =>
+    app.get("/api/search_thesis_by_guideemail_by_admin/:guideemail", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -2982,7 +3123,7 @@ else
     })
 
 
-    app.get("/api/fetch_student_thesis_by_Admin/:tid", async (req, res) =>
+    app.get("/api/fetch_student_thesis_by_Admin/:tid", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
@@ -3006,12 +3147,11 @@ else
     })
 
 
-    app.put("/api/update_student_thesis_by_admin", async (req, res) =>
+    app.put("/api/update_student_thesis_by_admin", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
             const { tid, title, description, remarks } = req.body;
-
 
             if (!tid?.trim() || !title?.trim() || !description?.trim() || !remarks?.trim())
             {

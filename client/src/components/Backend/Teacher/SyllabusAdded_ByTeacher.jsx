@@ -33,8 +33,12 @@ function SyllabusAdded_ByTeacher()
     {
         try
         {
+            if (!email?.trim())
+            {
+                return toast.error("Teacher Email Not Found")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_syllabusList_added_by_me_teacher/${email}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_syllabusList_added_by_me_teacher/${email}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -61,12 +65,15 @@ function SyllabusAdded_ByTeacher()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            if (!id?.trim())
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_syllabus_by_teacher/${id}`)
+                return toast.error("ID Not Found")
+            }
+            const confirmdelete = window.confirm("Are you sure to Delete")
+            if (confirmdelete)
+            {
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_syllabus_by_teacher/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {

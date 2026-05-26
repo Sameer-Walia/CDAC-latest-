@@ -19,7 +19,6 @@ function SearchThesisbyID_ByTeacher()
     const [showPopup, setshowPopup] = useState(false);
     const { email } = useSelector((state) => state.teacher)
 
-
     useEffect(() =>
     {
         document.title = "Search Student Thesis"
@@ -29,17 +28,17 @@ function SearchThesisbyID_ByTeacher()
     {
         try
         {
-            if (!studentid.trim())
+            if (!studentid?.trim())
             {
                 return toast.error("Enter student ID")
             }
-            if (!email)
+            if (!email?.trim())
             {
                 return toast.error("Teacher Email Not Found")
             }
             setstudent_thesis([]);
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_thesis_by_id_by_teacher/${studentid}/${email}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_thesis_by_id_by_teacher/${studentid}/${email}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -65,12 +64,15 @@ function SearchThesisbyID_ByTeacher()
     {
         try
         {
+            if (!id?.trim())
+            {
+                return toast.error("ID not Found")
+            }
             const confirmDelete = window.confirm("Are you sure to Delete")
-
             if (confirmDelete)
             {
                 setloading(true)
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_teacher/${id}`)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_teacher/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {
@@ -97,10 +99,13 @@ function SearchThesisbyID_ByTeacher()
     {
         try
         {
+            if (!id?.trim() || !newStatus?.trim())
+            {
+                return toast.error("All fields Required")
+            }
             setloading(true)
-
             const data = { id, newStatus }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_teacher`, data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_teacher`, data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

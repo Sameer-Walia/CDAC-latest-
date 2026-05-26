@@ -30,8 +30,11 @@ function AddSyllabus_ByTeacher()
         e.preventDefault();
         try
         {
+            if (!subjectname?.trim() || !email?.trim())
+            {
+                return toast.error("All fields are required");
+            }
             setloading(true);
-
             const formData = new FormData();
             formData.append("subjectname", subjectname);
             formData.append("email", email);
@@ -40,7 +43,7 @@ function AddSyllabus_ByTeacher()
                 formData.append("pdf", pdf)
             }
 
-            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_syllabus_by_teacher`, formData)
+            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_syllabus_by_teacher`, formData, { withCredentials: true })
 
             if (resp.data.statuscode === 1)
             {

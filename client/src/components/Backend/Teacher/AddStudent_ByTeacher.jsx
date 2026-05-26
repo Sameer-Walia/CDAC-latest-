@@ -39,7 +39,7 @@ function AddStudent_ByTeacher()
         }
         else
         {
-            if (!name || !studentId || !email || !batch || !course || !studentemail || !phone || !fathername || !mothername || !phone2)
+            if (!name?.trim() || !studentId?.trim() || !email?.trim() || !batch?.trim() || !course?.trim() || !studentemail?.trim() || !phone?.trim() || !fathername?.trim() || !mothername?.trim() || !phone2?.trim())
             {
                 return toast.error("All fields are required");
             }
@@ -47,7 +47,7 @@ function AddStudent_ByTeacher()
             try 
             {
                 setloading(true)
-                const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_student_by_teacher`, reqdata)
+                const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_student_by_teacher`, reqdata, { withCredentials: true })
                 if (resp.data.statuscode === 1)
                 {
                     toast.success(resp.data.msg)

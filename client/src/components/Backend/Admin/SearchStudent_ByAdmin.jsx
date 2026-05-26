@@ -13,7 +13,6 @@ function SearchStudent_ByAdmin()
     const [student_data, setstudent_data] = useState(null);
     const navi = useNavigate();
 
-
     useEffect(() =>
     {
         document.title = "Search Student"
@@ -23,15 +22,13 @@ function SearchStudent_ByAdmin()
     {
         try
         {
-            setloading(true)
-
-            if (studentid === "")
+            setstudent_data(null);
+            if (!studentid)
             {
-                toast.error("Enter student ID")
-                return
+                return toast.error("Enter student ID")
             }
-
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_student_by_admin/${studentid}`);
+            setloading(true)
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_student_by_admin/${studentid}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -64,12 +61,15 @@ function SearchStudent_ByAdmin()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            if (!id)
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_by_admin/${id}`)
+                return toast.error("Student ID not found")
+            }
+            const confirmdelete = window.confirm("Are you sure to Delete")
+            if (confirmdelete)
+            {
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_by_admin/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {

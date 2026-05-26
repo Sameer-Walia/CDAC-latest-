@@ -84,6 +84,10 @@ function My_Thesis()
     {
         try
         {
+            if (!studentID?.trim())
+            {
+                return toast.error("Cannot Fetch Thesis Title")
+            }
             setloading(true)
             const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_thesis_Title_by_student?sid=${studentID}`);
 

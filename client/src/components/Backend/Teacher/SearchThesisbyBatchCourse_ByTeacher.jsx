@@ -47,9 +47,13 @@ function SearchThesisbyBatchCourse_ByTeacher()
             {
                 return toast.error("Select Course")
             }
+            if (!email)
+            {
+                return toast.error("Email Required")
+            }
             setstudent_thesis([]);
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_thesis_by_BatchCourse_by_teacher/${batch}/${course}/${email}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_thesis_by_BatchCourse_by_teacher/${batch}/${course}/${email}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -75,12 +79,16 @@ function SearchThesisbyBatchCourse_ByTeacher()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            if (!id?.trim())
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_teacher/${id}`)
+                return toast.error("ID not found ")
+            }
+            const confirmdelete = window.confirm("Are you sure to Delete")
+
+            if (confirmdelete)
+            {
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_teacher/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {
@@ -107,10 +115,13 @@ function SearchThesisbyBatchCourse_ByTeacher()
     {
         try
         {
+            if (!id?.trim() || !newStatus?.trim())
+            {
+                return toast.error("Cannot Update Thesis Status ")
+            }
             setloading(true)
-
             const data = { id, newStatus }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_teacher`, data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_teacher`, data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

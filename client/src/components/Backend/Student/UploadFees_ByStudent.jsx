@@ -30,12 +30,11 @@ function UploadFees_ByStudent()
     {
         try
         {
-            setloading(true);
             if (!semester)
             {
-                toast.error("Please select semester");
-                return;
+                return toast.error("Please select semester");
             }
+            setloading(true);
             const formData = new FormData();
             formData.append("semester", semester);
             formData.append("studentID", studentID);
@@ -90,6 +89,10 @@ function UploadFees_ByStudent()
     {
         try
         {
+            if (!semester?.trim() || !studentID?.trim())
+            {
+                return toast.error("All fields required");
+            }
             setloading(true)
             const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_sem_fees_detail_status/${studentID}/${semester}`,)
             if (resp.data.statuscode === 1)

@@ -61,8 +61,12 @@ function ExploreAttendence_ByTeacher()
     {
         try
         {
+            if (!aid?.trim())
+            {
+                return toast.error("Cannot Fetch Attendance")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_unique_attendance_by_teacher/${aid}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_unique_attendance_by_teacher/${aid}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -97,33 +101,31 @@ function ExploreAttendence_ByTeacher()
         e.preventDefault()
         try
         {
-            if (batch == "")
+            if (!batch?.trim())
             {
                 return toast.error("Please Select Batch")
             }
 
-            if (course == "")
+            if (!course?.trim())
             {
                 return toast.error("Please Select Course")
             }
 
-            if (semester == "")
+            if (!semester?.trim())
             {
                 return toast.error("Please Select Semester")
             }
 
-            if (subjectCode == "")
+            if (!subjectCode?.trim())
             {
                 return toast.error("Please Select Subject Code")
             }
 
-            if (date == "")
+            if (!date?.trim())
             {
                 return toast.error("Please Select Date ")
             }
-
             setloading(true)
-
             const formData = new FormData(e.target);
 
             const students = FetchList.map((item) => ({
@@ -136,7 +138,7 @@ function ExploreAttendence_ByTeacher()
 
             const data = { email, batch, course, semester, subjectCode, date, students, aid }
 
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_Attendnace_by_teacher`, data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_Attendnace_by_teacher`, data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

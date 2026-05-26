@@ -74,7 +74,7 @@ function Student_Login()
                     <div className="col-lg-6 col-12 ">
                         <img src={`/assets/images/login.jpg`} alt="" className="img-fluid authimage " />
                     </div>
-                    <div className="col-lg-6 col-12 text-center mb-5">
+                    <div className="col-lg-6 col-12 text-center mt-5 mb-5">
 
                         <div className={`containerdiv mt-5 `}>
                             <Link

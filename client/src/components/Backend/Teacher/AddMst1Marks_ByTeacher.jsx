@@ -51,15 +51,14 @@ function AddMst1Marks_ByTeacher()
     {
         try
         {
-            setloading(true)
-
-            if (studentID === "")
+            setstudent_data(null);
+            if (!studentID)
             {
-                toast.error("Enter student ID")
-                return
+                return toast.error("Enter student ID")
             }
 
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_student_by_teacher/${studentID}`);
+            setloading(true)
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_student_by_teacher/${studentID}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -91,14 +90,11 @@ function AddMst1Marks_ByTeacher()
 
         if (!studentID || !course || !semester || !subjectCode || !obtainedMarks || !email || !type)
         {
-            toast.error("All fields are required");
-            return;
+            return toast.error("All fields are required");
         }
-
         if (Number(obtainedMarks) > 24)
         {
-            toast.error("Obtained marks cannot be greater than total marks");
-            return;
+            return toast.error("Obtained marks cannot be greater than total marks");
         }
 
         try
@@ -107,7 +103,7 @@ function AddMst1Marks_ByTeacher()
 
             const data = { studentID, course, semester, subjectCode, obtainedMarks, email, type }
 
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_mst_marks_by_teacher`, data);
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_mst_marks_by_teacher`, data, { withCredentials: true });
 
             if (res.data.statuscode === 1)
             {
@@ -193,7 +189,7 @@ function AddMst1Marks_ByTeacher()
                                         <p>{student_data?.course || "-"}</p>
                                     </div>
 
-                                     <div className="student_info">
+                                    <div className="student_info">
                                         <span>ID:</span>
                                         <p>{student_data?.studentID || "-"}</p>
                                     </div>

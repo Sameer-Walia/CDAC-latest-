@@ -28,7 +28,7 @@ function AllTimeTableList_ToTeacher()
         try
         {
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_TimeTableList_by_teacher`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_TimeTableList_by_teacher`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -55,12 +55,15 @@ function AllTimeTableList_ToTeacher()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            if (!id?.trim())
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_timetable_by_teacher/${id}`)
+                return toast.error("No Id Found")
+            }
+            const confirmdelete = window.confirm("Are you sure to Delete")
+            if (confirmdelete)
+            {
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_timetable_by_teacher/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {

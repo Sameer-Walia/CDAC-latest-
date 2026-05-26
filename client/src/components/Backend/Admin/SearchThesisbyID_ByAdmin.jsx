@@ -28,13 +28,13 @@ function SearchThesisbyID_ByAdmin()
     {
         try
         {
+            setstudent_thesis([]);
             if (!studentid.trim())
             {
                 return toast.error("Enter student ID")
             }
-            setstudent_thesis([]);
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_thesis_by_id_by_admin/${studentid}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_thesis_by_id_by_admin/${studentid}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -65,7 +65,7 @@ function SearchThesisbyID_ByAdmin()
             if (confirmDelete)
             {
                 setloading(true)
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_admin/${id}`)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_admin/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {
@@ -92,10 +92,14 @@ function SearchThesisbyID_ByAdmin()
     {
         try
         {
+            if (!id.trim() || !newStatus.trim())
+            {
+                return toast.error("Cannot Update Status")
+            }
             setloading(true)
 
             const data = { id, newStatus }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_admin`, data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_admin`, data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

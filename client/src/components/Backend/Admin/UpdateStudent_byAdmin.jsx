@@ -42,8 +42,12 @@ function UpdateStudent_byAdmin()
     {
         try
         {
+            if (!sid)
+            {
+                return toast.error("Cannot Fetch Data")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_student_data_by_Admin/${sid}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_student_data_by_Admin/${sid}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -81,7 +85,7 @@ function UpdateStudent_byAdmin()
         {
             setloading(true)
             const student_data = { name, phone, phone2, batch, course, sid, fathername, mothername, studentemail }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_student_data_by_admin`, student_data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_student_data_by_admin`, student_data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -111,7 +115,7 @@ function UpdateStudent_byAdmin()
         {
             setloading(true)
             const student_data_for_email = { name, studentpassword, studentemail, studentId }
-            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/send_mail_to_student_by_admin`, student_data_for_email);
+            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/send_mail_to_student_by_admin`, student_data_for_email, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

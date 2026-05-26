@@ -35,12 +35,13 @@ function AllThesisList_ToTeacher()
     {
         try
         {
+            setstudents_thesis([]);
             if (!email?.trim())
             {
                 return toast.error("Invalid Email")
             }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_thesis_by_teacher/${email}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_thesis_by_teacher/${email}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -51,7 +52,6 @@ function AllThesisList_ToTeacher()
                 toast.warn(resp.data.msg)
                 setstudents_thesis([]);
             }
-
         }
         catch (e)
         {
@@ -67,11 +67,14 @@ function AllThesisList_ToTeacher()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            if (!id?.trim())
             {
+                return toast.error("No Id Found")
+            }
+            const confirmdelete = window.confirm("Are you sure to Delete")
+            if (confirmdelete)
+            {
+                setloading(true)
                 const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_teacher/${id}`)
 
                 if (resp.data.statuscode === 1)
@@ -99,10 +102,13 @@ function AllThesisList_ToTeacher()
     {
         try
         {
+            if (!id?.trim() || !newStatus?.trim())
+            {
+                return toast.error("No Status Updated")
+            }
             setloading(true)
-
             const data = { id, newStatus }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_teacher`, data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_teacher`, data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

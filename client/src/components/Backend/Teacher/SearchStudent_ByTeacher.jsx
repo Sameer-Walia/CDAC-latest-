@@ -28,7 +28,7 @@ function SearchStudent_ByTeacher()
             }
             setstudent_data(null);
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_student_by_teacher/${studentid}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_student_by_teacher/${studentid}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -61,12 +61,15 @@ function SearchStudent_ByTeacher()
     {
         try
         {
+            if (!id.trim())
+            {
+                return toast.error("ID not Found")
+            }
             const confirmDelete = window.confirm("Are you sure to Delete")
             if (confirmDelete)
             {
                 setloading(true)
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_by_teacher/${id}`)
-
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_by_teacher/${id}`, { withCredentials: true })
                 if (resp.data.statuscode === 1)
                 {
                     toast.success(resp.data.msg)

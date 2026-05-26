@@ -46,7 +46,7 @@ function ChangePassword_ByTeacher()
                         return toast.error("New Password must be at least 3 characters");
                     }
                     setloading(true)
-                    const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/change_password_by_teacher`, apidata);
+                    const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/change_password_by_teacher`, apidata, { withCredentials: true });
 
                     if (resp.data.statuscode === 0)
                     {

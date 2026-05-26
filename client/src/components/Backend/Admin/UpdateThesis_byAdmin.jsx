@@ -43,8 +43,12 @@ function UpdateThesis_byAdmin()
     {
         try
         {
+            if (!tid?.trim())
+            {
+                return toast.error("Cannot Fetch Student Thesis")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_student_thesis_by_Admin/${tid}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_student_thesis_by_Admin/${tid}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -88,7 +92,7 @@ function UpdateThesis_byAdmin()
 
             setloading(true)
             const student_thesis = { tid, title, description, remarks }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_student_thesis_by_admin`, student_thesis);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_student_thesis_by_admin`, student_thesis, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

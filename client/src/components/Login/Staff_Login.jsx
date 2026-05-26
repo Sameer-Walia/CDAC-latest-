@@ -35,7 +35,7 @@ function Staff_Login()
         try 
         {
             setloading(true)
-            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/staff_login`, logindata)
+            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/staff_login`, logindata, { withCredentials: true })
             if (resp.data.statuscode === 1) 
             {
                 if (resp.data.teacherdata.actstatus === true)

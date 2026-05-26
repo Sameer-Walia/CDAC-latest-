@@ -49,38 +49,40 @@ function SearchAttendence_ByTeacher()
         document.title = "Search Attendance"
     }, [])
 
-
     async function handleSearch()
     {
         try
         {
-            setloading(true)
-
-            if (batch === "")
+            setattendance_data([]);
+            if (!email?.trim())
+            {
+                return toast.error("Email Required")
+            }
+            if (!batch?.trim())
             {
                 return toast.error("Please Select Batch")
             }
-
-            if (course === "")
+            if (!course?.trim())
             {
                 return toast.error("Please Select Course")
             }
-            if (semester === "")
+            if (!semester?.trim())
             {
                 return toast.error("Please Select Semester")
             }
-            if (subjectCode === "")
+            if (!subjectCode?.trim())
             {
                 return toast.error("Please Select Subject Code")
             }
-            if (date === "")
+            if (!date?.trim())
             {
                 return toast.error("Please Select Date")
             }
 
+            setloading(true)
             const data = { email, batch, course, semester, subjectCode, date }
 
-            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/search_attendance_by_teacher`, data);
+            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/search_attendance_by_teacher`, data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -107,12 +109,15 @@ function SearchAttendence_ByTeacher()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            if (!id?.trim())
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_attendence_by_teacher/${id}`)
+                return toast.error("ID not Found")
+            }
+            const confirmdelete = window.confirm("Are you sure to Delete")
+            if (confirmdelete)
+            {
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_attendence_by_teacher/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {

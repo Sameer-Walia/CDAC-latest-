@@ -32,8 +32,11 @@ function AddTimeTable_ByTeacher()
         e.preventDefault();
         try
         {
+            if (!course?.trim() || !semester?.trim() || !email?.trim())
+            {
+                return toast.error("All fields are required");
+            }
             setloading(true);
-
             const formData = new FormData();
             formData.append("course", course);
             formData.append("semester", semester);
@@ -43,7 +46,7 @@ function AddTimeTable_ByTeacher()
                 formData.append("pdf", pdf)
             }
 
-            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_timetable_by_teacher`, formData)
+            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_timetable_by_teacher`, formData, { withCredentials: true })
 
             if (resp.data.statuscode === 1)
             {

@@ -59,7 +59,7 @@ function AddTeacher_ByAdmin()
             try 
             {
                 setloading(true)
-                const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_teacher_by_admin`, reqdata)
+                const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_teacher_by_admin`, reqdata , {withCredentials:true})
                 if (resp.data.statuscode === 1)
                 {
                     toast.success(resp.data.msg)

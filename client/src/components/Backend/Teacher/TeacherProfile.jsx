@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import TeacherSidebar from "./TeacherSidebar";
 import "./Teacher.css";
 
-
 function TeacherProfile()
 {
 
@@ -22,7 +21,6 @@ function TeacherProfile()
         document.title = "Teacher Profile"
     }, [])
 
-
     useEffect(() =>
     {
         if (email)
@@ -35,8 +33,12 @@ function TeacherProfile()
     {
         try 
         {
+            if (!email?.trim())
+            {
+                return toast.error("Email not found.")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_teacher_profile/${email}`,)
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_teacher_profile/${email}`, { withCredentials: true })
             if (resp.data.statuscode === 1)
             {
                 // toast.success(resp.data.msg)

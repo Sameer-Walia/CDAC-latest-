@@ -38,8 +38,12 @@ function EditTeacherProfile()
     {
         try 
         {
+            if (!email?.trim())
+            {
+                return toast.error("No Email Found")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_teacher_profile/${email}`,)
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_teacher_profile/${email}`, { withCredentials: true })
             if (resp.data.statuscode === 1)
             {
                 const profile = resp.data.profile
@@ -68,9 +72,13 @@ function EditTeacherProfile()
         e.preventDefault()
         try
         {
+            if (!name?.trim() || !phone?.trim() || !email?.trim())
+            {
+                return toast.error("All fields are required")
+            }
             setloading(true)
             const profile_data = { name, phone, email }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_teacher_profile`, profile_data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_teacher_profile`, profile_data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

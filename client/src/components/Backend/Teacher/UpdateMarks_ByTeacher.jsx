@@ -60,8 +60,12 @@ function UpdateMarks_ByTeacher()
     {
         try
         {
+            if (!mid?.trim())
+            {
+                return toast.error("ID Not Found")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_marks_data_by_teacher/${mid}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_marks_data_by_teacher/${mid}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -93,21 +97,18 @@ function UpdateMarks_ByTeacher()
         e.preventDefault()
         try
         {
-            if (!studentID || !type || !course || !semester || !subjectCode || !obtainedMarks || !email)
+            if (!studentID?.trim() || !type?.trim() || !course?.trim() || !semester?.trim() || !subjectCode?.trim() || !obtainedMarks?.trim() || !email?.trim())
             {
-                toast.error("All fields are required");
-                return;
+                return toast.error("All fields are required");
             }
-
             if (Number(obtainedMarks) > 24)
             {
-                toast.error("Obtained marks cannot be greater than total marks");
-                return;
+                return toast.error("Obtained marks cannot be greater than total marks");
             }
 
             setloading(true)
             const student_marks = { mid, studentID, type, course, semester, subjectCode, obtainedMarks, email }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_student_marks_by_teacher`, student_marks);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_student_marks_by_teacher`, student_marks, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

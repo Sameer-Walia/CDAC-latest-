@@ -15,7 +15,7 @@ function My_Attendance()
     const [loading, setloading] = useState(false);
     const navi = useNavigate()
 
-    const { batch ,course, studentID } = useSelector((state) => state.student)
+    const { batch, course, studentID } = useSelector((state) => state.student)
     const [semester, setSemester] = useState("");
 
     const [my_attendance, setmy_attendance] = useState([]);
@@ -38,6 +38,10 @@ function My_Attendance()
     {
         try
         {
+            if (!batch?.trim() || !course?.trim() || !semester?.trim() || !studentID?.trim())
+            {
+                return toast.error("Cannot Fetch Attendence")
+            }
             setloading(true)
             const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_my_attendance_acc_to_sem/${batch}/${course}/${semester}/${studentID}`);
 

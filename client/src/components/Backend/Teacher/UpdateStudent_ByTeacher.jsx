@@ -42,8 +42,12 @@ function UpdateStudent_ByTeacher()
     {
         try
         {
+            if (!sid?.trim())
+            {
+                return toast.error("ID Not Found")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_student_data_by_teacher/${sid}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_student_data_by_teacher/${sid}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -79,9 +83,13 @@ function UpdateStudent_ByTeacher()
         e.preventDefault()
         try
         {
+            if (!name?.trim() || !sid?.trim() || !batch?.trim() || !course?.trim() || !studentemail?.trim() || !phone?.trim() || !fathername?.trim() || !mothername?.trim() || !phone2?.trim())
+            {
+                return toast.error("All fields are required");
+            }
             setloading(true)
             const student_data = { name, phone, phone2, batch, course, sid, fathername, mothername, studentemail }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_student_data_by_teacher`, student_data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_student_data_by_teacher`, student_data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -101,9 +109,7 @@ function UpdateStudent_ByTeacher()
         {
             setloading(false)
         }
-
     }
-
 
     return (
         <div id="Teacher_page">

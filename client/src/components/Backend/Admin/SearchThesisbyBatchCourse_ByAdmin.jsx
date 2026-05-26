@@ -39,17 +39,17 @@ function SearchThesisbyBatchCourse_ByAdmin()
     {
         try
         {
-            if (!batch)
+            if (!batch?.trim())
             {
                 return toast.error("Select Batch ")
             }
-            if (!course)
+            if (!course?.trim())
             {
                 return toast.error("Select Course")
             }
             setstudent_thesis([]);
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_thesis_by_BatchCourse_by_teacher/${batch}/${course}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/search_thesis_by_BatchCourse_by_admin/${batch}/${course}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -75,12 +75,15 @@ function SearchThesisbyBatchCourse_ByAdmin()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            if (!id?.trim())
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_admin/${id}`)
+                return toast.error("Thesis not found")
+            }
+            const confrimdelete = window.confirm("Are you sure to Delete")
+            if (confrimdelete)
+            {
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_admin/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {
@@ -107,10 +110,13 @@ function SearchThesisbyBatchCourse_ByAdmin()
     {
         try
         {
+            if (!id?.trim() || !newStatus?.trim())
+            {
+                return toast.error("All fields required")
+            }
             setloading(true)
-
             const data = { id, newStatus }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_admin`, data);
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_thesis_status_by_admin`, data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {

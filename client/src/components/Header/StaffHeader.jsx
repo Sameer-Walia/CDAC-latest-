@@ -16,10 +16,10 @@ function StaffHeader()
     const dispatch = useDispatch()
     const navi = useNavigate();
 
-    function logout() 
+    async function logout() 
     {
         sessionStorage.clear()
-        // const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/logout`)
+        const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/logout`, {}, { withCredentials: true })
         navi("/staff_login")
         dispatch(TeacherLogOut())
         toast.info("You have successfully Logged Out")

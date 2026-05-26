@@ -28,7 +28,7 @@ function AllStudentList_ToAdmin()
         try
         {
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_Students_by_admin`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_all_Students_by_admin`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -43,7 +43,7 @@ function AllStudentList_ToAdmin()
         }
         catch (e)
         {
-            toast.error("Error Occured " + (e.response?.data?.msg || e.message))
+            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
         }
         finally
         {
@@ -65,7 +65,7 @@ function AllStudentList_ToAdmin()
 
             if (resp === true)
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_by_admin/${id}`)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_by_admin/${id}`,{withCredentials:true})
 
                 if (resp.data.statuscode === 1)
                 {
@@ -80,7 +80,7 @@ function AllStudentList_ToAdmin()
         }
         catch (e)
         {
-            toast.error("Error Occured " + (e.response?.data?.msg || e.message))
+            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
         }
         finally
         {

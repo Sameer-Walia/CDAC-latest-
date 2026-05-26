@@ -32,8 +32,12 @@ function MarksAdded_ByTeacher()
     {
         try
         {
+            if (!email?.trim())
+            {
+                return toast.error("Email Required")
+            }
             setloading(true)
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_marks_by_me_teacher/${email}`);
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_marks_by_me_teacher/${email}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -65,12 +69,15 @@ function MarksAdded_ByTeacher()
     {
         try
         {
-            setloading(true)
-            const resp = window.confirm("Are you sure to Delete")
-
-            if (resp === true)
+            if (!id?.trim())
             {
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_marks_by_teacher/${id}`)
+                return toast.error("ID Required")
+            }
+            const confirmdelete = window.confirm("Are you sure to Delete")
+            if (confirmdelete)
+            {
+                setloading(true)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_marks_by_teacher/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {
