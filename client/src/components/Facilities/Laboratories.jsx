@@ -1,6 +1,7 @@
 import Footer from '../Footer/Footer'
 import { Link } from 'react-router-dom'
 import "./Facilities.css"
+import { useEffect } from 'react'
 
 function Laboratories()
 {

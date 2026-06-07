@@ -11,7 +11,7 @@ import Footer from "../../Footer/Footer";
 function UploadFees_ByStudent()
 {
 
-    const { course, studentID, email, name } = useSelector((state) => state.student)
+    const { course, studentID, email, name, batch } = useSelector((state) => state.student)
 
     const [semester, setSemester] = useState("");
     const [loading, setloading] = useState(false);
@@ -30,9 +30,13 @@ function UploadFees_ByStudent()
     {
         try
         {
-            if (!semester)
+            if (!semester?.trim())
             {
                 return toast.error("Please select semester");
+            }
+            if (!pdf)
+            {
+                return toast.error("Please Upload Pdf");
             }
             setloading(true);
             const formData = new FormData();
@@ -41,6 +45,7 @@ function UploadFees_ByStudent()
             formData.append("email", email);
             formData.append("name", name);
             formData.append("course", course);
+            formData.append("batch", batch);
 
             if (pdf != null)
             {
@@ -236,7 +241,7 @@ function UploadFees_ByStudent()
                                                 setPdf(file);
                                             }}
                                         />
-                                        <button onClick={submit_fees_proof} disabled={!pdf} >Submit</button>
+                                        <button onClick={submit_fees_proof}  >Submit</button>
                                     </div>
                                 </>
                             }

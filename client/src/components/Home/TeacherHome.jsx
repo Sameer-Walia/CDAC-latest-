@@ -91,7 +91,7 @@ function TeacherHome()
 
                         </div>
                         <div className="col-lg-6 col-12 mt-lg-0 text-center " data-aos="fade-down-left" data-aos-delay="100">
-                            <img src="/assets/images/CDAC_Image.jpg" className="img-fluid" />
+                            <img src="/assets/images/CDAC_CIRCULAR_LOGO.png" className="img-fluid" />
                         </div>
                     </div>
                 </div>

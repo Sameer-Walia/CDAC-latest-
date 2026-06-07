@@ -39,130 +39,146 @@ function List_of_faculty()
                                         <th>Name</th>
                                         <th>Designation</th>
                                         <th>Qualification</th>
-                                        <th>Specialization</th>
-                                        <th>Phone(0172-66190)</th>
+                                        <th>Branch</th>
+                                        <th>E-Mail ID</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>Sanjay Madan</td>
+                                        <td>Assistant Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M.Tech. Computer Science & Engineering (Artificial Intelligence)</td>
+                                        <td>msanjay@cdac.in </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>2</td>
+                                        <td>Jaspal Singh</td>
+                                        <td>Associate Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M. Tech. Embedded System</td>
+                                        <td>jaspal@cdac.in  </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>3</td>
+                                        <td>Preeti Bali </td>
+                                        <td>Associate Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M. Tech. Embedded System</td>
+                                        <td>preet@cdac.in  </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>4</td>
+                                        <td>Manjit Kaur</td>
+                                        <td>Assistant Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M. Tech. VLSI Design</td>
+                                        <td>manjit@cdac.in  </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>5</td>
+                                        <td>Gurmohan Singh</td>
+                                        <td>Assistant Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M. Tech. VLSI Design</td>
+                                        <td>gurmohan@cdac.in  </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>6</td>
+                                        <td>Sunil Kumar Chille</td>
+                                        <td>Associate Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M.Tech. Computer Science & Engineering (Artificial Intelligence)</td>
+                                        <td>sunil@cdac.in  </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
+                                        <td>7</td>
+                                        <td>Mandeep Singh</td>
+                                        <td>Associate Professor</td>
                                         <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>M. Tech. Embedded System</td>
+                                        <td>mandeep@cdac.in  </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>8</td>
+                                        <td>Sanjay P Sood</td>
+                                        <td>Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M.Tech. Computer Science & Engineering (Artificial Intelligence)</td>
+                                        <td>sanjay@cdac.in </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>9</td>
+                                        <td>Navdeep Singh </td>
+                                        <td>Assistant Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M.Tech. Computer Science & Engineering (Artificial Intelligence)</td>
+                                        <td>navdeep@cdac.in </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>10</td>
+                                        <td>Sanjeev Kumar</td>
+                                        <td>Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M.Tech. Computer Science & Engineering (Artificial Intelligence)</td>
+                                        <td>sanjeev@cdac.in  </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>11</td>
+                                        <td>Rakesh Kumar Sehgal</td>
+                                        <td>Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M.Tech. Computer Science & Engineering (Artificial Intelligence)</td>
+                                        <td>rks@cdac.in  </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>12</td>
+                                        <td>Sonia Dosanjh</td>
+                                        <td>Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M.Tech. Computer Science & Engineering (Artificial Intelligence)</td>
+                                        <td>soniad@cdac.in  </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>13</td>
+                                        <td>Mikanshu Rani</td>
+                                        <td>Assistant Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M.Tech. Computer Science & Engineering (Artificial Intelligence)</td>
+                                        <td>mikanshu6406@gmail.com  </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
+                                        <td>14</td>
+                                        <td>Dr.Balwinder Singh</td>
+                                        <td>Associate Professor</td>
                                         <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>M. Tech. VLSI Design</td>
+                                        <td>balwinder.cdacmohali@gmail.com </td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
+                                        <td>15</td>
+                                        <td>SONIYA</td>
+                                        <td>Assistant Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M. Tech. VLSI Design</td>
+                                        <td>mssoniya@cdac.in  </td>
+                                    </tr>
+                                    <tr>
+                                        <td>16</td>
+                                        <td>Rohan Dhaload</td>
+                                        <td>Assistant Professor</td>
+                                        <td>M.Tech., B.Tech.</td>
+                                        <td>M. Tech. Embedded System</td>
+                                        <td>rohandhaload@cdac.in  </td>
+                                    </tr>
+                                    <tr>
+                                        <td>17</td>
+                                        <td>KOMAL</td>
+                                        <td>Assistant Professor</td>
                                         <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>M. Tech. VLSI Design</td>
+                                        <td>drkomal@cdac.in  </td>
                                     </tr>
                                 </tbody>
                             </table>

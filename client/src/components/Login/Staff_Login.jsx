@@ -55,7 +55,7 @@ function Staff_Login()
                     else
                     {
                         toast.success(resp.data.msg)
-                        navi("/")
+                        navi("/studentHome")
                     }
                 }
                 else

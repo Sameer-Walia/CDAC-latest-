@@ -516,20 +516,20 @@ else
             const { email, pass } = req.body;
 
             // 1. Empty check
-            if (!email || !pass)
-            {
-                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
-            }
+            // if (!email || !pass)
+            // {
+            //     return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            // }
 
-            if (!/\S+@\S+\.\S+/.test(email))
-            {
-                return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
-            }
+            // if (!/\S+@\S+\.\S+/.test(email))
+            // {
+            //     return res.status(400).json({ statuscode: 0, msg: "Invalid email format" });
+            // }
 
-            if (pass.length < 3)
-            {
-                return res.status(400).json({ statuscode: 0, msg: "Password must be at least 3 characters" });
-            }
+            // if (pass.length < 3)
+            // {
+            //     return res.status(400).json({ statuscode: 0, msg: "Password must be at least 3 characters" });
+            // }
 
             const result = await TeacherSignupModel.findOne({ email: email }).select("-phone");
             console.log(result)
@@ -1985,12 +1985,10 @@ else
         }
     })
 
-
-
-    const FeesUploadSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, email: { type: String, required: true }, studentID: { type: String, required: true }, semester: { type: String, required: true }, course: { type: String, required: true }, fees_pdf: { type: String, required: true }, Addedon: { type: Date }, status: { type: String, default: "Pending", required: true } }, { versionKey: false });
+    const FeesUploadSchema = new mongoose.Schema({ name: { type: String, required: true, trim: true }, email: { type: String, required: true }, studentID: { type: String, required: true }, batch: { type: String, required: true }, course: { type: String, required: true }, semester: { type: String, required: true }, fees_pdf: { type: String, required: true }, Addedon: { type: Date }, status: { type: String, default: "Pending", required: true } }, { versionKey: false });
 
     FeesUploadSchema.index({ studentID: 1 });
-    FeesUploadSchema.index({ semester: 1 });
+    FeesUploadSchema.index({ batch: 1, course: 1, semester: 1 });
     FeesUploadSchema.index({ studentID: 1, semester: 1 });
 
     const FeesUploadModel = mongoose.model("FeesUpload", FeesUploadSchema, "FeesUpload")
@@ -2000,7 +1998,7 @@ else
     {
         try
         {
-            const { semester, studentID, email, name, course } = req.body;
+            const { semester, studentID, email, name, course, batch } = req.body;
 
             const deleteFile = () =>
             {
@@ -2015,7 +2013,7 @@ else
                 }
             };
 
-            if (!semester || !req.file)
+            if (!semester?.trim() || !req.file)
             {
                 deleteFile();
                 return res.status(400).json({ statuscode: 0, msg: "All fields required" });
@@ -2034,7 +2032,7 @@ else
             const ISTOffset = 5.5 * 60 * 60 * 1000; // IST offset in milliseconds (5 hours 30 minutes)
             const currentDateIST = new Date(currentDateUTC.getTime() + ISTOffset)  // convert to IST
 
-            const newrecord = new FeesUploadModel({ name: name, email: email, studentID: studentID, semester: semester, course: course, fees_pdf: filePath, Addedon: currentDateIST, status: "Pending" })
+            const newrecord = new FeesUploadModel({ name: name, email: email, studentID: studentID, batch: batch, course: course, semester: semester, fees_pdf: filePath, Addedon: currentDateIST, status: "Pending" })
 
             const result = await newrecord.save()
 
@@ -2206,13 +2204,18 @@ else
         }
     })
 
-    app.get("/api/fetch_feesList_acc_to_semester_by_admin/:sem", verifyjsontoken, verifyadmin, async (req, res) =>
+    app.get("/api/fetch_feesList_acc_to_batch_course_semester_by_admin/:batch/:course/:sem", verifyjsontoken, verifyadmin, async (req, res) =>
     {
         try
         {
-            const { sem } = req.params
+            const { batch, course, sem } = req.params
 
-            const result = await FeesUploadModel.find({ semester: sem })
+            if (!batch?.trim() || !course?.trim() || !sem?.trim())
+            {
+                return res.status(400).json({ statuscode: 0, msg: "Batch, Course and Semester All are required" });
+            }
+
+            const result = await FeesUploadModel.find({ batch: batch, course: course, semester: sem })
 
             if (result.length === 0) 
             {
@@ -3146,8 +3149,61 @@ else
         }
     })
 
+    app.get("/api/fetch_student_thesis_by_Teacher/:tid", verifyjsontoken, verifyteacher, async (req, res) =>
+    {
+        try
+        {
+            const result = await ThesisUploadModel.findOne({ _id: req.params.tid })
+
+            if (result === null) 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "No Thesis Found" })
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 1, student_thesis: result })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).json({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
 
     app.put("/api/update_student_thesis_by_admin", verifyjsontoken, verifyadmin, async (req, res) =>
+    {
+        try
+        {
+            const { tid, title, description, remarks } = req.body;
+
+            if (!tid?.trim() || !title?.trim() || !description?.trim() || !remarks?.trim())
+            {
+                return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+            }
+
+            const result = await ThesisUploadModel.updateOne({ _id: tid }, { $set: { thesis_title: title, description: description, remarks: remarks } })
+
+            if (result.modifiedCount === 1) 
+            {
+                return res.status(200).json({ statuscode: 1, msg: "Student Thesis Updated Successfully" })
+            }
+            else 
+            {
+                return res.status(200).json({ statuscode: 0, msg: "Student Thesis Not Updated Successfully" })
+            }
+
+        }
+        catch (e)
+        {
+            console.log(e.message)
+            return res.status(500).json({ statuscode: -1, msg: "Server error" })
+        }
+    })
+
+    app.put("/api/update_student_thesis_by_teacher", verifyjsontoken, verifyteacher, async (req, res) =>
     {
         try
         {

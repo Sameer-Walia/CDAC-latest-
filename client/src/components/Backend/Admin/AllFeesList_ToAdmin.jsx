@@ -157,6 +157,7 @@ function AllFeesList_ToAdmin()
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>ID</th>
+                                    <th>Batch</th>
                                     <th>Course</th>
                                     <th>Sem</th>
                                     <th>Date</th>
@@ -175,6 +176,7 @@ function AllFeesList_ToAdmin()
                                             <td>{item.name}</td>
                                             <td>{item.email}</td>
                                             <td>{item.studentID}</td>
+                                            <td>{item.batch}</td>
                                             <td>{item.course}</td>
                                             <td>{item.semester}</td>
                                             <td>

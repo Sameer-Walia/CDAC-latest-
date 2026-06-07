@@ -37,7 +37,7 @@ function StaffHeader()
         }
         else
         {
-            navi("/")
+            navi("/studentHome")
         }
     }
 
@@ -55,7 +55,7 @@ function StaffHeader()
 
                     <div className="right">
                         <div onClick={whichpage} className="auth-btn homeicon"> <FaHome size={20} /></div>
-                        <a href="https://cdac.in/" target="_blank" rel="noopener noreferrer" className="auth-btn login">CDAC</a>
+                        <a href="https://cdac.in/" target="_blank" rel="noopener noreferrer" className="auth-btn login">C-DAC</a>
                         <Link to="/contact" className="auth-btn login">Contact Us</Link>
                         {
                             isLoggedIn === false ?
@@ -70,7 +70,7 @@ function StaffHeader()
                 </div>
 
                 <div className="middlebar">
-                    <img src="/assets/images/logo_acsd.png" onClick={whichpage} alt="Logo" className="logo" />
+                    <img src="/assets/images/CDACLOGO.jpeg" onClick={whichpage} alt="Logo" className="logo" />
 
                     <div className="marquee-container">
                         <div className="marquee-track">
@@ -101,7 +101,7 @@ function StaffHeader()
                                     <li><Link to="/overview">Overview</Link></li>
                                     <li><Link to="/recognition">Recognition & Approval</Link></li>
                                     <li><Link to="/departmental_activities">Departmental Activities</Link></li>
-                                    {/* <li><Link to="">Photo Gallery</Link></li> */}
+                                    <li><Link to="/gallery">Photo Gallery</Link></li>
                                     <li><Link to="/holidays_list">Holiday List</Link></li>
                                     <li><Link to="/contact">Contact Information</Link></li>
                                 </ul>

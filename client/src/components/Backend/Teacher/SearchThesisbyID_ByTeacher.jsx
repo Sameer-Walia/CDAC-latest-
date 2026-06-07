@@ -127,6 +127,10 @@ function SearchThesisbyID_ByTeacher()
         }
     };
 
+    function handleEdit(id)
+    {
+        navi(`/update_studentThesis_by_teacher/${id}`)
+    }
 
 
     return (
@@ -172,6 +176,7 @@ function SearchThesisbyID_ByTeacher()
                                     <th>View</th>
                                     <th>Status</th>
                                     <th>Change Status</th>
+                                    <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
@@ -244,7 +249,16 @@ function SearchThesisbyID_ByTeacher()
                                                 >
                                                     <option value="Pending">Pending</option>
                                                     <option value="Verified">Verified</option>
+                                                    <option value="Approved" disabled >Approved</option>
                                                 </select>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    className="edit-btn"
+                                                    onClick={() => handleEdit(item._id)}
+                                                >
+                                                    ✏️
+                                                </button>
                                             </td>
                                             <td>
                                                 <button

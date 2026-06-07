@@ -23,7 +23,7 @@ function SearchFeesListOfStudent_ByAdmin()
         try
         {
             setstudentfeesListdata([]);
-            if (!studentid)
+            if (!studentid?.trim())
             {
                 return toast.error("Enter Student ID")
             }
@@ -154,6 +154,7 @@ function SearchFeesListOfStudent_ByAdmin()
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>ID</th>
+                                            <th>Batch</th>
                                             <th>Course</th>
                                             <th>Sem</th>
                                             <th>Date</th>
@@ -172,6 +173,7 @@ function SearchFeesListOfStudent_ByAdmin()
                                                     <td>{item.name}</td>
                                                     <td>{item.email}</td>
                                                     <td>{item.studentID}</td>
+                                                    <td>{item.batch}</td>
                                                     <td>{item.course}</td>
                                                     <td>{item.semester}</td>
                                                     <td>

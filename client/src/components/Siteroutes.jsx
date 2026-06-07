@@ -98,6 +98,11 @@ import TeacherRoutesProtector from "./TeacherRoutesProtector";
 import ForgotPassword_ByTeacher from "./ForgotPassword_ByTeacher";
 import ResetPassword_ByTeacher from "./ResetPassword_ByTeacher";
 import ForgotPassword_ByStudent from "./ForgotPassword_ByStudent";
+import UpdateThesis_byTeacher from "./Backend/Teacher/UpdateThesis_byTeacher";
+import Campus from "./AboutUs/Gallery/Campus";
+import Lab from "./AboutUs/Gallery/Lab";
+import SC from "./AboutUs/Gallery/SC";
+import ITEC from "./AboutUs/Gallery/ITEC";
 
 
 function Siteroutes()
@@ -121,6 +126,10 @@ function Siteroutes()
                 <Route path="/overview" element={<Overview />}></Route>
                 <Route path="/recognition" element={<Recognition />}></Route>
                 <Route path="/departmental_activities" element={<Departmental_Activities />}></Route>
+                <Route path="/gallery" element={<Campus />}></Route>
+                <Route path="/itec_course" element={<ITEC />}></Route>
+                <Route path="/labs" element={<Lab />}></Route>
+                <Route path="/student_counselling" element={<SC />}></Route>
                 <Route path="/holidays_list" element={<Holiday_List />}></Route>
                 <Route path="/contact" element={<Contact />}></Route>
                 <Route path="/director" element={<Director />}></Route>
@@ -132,6 +141,7 @@ function Siteroutes()
                 <Route path="/mtech_vlsi" element={<Mtech_Vlsi />}></Route>
                 <Route path="/academic_calendar" element={<Academic_Calender />}></Route>
                 <Route path="/syllabus" element={<Syllabus />}></Route>
+                <Route path="/timetable" element={<TimeTable />}></Route>
                 <Route path="/fees_structure" element={<Fees_Structure />}></Route>
                 <Route path="/procedure" element={<Procedure />}></Route>
                 <Route path="/eligibility_criteria" element={<Eligibility_criteria />}></Route>
@@ -156,7 +166,6 @@ function Siteroutes()
 
                 {/* backend start */}
 
-
                 <Route path="/thanks" element={<Thanks />}></Route>
                 <Route path="/resend_email" element={<Resend_email />}></Route>
                 <Route path="/activateaccount" element={<ActivateAccount />}></Route>
@@ -172,7 +181,6 @@ function Siteroutes()
                 <Route path="/update_teacher_by_admin/:tid" element={<AdminRoutesProtector compname={UpdateTeacher} />}></Route>
                 <Route path="/search_teacher_by_admin" element={<AdminRoutesProtector compname={SearchTeacher_ByAdmin} />}></Route>
                 <Route path="/all_students_list_to_admin" element={<AdminRoutesProtector compname={AllStudentList} />}></Route>
-                {/* <Route path="/all_students_list_to_admin" element={<AllStudentList />}></Route> */}
                 <Route path="/add_student_by_admin" element={<AdminRoutesProtector compname={AddStudent_byadmin} />}></Route>
                 <Route path="/add_teacher_by_admin" element={<AdminRoutesProtector compname={AddTeacher_byadmin} />}></Route>
                 <Route path="/update_student_by_admin/:sid" element={<AdminRoutesProtector compname={UpdateStudent_byAdmin} />}></Route>
@@ -219,14 +227,13 @@ function Siteroutes()
                 <Route path="/all_thesis_list_to_teacher" element={<TeacherRoutesProtector compname={AllThesisList_ToTeacher} />}></Route>
                 <Route path="/search_thesis_by_ID_by_teacher" element={<TeacherRoutesProtector compname={SearchThesisbyID_ByTeacher} />}></Route>
                 <Route path="/search_thesis_by_BatchCourse_by_teacher" element={<TeacherRoutesProtector compname={SearchThesisbyBatchCourse_ByTeacher} />}></Route>
-
+                <Route path="/update_studentThesis_by_teacher/:tid" element={<TeacherRoutesProtector compname={UpdateThesis_byTeacher} />}></Route>
 
 
                 {/* student */}
                 <Route path="/upload_fees_by_student" element={<UploadFees_ByStudent />}></Route>
                 <Route path="/my_marks" element={<My_Marks />}></Route>
                 <Route path="/my_attendance" element={<My_Attendance />}></Route>
-                <Route path="/timetable" element={<TimeTable />}></Route>
                 <Route path="/my_thesis" element={<My_Thesis />}></Route>
 
             </Routes>

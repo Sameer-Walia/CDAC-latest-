@@ -10,6 +10,8 @@ function SearchFeesListAccToSem_ByAdmin()
     const [collapse, setCollapse] = useState(false);
     const [loading, setloading] = useState(false);
     const [Feeslistdata, setfeesListdata] = useState([]);
+    const [batch, setbatch] = useState("")
+    const [course, setCourse] = useState("");
     const [semester, setSemester] = useState("");
     const navi = useNavigate();
 
@@ -30,14 +32,21 @@ function SearchFeesListAccToSem_ByAdmin()
     {
         try
         {
-            setloading(true)
-
-            if (!semester)
+            if (!batch?.trim())
+            {
+                return toast.error("Choose Batch")
+            }
+            if (!course?.trim())
+            {
+                return toast.error("Choose Course")
+            }
+            if (!semester?.trim())
             {
                 return toast.error("Choose Semester")
             }
-
-            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_feesList_acc_to_semester_by_admin/${semester}`, { withCredentials: true });
+            setfeesListdata([]);
+            setloading(true)
+            const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch_feesList_acc_to_batch_course_semester_by_admin/${batch}/${course}/${semester}`, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -147,19 +156,68 @@ function SearchFeesListAccToSem_ByAdmin()
                 <div className={`admin_maincontent ${collapse ? "expand" : ""}`}>
                     <h1 className="hd text-center">Fees List Acc. To Semester</h1>
 
-                    <div className="semester-filter-container">
-                        <select
-                            className="semester-dropdown"
-                            onChange={(e) => setSemester(e.target.value)}
-                            required
-                        >
-                            <option value="">Select Semester</option>
-                            <option value="1">Semester 1</option>
-                            <option value="2">Semester 2</option>
-                            <option value="3">Semester 3</option>
-                            <option value="4">Semester 4</option>
-                        </select>
+
+
+                    <div className="attendance-filter-box">
+                        <div className="filter-group">
+                            <label>Batch</label>
+                            <select
+                                onChange={(e) =>
+                                {
+                                    setbatch(e.target.value)
+                                    setCourse("");
+                                    setSemester("");
+                                }}
+                                value={batch}
+                                required>
+                                <option value="">Select Batch</option>
+                                <option value="2025-2027">2025-2027</option>
+                                <option value="2026-2028">2026-2028</option>
+                                <option value="2027-2029">2027-2029</option>
+                                <option value="2028-2030">2028-2030</option>
+                                <option value="2029-2031">2029-2031</option>
+                                <option value="2030-2032">2030-2032</option>
+                                <option value="2031-2033">2031-2033</option>
+                                <option value="2032-2034">2032-2034</option>
+                                <option value="2033-2035">2033-2035</option>
+                                <option value="2034-2036">2034-2036</option>
+                            </select>
+                        </div>
+
+                        <div className="filter-group">
+                            <label>Course</label>
+                            <select
+                                onChange={(e) =>
+                                {
+                                    setCourse(e.target.value);
+                                    setSemester("");
+                                }}
+                                value={course}
+                                required >
+                                <option value="">Select Course</option>
+                                <option value="AI"> M.Tech – Artificial Intelligence (AI)</option>
+                                <option value="VLSI">M.Tech - VLSI Design</option>
+                                <option value="ES"> M.Tech - Embedded Systems (ES)</option>
+                            </select>
+                        </div>
+
+                        <div className="filter-group">
+                            <label>Semester</label>
+                            <select
+                                value={semester}
+                                onChange={(e) => setSemester(e.target.value)}
+                                required
+                            >
+                                <option value="">Select Semester</option>
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                                <option value="3">Semester 3</option>
+                                <option value="4">Semester 4</option>
+                            </select>
+                        </div>
+
                     </div>
+
 
                     {
                         semester &&
@@ -171,6 +229,7 @@ function SearchFeesListAccToSem_ByAdmin()
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>ID</th>
+                                        <th>Batch</th>
                                         <th>Course</th>
                                         <th>Sem</th>
                                         <th>Date</th>
@@ -190,6 +249,7 @@ function SearchFeesListAccToSem_ByAdmin()
                                                     <td>{item.name}</td>
                                                     <td>{item.email}</td>
                                                     <td>{item.studentID}</td>
+                                                    <td>{item.batch}</td>
                                                     <td>{item.course}</td>
                                                     <td>{item.semester}</td>
                                                     <td>
