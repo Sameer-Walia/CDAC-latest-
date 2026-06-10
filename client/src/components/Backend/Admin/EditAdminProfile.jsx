@@ -70,7 +70,7 @@ function EditAdminProfile()
         {
             setloading(true)
             const profile_data = { name, phone, email }
-            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/     `, profile_data, { withCredentials: true });
+            const resp = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_admin_profile `, profile_data, { withCredentials: true });
 
             if (resp.data.statuscode === 1)
             {
@@ -85,7 +85,7 @@ function EditAdminProfile()
         }
         catch (e)
         {
-            toast.error("Error Occured " + (e.response?.data?.msg || e.message))
+            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
         }
         finally
         {

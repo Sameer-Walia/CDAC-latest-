@@ -75,7 +75,7 @@ function AllThesisList_ToTeacher()
             if (confirmdelete)
             {
                 setloading(true)
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_teacher/${id}`)
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_student_thesis_by_teacher/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {
