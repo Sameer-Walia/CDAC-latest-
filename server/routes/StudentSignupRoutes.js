@@ -8,7 +8,7 @@ router.post("/student_login", student_login);
 router.post("/add_student_by_admin", verifyjsontoken, verifyadmin, add_student_by_admin);
 router.post("/add_student_by_teacher", verifyjsontoken, verifyteacher, add_student_by_teacher);
 router.get("/fetch_all_Students_by_teacher", verifyjsontoken, verifyteacher, fetch_all_Students_by_teacher);
-router.get("/fetch_students_added_by_me/:teacheremail", verifyjsontoken, fetch_students_added_by_me);
+router.get("/fetch_students_added_by_me/:teacheremail", verifyjsontoken, verifyteacher, fetch_students_added_by_me);
 router.delete("/delete_student_by_admin/:sid", verifyjsontoken, verifyadmin, delete_student_by_admin);
 router.delete("/delete_student_by_teacher/:sid", verifyjsontoken, verifyteacher, delete_student_by_teacher);
 router.get("/fetch_student_data_by_Admin/:sid", verifyjsontoken, verifyadmin, fetch_student_data_by_Admin);
