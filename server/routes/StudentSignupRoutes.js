@@ -19,7 +19,7 @@ router.get("/search_student_by_teacher/:studentid", verifyjsontoken, verifyteach
 router.get("/search_student_by_admin/:studentid", verifyjsontoken, verifyadmin, search_student_by_admin);
 router.get("/fetch_all_Students_by_admin", verifyjsontoken, verifyadmin, fetch_all_Students_by_admin);
 router.get("/fetch_students_added_by_admin/:admin_email", verifyjsontoken, verifyadmin, fetch_students_added_by_admin);
-router.get("/send_mail_to_student_by_admin", verifyjsontoken, verifyadmin, send_mail_to_student_by_admin);
+router.post("/send_mail_to_student_by_admin", verifyjsontoken, verifyadmin, send_mail_to_student_by_admin);
 router.get("/fetch_all_Students_by_admin", verifyjsontoken, verifyadmin, fetch_all_Students_by_admin);
 router.get("/fetch_all_Students_by_admin", verifyjsontoken, verifyadmin, fetch_all_Students_by_admin);
 router.get("/fetch_students_acc_to_batch_Course/:batch/:course", verifyjsontoken, verifyteacher, fetch_students_acc_to_batch_Course);

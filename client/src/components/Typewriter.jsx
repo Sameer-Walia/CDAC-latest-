@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 function Typewriter()
 {
-    const strings = [
-        'RATE THE BEST TEACHER',
-        'CHOOSE THE TOP EDUCATOR',
-        'HONOR YOUR FAVOURITE EDUCATOR',
 
+    const strings = [
+        "C-DAC MOHALI",
+        "Centre for Development of Advanced Computing",
+        "Digital Innovation Hub",
+        "Advanced Computing Centre",
+        "Innovation & Research Centre"
     ];
+
     const [currentStringIndex, setCurrentStringIndex] = useState(0);
     const [currentString, setCurrentString] = useState('');
     const [isTyping, setIsTyping] = useState(true);

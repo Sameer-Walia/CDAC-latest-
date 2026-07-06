@@ -12,7 +12,7 @@ export const submit_Attendnace_by_teacher = async (req, res) =>
             return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
         }
 
-        if (!students?.trim() || students?.trim().length === 0)
+        if (!Array.isArray(students) || students.length === 0)
         {
             return res.status(400).json({ statuscode: 0, msg: "Students attendance not found" });
         }
@@ -184,7 +184,7 @@ export const update_Attendnace_by_teacher = async (req, res) =>
             return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
         }
 
-        if (!students?.trim() || students?.trim().length === 0)
+        if (!Array.isArray(students) || students.length === 0)
         {
             return res.status(400).json({ statuscode: 0, msg: "Students attendance not found" });
         }

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import bcrypt from "bcrypt";
 import { sendMail } from "../utils/mailer.js";
 import jwt from 'jsonwebtoken';
-
+import axios from 'axios';
 
 export const add_teacher_by_admin = async (req, res) => 
 {
@@ -672,19 +672,15 @@ export const resendmail = async (req, res) =>
                     html: `Dear ${user.name}<br/><br/>Thanks for signing up on our website.<br/><br/>Click on the following link to activate your account.<br/><br/><a href='http://localhost:5173/activateaccount?code=${user.token}'>Activate Account<a/>`
                 };
 
-                transporter.sendMail(mailOptions, (error, info) =>
+                const mailresp = await sendMail(mailOptions);
+                if (mailresp === true)
                 {
-                    if (error)
-                    {
-                        console.log(error);
-                        return res.status(200).json({ statuscode: 2, msg: "Activation mail not resent successfully!  , error while resending activation mail" });
-                    }
-                    else
-                    {
-                        console.log("Email sent: " + info.response);
-                        return res.status(200).json({ statuscode: 1, msg: "Activation mail resent successfully! , please check your mail" });
-                    }
-                });
+                    return res.status(200).json({ statuscode: 1, msg: "Activation mail resent successfully! , please check your mail" });
+                }
+                else
+                {
+                    return res.status(200).json({ statuscode: 2, msg: "Activation mail not resent successfully!  , error while resending activation mail" });
+                }
             }
             else
             {
@@ -695,19 +691,15 @@ export const resendmail = async (req, res) =>
                     html: `Dear ${user.name}<br/><br/>Thanks for signing up on our website.<br/><br/>Click on the following link to activate your account.<br/><br/><a href='http://localhost:5173/activateaccount?code=${user.token}'>Activate Account<a/>`
                 };
 
-                transporter.sendMail(mailOptions, (error, info) => 
+                const mailresp = await sendMail(mailOptions);
+                if (mailresp === true)
                 {
-                    if (error)
-                    {
-                        console.log(error);
-                        return res.status(200).json({ statuscode: 2, msg: "Activation mail not resent successfully!  , error while resending activation mail" });
-                    }
-                    else
-                    {
-                        console.log("Email sent: " + info.response);
-                        return res.status(200).json({ statuscode: 1, msg: "Activation mail resent successfully! , please check your mail" });
-                    }
-                });
+                    return res.status(200).json({ statuscode: 1, msg: "Activation mail Resent successfully! , please check your mail" });
+                }
+                else
+                {
+                    return res.status(200).json({ statuscode: 2, msg: "Activation mail not resent successfully! , error while resending activation mail" });
+                }
             }
         }
     }
@@ -776,19 +768,15 @@ export const ContactUs = async (req, res) =>
             html: `<b>Name:- </b>${name}<br/><b>Phone:- </b>${phone}<br/><b>Email:- </b>${email}<br/><b>Message:- </b>${message}`
         };
 
-        transporter.sendMail(mailOptions, (error, info) =>
+        const mailresp = await sendMail(mailOptions);
+        if (mailresp === true)
         {
-            if (error)
-            {
-                console.log(error);
-                return res.status(200).json({ statuscode: 0, msg: "Error sending message , try again" })
-            }
-            else
-            {
-                console.log("Email sent: " + info.response);
-                return res.status(200).json({ statuscode: 1, msg: "Message submitted successfully. We will revert back in 24 hours" })
-            }
-        });
+            return res.status(200).json({ statuscode: 1, msg: "Message submitted successfully. We will revert back in 24 hours" })
+        }
+        else
+        {
+            return res.status(200).json({ statuscode: 0, msg: "Error sending message , try again" })
+        }
 
     }
     catch (e)

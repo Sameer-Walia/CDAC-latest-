@@ -26,7 +26,7 @@ export const add_student_by_admin = async (req, res) =>
             "ES"
         ];
 
-        if (!name || !studentId || !studentemail || !batch || !course || !phone || !fathername || !mothername || !phone2)
+        if (!name?.trim() || !studentId?.trim() || !studentemail?.trim() || !batch?.trim() || !course?.trim() || !phone?.trim() || !fathername?.trim() || !mothername?.trim() || !phone2?.trim())
         {
             return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
         }
@@ -292,9 +292,12 @@ export const fetch_student_data_by_Admin = async (req, res) =>
 {
     try
     {
-
-        const result = await StudentSignupModel.findOne({ _id: req.params.sid })
-
+        const { sid } = req.params
+        if (!sid)
+        {
+            return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+        }
+        const result = await StudentSignupModel.findOne({ _id: sid })
         if (result === null) 
         {
             return res.status(200).json({ statuscode: 0, msg: "No Student Found" })
@@ -317,7 +320,12 @@ export const fetch_student_data_by_teacher = async (req, res) =>
 {
     try
     {
-        const result = await StudentSignupModel.findOne({ _id: req.params.sid })
+        const { sid } = req.params
+        if (!sid)
+        {
+            return res.status(400).json({ statuscode: 0, msg: "All fields are required" });
+        }
+        const result = await StudentSignupModel.findOne({ _id: sid })
         if (result === null) 
         {
             return res.status(200).json({ statuscode: 0, msg: "No Student Found" })
@@ -629,20 +637,15 @@ export const send_mail_to_student_by_admin = async (req, res) =>
                     Your Password = ${studentpassword}`
             };
 
-            transporter.sendMail(mailOptions, (error, info) =>
+            const mailresp = await sendMail(mailOptions);
+            if (mailresp === true)
             {
-                if (error)
-                {
-                    console.log(error);
-                    return res.status(200).json({ statuscode: 2, msg: "Mail Not Sent Successfully" })
-
-                }
-                else
-                {
-                    console.log("Email sent: " + info.response);
-                    return res.status(200).json({ statuscode: 1, msg: "Mail Sent Successfully" })
-                }
-            });
+                return res.status(200).json({ statuscode: 1, msg: "Mail Sent Successfully" });
+            }
+            else
+            {
+                return res.status(200).json({ statuscode: 2, msg: "Mail Not Sent Successfully" });
+            }
         }
     }
     catch (e)

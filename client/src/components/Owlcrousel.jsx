@@ -8,12 +8,36 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 function Owlcrousel()
 {
     const data = [
-        { id: 1, title: "Web Development", img: "/assets/images/p1.png" },
-        { id: 2, title: "UI/UX Design", img: "/assets/images/p2.jpeg" },
-        { id: 3, title: "App Development", img: "/assets/images/p3.jpeg" },
-        { id: 4, title: "Cloud Services", img: "/assets/images/p4.png" },
-        { id: 5, title: "AI Solutions", img: "/assets/images/s1.jpg" },
-        { id: 6, title: "Cyber Security", img: "/assets/images/s2.jpg" }
+        {
+            id: 1,
+            title: "Industry Standard Tools",
+            img: "/assets/images/p1.jpeg",
+            description: "Access industry-standard software, development platforms, programming tools, and professional technologies used for practical learning, research, and innovation."
+        },
+        {
+            id: 2,
+            title: "Modern Library",
+            img: "/assets/images/p2.jpeg",
+            description: "A well-equipped library offering technical books, journals, e-resources, and research materials to support academic excellence."
+        },
+        {
+            id: 3,
+            title: "Advanced Computing Labs",
+            img: "/assets/images/p3.jpeg",
+            description: "Modern laboratories equipped with high-performance systems for practical learning, research, and software development."
+        },
+        {
+            id: 4,
+            title: "Hardware Development Kits",
+            img: "/assets/images/p4.jpeg",
+            description: "Hands-on experience with embedded systems, IoT devices, FPGA boards, and hardware development platforms."
+        },
+        {
+            id: 5,
+            title: "Artificial Intelligence",
+            img: "/assets/images/AI.jpg",
+            description: "Specialized education and research in Artificial Intelligence, Machine Learning, and Data Science using modern technologies."
+        },
     ];
 
     return (
@@ -53,8 +77,7 @@ function Owlcrousel()
                                 <div className="custom-content">
                                     <h5>{item.title}</h5>
                                     <p>
-                                        We provide high-quality {item.title.toLowerCase()} services
-                                        to help your business grow faster and smarter.
+                                        {item.description}
                                     </p>
                                 </div>
                             </div>
@@ -79,8 +102,7 @@ function Owlcrousel()
                                         style={{ maxHeight: "200px" }}
                                     />
                                     <p>
-                                        Detailed information about {item.title}. We deliver
-                                        top-notch solutions tailored to your needs.
+                                        {item.description}
                                     </p>
                                 </div>
 

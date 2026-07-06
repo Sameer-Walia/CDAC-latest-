@@ -23,7 +23,7 @@ function SearchStudent_ByAdmin()
         try
         {
             setstudent_data(null);
-            if (!studentid)
+            if (!studentid?.trim())
             {
                 return toast.error("Enter student ID")
             }
