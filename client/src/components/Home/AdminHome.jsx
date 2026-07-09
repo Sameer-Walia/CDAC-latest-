@@ -119,18 +119,17 @@ function AdminHome()
                             <div className="effect rounded">
                                 <img src="/assets/images/p1.jpeg" className="rounded img-fluid" />
                                 <div className="eff rounded">
-                                    <h4>Advanced Software Tools</h4>
-                                    <p className="para">
+                                    <h4>Advanced Tools</h4>
+                                    <div className="points">
                                         <ul >
                                             <li>Cadence</li>
                                             <li>Synopsys</li>
                                             <li>Vivado</li>
                                             <li>Siemens Tanner</li>
                                             <li>Mentor Graphics</li>
-                                            <li>Silvaco</li>
                                             <li>TCAD</li>
                                         </ul>
-                                    </p>
+                                    </div>
                                 </div>
                                 <span className="fa fa-plus"></span>
                             </div>
@@ -140,49 +139,50 @@ function AdminHome()
                                 <img src="/assets/images/p2.jpeg" className="rounded img-fluid" />
                                 <div className="eff rounded">
                                     <h4>Modern Library</h4>
-                                    <p className="para">
+                                    <div className="points">
                                         <ul >
                                             <li>Technical books</li>
                                             <li>IEEE Xplore Digital Library</li>
                                             <li>Academic Journals for Research</li>
                                         </ul>
-                                    </p>
+                                    </div>
                                 </div>
                                 <span className="fa fa-plus"></span>
                             </div>
                         </div>
                         <div className="col-lg-3 col-6 mt-lg-0 mt-5" data-aos="zoom-out-right" data-aos-delay="100">
                             <div className="effect rounded">
-                                <img src="/assets/images/p3.jpeg" className="rounded img-fluid" />
+                                <img src="/assets/images/p3.jpeg" className="rounded img-fluid " />
                                 <div className="eff rounded">
                                     <h4>Labs</h4>
-                                    <p className="para">
-                                        <ul >
+                                    <div className="points">
+                                        <ul>
                                             <li>VLSI Design Lab</li>
                                             <li>AI Computing Lab</li>
                                             <li>Embedded Systems</li>
                                             <li>Robotics Lab</li>
                                         </ul>
-                                    </p>
+                                    </div>
                                 </div>
                                 <span className="fa fa-plus"></span>
                             </div>
                         </div>
+
                         <div className="col-lg-3 col-6  mt-lg-0 mt-5" data-aos="zoom-out-up" data-aos-delay="100">
                             <div className="effect rounded">
                                 <img src="/assets/images/p4.jpeg" className="rounded img-fluid" />
                                 <div className="eff rounded">
                                     <h4>Hardware Kits</h4>
-                                    <p className="para">
+                                    <div className="points">
                                         <ul >
                                             <li>Raspberry Pi</li>
                                             <li>Arduino</li>
                                             <li>STM32</li>
                                             <li>Spartan</li>
                                             <li>Nvidia Jetson Nano</li>
-                                            <li>FPGA boards UltraScale+</li>
+                                            <li>FPGA boards</li>
                                         </ul>
-                                    </p>
+                                    </div>
                                 </div>
                                 <span className="fa fa-plus"></span>
                             </div>
@@ -190,7 +190,6 @@ function AdminHome()
                     </div>
                 </div>
             </div>
-
 
             <div id="solution" className="pd " >
                 <div className="container">

@@ -312,121 +312,143 @@
 
 #process .effect {
     position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#process .process-img {
+    width: 100%;
+    height: 430px;
+    object-fit: cover;
+    display: block;
 }
 
 #process .eff {
-    background-color: rgba(0, 90, 255, 0.65);
-    color: white;
     position: absolute;
-    top: 0%;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
+
+    background: rgba(0, 90, 255, 0.65);
+    color: #fff;
+
     padding: 30px;
-    padding-top: 50px;
+    padding-top: 45px;
+
     transform: scale(0);
-    /* hide */
-    transition: all 0.5s ease-out;
+    transform-origin: center;
+    transition: transform .4s ease;
 }
 
 #process .effect:hover .eff {
     transform: scale(1);
-    /* show */
 }
 
 #process .eff h4 {
-    font-weight: 600;
     font-size: 22px;
-    line-height: 28px;
-    margin-bottom: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
 }
 
-#process .eff p {
+#process .eff .points {
+    font-size: 18px;
+    line-height: 28px;
     color: white;
-    opacity: 1;
+    font-weight: 400;
+    text-align: justify;
+}
+
+#process .eff .para ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+#process .eff .para li {
+    color: #fff;
+    margin-bottom: 8px;
 }
 
 #process .effect span.fa {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    background: #5fa8d3;
     color: #fff;
-    background-color: #5fa8d3;
+
     padding: 10px;
     border-bottom-left-radius: 5px;
-    position: absolute;
-    bottom: 0%;
-    left: 0%;
-    transition: all 0.4s linear;
+
+    transition: .3s;
 }
 
 #process .effect:hover span.fa {
     opacity: 0;
 }
 
-@media (max-width: 1024px) {
+/* Responsive */
 
-    #process .eff h4 {
-        font-size: 15px;
+@media (max-width:1024px) {
+
+    #process .process-img {
+        height: 350px;
     }
 
-    #process .eff p {
+    #process .eff h4 {
+        font-size: 18px;
+    }
+
+    #process .eff li {
+        margin-top: -5px;
         font-size: 14px;
     }
-
 }
 
-@media (max-width: 769px) {
+@media (max-width:768px) {
 
-    #process .eff h4 {
-        font-size: 26px;
+    #process .process-img {
+        height: 300px;
     }
 
-    #process .eff p {
+    #process .eff h4 {
         font-size: 20px;
     }
 
+    #process .eff li {
+        padding: 5px;
+        font-size: 16px;
+    }
 }
 
 @media (max-width: 426px) {
 
     #process .eff h4 {
-        font-size: 10px;
-        margin-bottom: 5px;
+        font-size: 14px;
+        margin-top: -15px
     }
 
-    #process .eff p {
+    #process .eff li {
+        margin: -20px;
         font-size: 8px;
-        line-height: 2;
     }
-
 }
 
-@media (max-width: 378px) {
+@media (max-width: 376px) {
 
     #process .eff h4 {
         font-size: 8px;
-
+        margin-top: -15px
     }
 
-    #process .eff p {
-        font-size: 6px;
-        line-height: 2;
+    #process .eff li {
+        margin: -25px;
+        font-size: 8px;
     }
-
 }
 
-@media (max-width: 321px) {
 
-    #process .eff h4 {
-        font-size: 6px;
-        margin-bottom: 0;
-
-    }
-
-    #process .eff p {
-        font-size: 5px;
-        line-height: 2;
-    }
-
-}
-
-/* process css close */
+/* process css ends */
 
 
 

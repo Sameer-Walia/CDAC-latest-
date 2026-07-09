@@ -103,6 +103,7 @@ import Campus from "./AboutUs/Gallery/Campus";
 import Lab from "./AboutUs/Gallery/Lab";
 import SC from "./AboutUs/Gallery/SC";
 import ITEC from "./AboutUs/Gallery/ITEC";
+import MtechAdmission from "./MtechAdmission";
 
 
 function Siteroutes()
@@ -162,6 +163,7 @@ function Siteroutes()
                 <Route path="/sports" element={<Sports />}></Route>
                 <Route path="/privacy_policy" element={<Privacy_policy />}></Route>
                 <Route path="/seat_distribution" element={<SeatDistribution />}></Route>
+                <Route path="/MtechAdmission" element={<MtechAdmission />}></Route>
 
 
                 {/* backend start */}

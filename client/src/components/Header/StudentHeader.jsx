@@ -65,12 +65,9 @@ function StudentHeader()
                     <div className="marquee-container">
                         <div className="marquee-track">
 
-                            <a href="http://acsd.ac.in/onlinefill.aspx" target="_blank" rel="noopener noreferrer" className="announce-btn blue">
-                                MTech Admission Open
-                            </a>
-
-                            <button className="announce-btn green">PhD Admission Open</button>
-                            <button className="announce-btn orange">Apply Now</button>
+                            <Link to="/MtechAdmission"><button className="announce-btn blue">MTech Admission </button></Link>
+                            <button className="announce-btn green">PhD Admission </button>
+                            <Link to="/MtechAdmission"><button className="announce-btn orange">Apply Now</button></Link>
 
                         </div>
                     </div>
