@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./admin.css";
+// import "./admin.css";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";

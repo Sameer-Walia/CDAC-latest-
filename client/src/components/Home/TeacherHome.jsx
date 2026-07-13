@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Typewriter from "../Typewriter";
 import "./Home.css";
 import { useEffect } from "react";
-import Owlcrousel from "../OwlCrousel";
+// import Owlcrousel from "../OwlCrousel";
 // import AOS from 'aos';
 // import 'aos/dist/aos.css';
 import Footer from "../Footer/Footer";
