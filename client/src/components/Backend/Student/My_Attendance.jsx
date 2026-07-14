@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import { useEffect } from 'react';
-import "./student.css";
+import "./Student.css";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';

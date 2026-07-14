@@ -7,7 +7,7 @@ import Footer from '../../Footer/Footer';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRef } from 'react';
-import "./student.css";
+import "./Student.css";
 
 
 function My_Thesis()

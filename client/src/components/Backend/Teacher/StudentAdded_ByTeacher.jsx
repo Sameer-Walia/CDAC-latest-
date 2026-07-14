@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import "./Teacher.css";
 import axios from "axios";

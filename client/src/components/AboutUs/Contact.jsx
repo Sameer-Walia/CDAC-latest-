@@ -37,60 +37,60 @@ function Contact()
     {
         e.preventDefault()
 
-        if (captchaToken)
+        // if (captchaToken)
+        // {
+        if (!name?.trim() || !phone?.trim() || !email?.trim() || !message?.trim())
         {
-            if (!name?.trim() || !phone?.trim() || !email?.trim() || !message?.trim())
-            {
-                return toast.error("All fields are required");
-            }
+            return toast.error("All fields are required");
+        }
 
-            if (name?.trim().length < 3)
-            {
-                return toast.error("Name must be at least 3 characters");
-            }
+        if (name?.trim().length < 3)
+        {
+            return toast.error("Name must be at least 3 characters");
+        }
 
-            if (!/^[0-9]{10}$/.test(phone))
-            {
-                return toast.error("Phone must be 10 digits");
-            }
+        if (!/^[0-9]{10}$/.test(phone))
+        {
+            return toast.error("Phone must be 10 digits");
+        }
 
-            if (!/\S+@\S+\.\S+/.test(email))
-            {
-                return toast.error("Invalid email format");
-            }
+        if (!/\S+@\S+\.\S+/.test(email))
+        {
+            return toast.error("Invalid email format");
+        }
 
-            const data = { name, phone, email, message, captchaToken }
-            try 
+        const data = { name, phone, email, message, captchaToken }
+        try 
+        {
+            setloading(true);
+            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/ContactUs`, data)
+            if (resp.data.statuscode === 1) 
             {
-                setloading(true);
-                const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/ContactUs`, data)
-                if (resp.data.statuscode === 1) 
-                {
-                    toast.success(resp.data.msg);
-                    setname("")
-                    setphone("")
-                    setemail("")
-                    setmessage("")
-                    setcaptchaToken("")
-                }
-                else 
-                {
-                    toast.warning(resp.data.msg);
-                }
+                toast.success(resp.data.msg);
+                setname("")
+                setphone("")
+                setemail("")
+                setmessage("")
+                setcaptchaToken("")
             }
-            catch (e) 
+            else 
             {
-                toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
-            }
-            finally
-            {
-                setloading(false)
+                toast.warning(resp.data.msg);
             }
         }
-        else
+        catch (e) 
         {
-            toast.error("Captcha Verification failed , try again")
+            toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
         }
+        finally
+        {
+            setloading(false)
+        }
+        // }
+        // else
+        // {
+        //     toast.error("Captcha Verification failed , try again")
+        // }
     }
 
 
@@ -145,7 +145,7 @@ function Contact()
 
                         {/* RIGHT FORM */}
                         <div className="contact-right">
-                            <h2 className="hd">Leave a <span>Message</span></h2>
+                            <h2 className="hd mt-4">Leave a <span>Message</span></h2>
 
                             <form name="contactform" onSubmit={onsend}>
                                 <input type="text" placeholder="Your Name" value={name} required onChange={(e) => setname(e.target.value)} minLength={3} />
@@ -155,7 +155,7 @@ function Contact()
 
                                 <textarea placeholder="Your message here..." value={message} required onChange={(e) => setmessage(e.target.value)}></textarea>
 
-                                <div className="captcha-container"><ReCAPTCHA sitekey="6LfERsgrAAAAALuRJGrIb-al3osvxot0jCNfyLgU" onChange={onChange} /></div>
+                                {/* <div className="captcha-container"><ReCAPTCHA sitekey="6LfERsgrAAAAALuRJGrIb-al3osvxot0jCNfyLgU" onChange={onChange} /></div> */}
 
                                 <button type="submit" className='mt-3'>Submit</button>
                             </form>
