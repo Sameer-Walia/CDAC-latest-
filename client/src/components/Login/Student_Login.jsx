@@ -67,67 +67,79 @@ function Student_Login()
     }
 
     return (
-        <div id="authpage">
-
-            <div className="container">
-                <div className="row ">
-                    <div className="col-lg-6 col-12 ">
-                        <img src={`/assets/images/login.jpg`} alt="" className="img-fluid authimage " />
+        <>
+            {loading && (
+                <div className="overlay">
+                    <div>
+                        <div className="spinner"></div>
+                        <p style={{ color: "white", marginTop: "10px" }}>
+                            Please wait...
+                        </p>
                     </div>
-                    <div className="col-lg-6 col-12 text-center mt-5 mb-5">
+                </div>
+            )}
+            <div id="authpage">
+                <div className="container">
+                    <div className="row ">
+                        <div className="col-lg-6 col-12 ">
+                            <img src={`/assets/images/login.jpg`} alt="" className="img-fluid authimage " />
+                        </div>
+                        <div className="col-lg-6 col-12 text-center mt-5 mb-5">
 
-                        <div className={`containerdiv mt-5 `}>
-                            <Link
-                                to="/student_login"
-                                className={`link active`}
-                                style={{ fontSize: "0.9rem" }}
-                            >
-                                Log in
-                            </Link>
+                            <div className={`containerdiv mt-5 `}>
+                                <Link
+                                    to="/student_login"
+                                    className={`link active`}
+                                    style={{ fontSize: "0.9rem" }}
+                                >
+                                    Log in
+                                </Link>
+
+                            </div>
+                            <form onSubmit={onlogin} className="register-form mt-4 ">
+
+                                <div className="input-container mt-5 ">
+
+                                    <input type="text" name="studentID" placeholder="" value={studentID} onChange={(e) => setstudentID(e.target.value)} className="input-field" required />
+
+                                    <label className="input-label">
+                                        <span><i className="fa-solid fa-envelope" /></span><span>Student ID</span>
+                                    </label>
+
+                                </div>
+
+                                <div className="input-container mt-4 ">
+
+                                    <input type="password" name="userpass" placeholder="" value={pass} onChange={(e) => setpass(e.target.value)} className="input-field" required />
+
+                                    <label className="input-label">
+                                        <span><i className="fa-solid fa-lock" /></span><span>Password</span>
+                                    </label>
+                                </div>
+
+                                <br />
+                                {/* <div className="captcha-container"><ReCAPTCHA sitekey="6LfERsgrAAAAALuRJGrIb-al3osvxot0jCNfyLgU" onChange={onChange} /></div> */}
+
+                                {
+                                    loading ?
+                                        <div className="loader-container mt-2">
+                                            <img src="assets/images/loader.gif" alt="loader" className="loader" />
+                                        </div> : <input type="submit" className="register-button mt-3" value="SIGN IN" />
+                                }
+
+                                <Link to="/forgot_password_by_student" className="login-link mt-4" >Forgot Password</Link>
+
+                            </form>
 
                         </div>
-                        <form onSubmit={onlogin} className="register-form mt-4 ">
-
-                            <div className="input-container mt-5 ">
-
-                                <input type="text" name="studentID" placeholder="" value={studentID} onChange={(e) => setstudentID(e.target.value)} className="input-field" required />
-
-                                <label className="input-label">
-                                    <span><i className="fa-solid fa-envelope" /></span><span>Student ID</span>
-                                </label>
-
-                            </div>
-
-                            <div className="input-container mt-4 ">
-
-                                <input type="password" name="userpass" placeholder="" value={pass} onChange={(e) => setpass(e.target.value)} className="input-field" required />
-
-                                <label className="input-label">
-                                    <span><i className="fa-solid fa-lock" /></span><span>Password</span>
-                                </label>
-                            </div>
-
-                            <br />
-                            {/* <div className="captcha-container"><ReCAPTCHA sitekey="6LfERsgrAAAAALuRJGrIb-al3osvxot0jCNfyLgU" onChange={onChange} /></div> */}
-
-                            {
-                                loading ?
-                                    <div className="loader-container mt-2">
-                                        <img src="assets/images/loader.gif" alt="loader" className="loader" />
-                                    </div> : <input type="submit" className="register-button mt-3" value="SIGN IN" />
-                            }
-
-                            <Link to="/forgot_password_by_student" className="login-link mt-4" >Forgot Password</Link>
-
-                        </form>
 
                     </div>
-
                 </div>
-            </div>
-            <Footer />
+                <Footer />
 
-        </div>
+            </div>
+        </>
+
     )
 }
 

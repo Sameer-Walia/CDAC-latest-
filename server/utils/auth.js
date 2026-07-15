@@ -33,8 +33,8 @@ export function verifyjsontoken(req, res, next)
 
         res.cookie("authToken", newauthToken, {
             httpOnly: true,
-            secure: false,
-            sameSite: "lax",
+            secure: true,
+            sameSite: "none",
             maxAge: 15 * 60 * 1000,
         });
 

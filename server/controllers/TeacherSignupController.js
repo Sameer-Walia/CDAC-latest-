@@ -235,15 +235,15 @@ export const staff_login = async (req, res) =>
 
                 res.cookie("authToken", jsontoken, {
                     httpOnly: true,
-                    secure: false,
-                    sameSite: "lax",
+                    secure: true,
+                    sameSite: "none",
                     maxAge: 15 * 60 * 1000,
                 });
 
                 res.cookie("refreshToken", refreshjsontoken, {
                     httpOnly: true,
-                    secure: false,
-                    sameSite: "lax",
+                    secure: true,
+                    sameSite: "none",
                     maxAge: 7 * 24 * 60 * 60 * 1000,
                 });
 
@@ -717,28 +717,28 @@ export const ContactUs = async (req, res) =>
     {
         const { name, phone, email, message, captchaToken } = req.body
 
-        if (!captchaToken)
-        {
-            return res.status(400).json({ statuscode: 0, msg: "Captcha missing" });
-        }
-        const verifyURL = "https://www.google.com/recaptcha/api/siteverify";
+        // if (!captchaToken)
+        // {
+        //     return res.status(400).json({ statuscode: 0, msg: "Captcha missing" });
+        // }
+        // const verifyURL = "https://www.google.com/recaptcha/api/siteverify";
 
-        const captchaResponse = await axios.post(
-            verifyURL,
-            null,
-            {
-                params:
-                {
-                    secret: process.env.RECAPTCHA_SECRET_KEY,
-                    response: captchaToken
-                }
-            }
-        );
+        // const captchaResponse = await axios.post(
+        //     verifyURL,
+        //     null,
+        //     {
+        //         params:
+        //         {
+        //             secret: process.env.RECAPTCHA_SECRET_KEY,
+        //             response: captchaToken
+        //         }
+        //     }
+        // );
 
-        if (!captchaResponse.data.success)
-        {
-            return res.status(400).json({ statuscode: 0, msg: "Captcha verification failed" });
-        }
+        // if (!captchaResponse.data.success)
+        // {
+        //     return res.status(400).json({ statuscode: 0, msg: "Captcha verification failed" });
+        // }
 
         if (!name?.trim() || !phone?.trim() || !email?.trim() || !message?.trim())
         {
