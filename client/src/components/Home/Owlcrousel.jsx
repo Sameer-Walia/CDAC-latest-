@@ -12,7 +12,7 @@ function Owlcrousel()
             id: 1,
             title: "Industry Standard Tools",
             img: "/assets/images/p1.jpeg",
-            description: "Access industry-standard software, development platforms, programming tools, and professional technologies used for practical learning, research, and innovation."
+            description: "Access industry-standard software, development platforms, programming tools, and professional technologies used for practical learning and research."
         },
         {
             id: 2,

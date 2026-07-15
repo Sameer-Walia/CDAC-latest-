@@ -39,21 +39,21 @@ function AdminHome()
 
                     <span style={{ margin: "0 40px" }} />
 
-                    <a href="/programmes">
+                    <Link to="/programmes">
                         💻 Explore Industry-Oriented PG Degree Programmes in AI & Software Development!
-                    </a>
+                    </Link>
                     <span style={{ margin: "0 40px" }} />
 
-                    <a href="/placement_acsd">
+                    <Link to="/placement_acsd">
                         🚀 Empowering Students with Industry-Focused Training, Innovation, and Excellent Placement Opportunities!
-                    </a>
+                    </Link>
 
                     <span style={{ margin: "0 40px" }} />
 
                     <div className="me-5">
-                        <a href="/student_projects">
+                        <Link to="/student_projects">
                             🔬 Discover Research, High Performance Computing, Digital Transformation & Emerging Technologies at C-DAC Mohali!
-                        </a>
+                        </Link>
                     </div>
                 </Marquee>
             </div>

@@ -107,8 +107,8 @@ else
 
     app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  //Allow files inside uploads/ to be opened directly via URL.
 
-    // mongoose.connect('mongodb://127.0.0.1:27017/CDAC').then(() => console.log('Connected to MongoDB'));
-    mongoose.connect('mongodb+srv://sameer:123@cluster0.e6krwcg.mongodb.net/cdac?retryWrites=true&w=majority&appName=Cluster0').then(() => console.log('Connected to MongoDB'));
+    mongoose.connect('mongodb://127.0.0.1:27017/CDAC').then(() => console.log('Connected to MongoDB'));
+    // mongoose.connect('mongodb+srv://sameer:123@cluster0.e6krwcg.mongodb.net/cdac?retryWrites=true&w=majority&appName=Cluster0').then(() => console.log('Connected to MongoDB'));
 
 
     app.use("/api", TeacherSignupRoutes)
