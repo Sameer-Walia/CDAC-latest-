@@ -57,7 +57,7 @@ export const add_teacher_by_admin = async (req, res) =>
         if (result) 
         {
             const mailOptions = {
-                from: 'sameerwalia13@gmail.com',
+                from: 'acsdcofficial@gmail.com',
                 to: email,
                 subject: 'Activation Mail from CDAC',
                 html: `Dear ${name}<br/><br/>Thanks for signing up on our website.<br/><br/>Click on the following link to activate your account.<br/><br/><a href='http://localhost:5173/activateaccount?code=${acttoken}'>Activate Account<a/>`
@@ -140,7 +140,7 @@ export const add_teacher_by_itself = async (req, res) =>
         if (result) 
         {
             const mailOptions = {
-                from: 'sameerwalia13@gmail.com',
+                from: 'acsdcofficial@gmail.com',
                 to: email,
                 subject: 'Activation Mail from CDAC',
                 html: `Dear ${name}<br/><br/>Thanks for signing up on our website.<br/><br/>Click on the following link to activate your account.<br/><br/><a href='http://localhost:5173/activateaccount?code=${acttoken}'>Activate Account<a/>`
@@ -666,7 +666,7 @@ export const resendmail = async (req, res) =>
             if (updateresult.modifiedCount === 1)
             {
                 const mailOptions = {
-                    from: 'sameerwalia13@gmail.com',
+                    from: 'acsdcofficial@gmail.com',
                     to: teacheremail,
                     subject: 'Activation Mail from CDAC',
                     html: `Dear ${user.name}<br/><br/>Thanks for signing up on our website.<br/><br/>Click on the following link to activate your account.<br/><br/><a href='http://localhost:5173/activateaccount?code=${user.token}'>Activate Account<a/>`
@@ -685,7 +685,7 @@ export const resendmail = async (req, res) =>
             else
             {
                 const mailOptions = {
-                    from: 'sameerwalia13@gmail.com',
+                    from: 'acsdcofficial@gmail.com',
                     to: teacheremail,
                     subject: 'Activation Mail from CDAC',
                     html: `Dear ${user.name}<br/><br/>Thanks for signing up on our website.<br/><br/>Click on the following link to activate your account.<br/><br/><a href='http://localhost:5173/activateaccount?code=${user.token}'>Activate Account<a/>`
@@ -761,8 +761,8 @@ export const ContactUs = async (req, res) =>
         }
 
         const mailOptions = {
-            from: 'sameerwalia13@gmail.com',
-            to: 'sameerwalia13@gmail.com',
+            from: 'acsdcofficial@gmail.com',
+            to: 'acsdcofficial@gmail.com',
             replyTo: email,
             subject: 'Message from website - Contact Us Page',
             html: `<b>Name:- </b>${name}<br/><b>Phone:- </b>${phone}<br/><b>Email:- </b>${email}<br/><b>Message:- </b>${message}`
