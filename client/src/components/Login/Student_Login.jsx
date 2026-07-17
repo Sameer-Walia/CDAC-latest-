@@ -133,12 +133,9 @@ function Student_Login()
 
                                 <br />
 
-                                {
-                                    loading ?
-                                        <div className="loader-container mt-2">
-                                            <img src="assets/images/loader.gif" alt="loader" className="loader" />
-                                        </div> : <input type="submit" className="register-button mt-3" value="SIGN IN" />
-                                }
+                                <button type="submit" className="register-button mt-3" disabled={loading}>
+                                    {loading ? "SIGNING IN..." : "SIGN IN"}
+                                </button>
 
                                 <Link to="/forgot_password_by_student" className="login-link mt-4" >Forgot Password</Link>
 
