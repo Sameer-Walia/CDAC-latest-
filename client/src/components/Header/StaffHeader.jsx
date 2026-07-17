@@ -109,7 +109,7 @@ function StaffHeader()
                                 <ul className="dropdown-menu">
                                     <li><Link to="/director">Director</Link></li>
                                     <li><Link to="/rules_guidelines">Rules & guidelines</Link></li>
-                                    <li><Link to="/notice">Notice</Link></li>
+                                    <li><Link to="#">Notice</Link></li>
                                 </ul>
                             </li>
 
@@ -189,8 +189,6 @@ function StaffHeader()
                                 <a href="#">Student Corner</a>
                                 <ul className="dropdown-menu">
                                     <li><Link to="/studentcounselling">Student Counselling</Link></li>
-                                    <li><a href="http://acsd.ac.in/readdata/Date%20sheet.pdf" target="_blank" rel="noopener noreferrer">Exam Date Sheet</a></li>
-                                    <li><Link to="#">Exam Results</Link></li>
                                     <li><Link to="/timetable">Time Table</Link></li>
                                     <li><Link to="/syllabus">Syllabus</Link></li>
                                 </ul>

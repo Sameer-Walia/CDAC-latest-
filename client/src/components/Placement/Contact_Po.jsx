@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Footer from '../Footer/Footer'
 import "./Placement.css"
+import { useEffect } from 'react'
 
 function Contact_Po()
 {
@@ -38,7 +39,7 @@ function Contact_Po()
                         <ul>
                             <li><Link to="/po_message">PO's Message</Link></li>
                             <li><Link to="/placement_acsd">Placement at ACSD</Link></li>
-                            <li><Link to="/brochure">Placement Brochure</Link></li>
+                            <li><Link to="#">Placement Brochure</Link></li>
                             <li className="active"><Link to="/contact_po">Contact PO</Link></li>
                         </ul>
                     </div>

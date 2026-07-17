@@ -56,20 +56,22 @@ function Staff()
                                     </tr>
                                     <tr>
                                         <td>2</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>Mr. Harpreet Singh</td>
+                                        <td>Project Associate</td>
+                                        <td>B.Tech.</td>
+                                        <td>ECE</td>
+                                        <td>72</td>
                                     </tr>
+
                                     <tr>
                                         <td>3</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>Mr. Paramjeet Singh</td>
+                                        <td>MSS4 Senior Mechanic</td>
+                                        <td>ITI Turner</td>
+                                        <td>Mechanical</td>
+                                        <td>23</td>
                                     </tr>
+
                                     <tr>
                                         <td colSpan="6" className="section-row text-center fw-bold">
                                             Supporting Staff
@@ -77,11 +79,11 @@ function Staff()
                                     </tr>
                                     <tr>
                                         <td>1</td>
-                                        <td>Dr. Balwinder Singh balwinder[at]cdac.in</td>
-                                        <td>Principal</td>
-                                        <td>Ph.D, M.Tech., B.Tech.</td>
-                                        <td>Micro Electronics,Embedded Systems & AI</td>
-                                        <td>078</td>
+                                        <td>Mr. Kumar Gurvaran</td>
+                                        <td>Project Service Support - II</td>
+                                        <td>MBA</td>
+                                        <td>Finance & HR</td>
+                                        <td>81</td>
                                     </tr>
                                 </tbody>
                             </table>

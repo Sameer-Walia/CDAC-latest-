@@ -26,8 +26,14 @@ function Procedure()
 
                 <div className="container divide py-3">
                     <div className="content">
-
-                        <a href="http://acsd.ac.in/readdata/Admission%20Form.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-primary mb-3">Admission Form</a>
+                        <a
+                            href="/pdf/AdmissionForm.pdf"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-primary mb-4"
+                        >
+                            Admission Form
+                        </a>
 
                         <h1 className="title hd">M. Tech. Admission</h1>
                         <p className="para">Interested candidates are required to fill Online Registration Form (Google Form). After verification of eligibility from the data so provided by the candidates, marit( on the basis of %age in B. Tech and GATE Qualification) will be announced on website for eligible candidates. Further process of admission will be communicated on our site as well as by email to eligible candidates.</p>

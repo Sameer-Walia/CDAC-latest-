@@ -56,7 +56,7 @@ function PoMessage()
                         <ul>
                             <li className="active"><Link to="/po_message">PO's Message</Link></li>
                             <li><Link to="/placement_acsd">Placement at ACSD</Link></li>
-                            <li><Link to="/brochure">Placement Brochure</Link></li>
+                            <li><Link to="#">Placement Brochure</Link></li>
                             <li><Link to="/contact_po">Contact PO</Link></li>
                         </ul>
                     </div>

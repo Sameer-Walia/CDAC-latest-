@@ -96,7 +96,7 @@ function Rules_guide()
                         <ul>
                             <li><Link to="/director">Director</Link></li>
                             <li className="active"><Link to="/rules_guidelines">Rules & guidelines</Link> </li>
-                            <li><Link to="/notice">Notice</Link> </li>
+                            <li><Link to="#">Notice</Link> </li>
                         </ul>
                     </div>
                 </div>

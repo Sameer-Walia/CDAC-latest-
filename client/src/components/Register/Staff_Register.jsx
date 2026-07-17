@@ -22,6 +22,10 @@ function Staff_Register()
         document.title = "Register Page"
     }, [])
 
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+
     async function onsignup(e) 
     {
         e.preventDefault()
@@ -138,26 +142,44 @@ function Staff_Register()
 
                 </div>
 
-                <div className="input-container mt-4 ">
+                <div className="input-container mt-4">
 
-                    <input type="password" name="password" placeholder="" className="input-field" onChange={(e) => setpass(e.target.value)} required />
-                    {/* pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" */}
+                    <input type={showPassword ? "text" : "password"} name="password" value={pass} className="input-field" onChange={(e) => setpass(e.target.value)} required placeholder="" />
 
                     <label className="input-label">
                         <span><i className="fa-solid fa-lock" /></span><span>Password</span>
                     </label>
 
-                </div>
-                <div className="input-container mt-4 ">
+                    <span
+                        className="password-toggle"
+                        onClick={() => setShowPassword(!showPassword)}
+                    >
+                        <i
+                            className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                        ></i>
+                    </span>
 
-                    <input type="password" name="confirmpass" placeholder="" className="input-field" onChange={(e) => setcpass(e.target.value)} required />
+                </div>
+
+                <div className="input-container mt-4">
+
+                    <input type={showConfirmPassword ? "text" : "password"} name="confirmpass" value={cpass} className="input-field" onChange={(e) => setcpass(e.target.value)} required placeholder="" />
 
                     <label className="input-label">
                         <span><i className="fa-solid fa-lock" /></span><span>Confirm Password</span>
                     </label>
 
+                    <span
+                        className="password-toggle"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                        <i
+                            className={`fa-solid ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}
+                        ></i>
+                    </span>
 
                 </div>
+
                 <label className="checkbox m-4">
                     <input type="checkbox" name="cbx1" onChange={(e) => setterms(e.target.checked)} /><i> </i>I accept the terms and conditions
                 </label>

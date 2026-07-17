@@ -138,6 +138,146 @@
     background-color: transparent;
     padding: 12px;
     font-family: 'Sans-serif';
+    font-size: 14px;#authpage .authimage {
+    height: 500px;
+    width: 550px;
+    margin-top: 50px;
+    margin-bottom: 60px;
+}
+
+#authpage .register-form {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    max-width: 640px;
+    margin: 12px auto;
+    text-align: center;
+    border: 2px solid #d1d5db;
+    border-radius: 24px;
+    padding: 40px 24px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+#authpage .register-form1 {
+    display: block;
+    flex-direction: column;
+    width: 80%;
+    max-width: 640px;
+    margin: 12px auto;
+    text-align: center;
+    border: 2px solid #d1d5db;
+    border-radius: 24px;
+    padding: 40px 24px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+#authpage .login-form-grids {
+    width: 45%;
+    padding: 3em;
+    background: #F7F7F9;
+    margin: 3em auto 0;
+}
+
+@media (min-width: 1024px) {
+
+    #authpage .register-form {
+        padding-top: 0px;
+        padding-bottom: 48px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+}
+
+@media (max-width: 1024px) {
+
+    #authpage .register-form {
+        padding-top: 0px;
+        padding-bottom: 48px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+}
+
+#authpage .input-container {
+
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    @media (min-width: 768px) {
+        grid-column-end: span 1;
+    }
+}
+
+#authpage .input-field {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    border-color: #d1d5db;
+    border-top-color: transparent;
+    background-color: transparent;
+    padding: 12px;
+    font-family: 'Sans-serif';
+    font-size: 14px;
+    font-weight: normal;
+    color: #374151;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+
+    &::placeholder {
+        border-color: #e5e7eb;
+        border-top-color: #e5e7eb;
+    }
+
+}
+
+#authpage .input-label {
+    pointer-events: none;
+    position: absolute;
+    left: 12px;
+    top: -6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1f2937;
+    transition: all 0.3s ease-in-out;
+
+    .input-field:placeholder-shown+& {
+        top: 10px;
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    #authpage .input-field:focus+& {
+        top: -6px;
+        font-size: 12px;
+        color: #5fa8d3;
+    }
+}
+
+#authpage .select-container {
+    position: relative;
+    height: 44px;
+    width: 100%;
+    grid-column-start: 1;
+    grid-column-end: span 2;
+}
+
+#authpage .select-box {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    border-top-color: transparent;
+    background-color: transparent;
+    padding: 12px;
+    font-family: 'Sans-serif';
     font-size: 14px;
     font-weight: normal;
     color: #374151;
@@ -375,5 +515,281 @@
     font-size: 1.1rem;
     color: #2c7a7b;
 }
+
+
+/* password-toggle css starts */
+
+#authpage .password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 18px;
+    z-index: 10;
+}
+
+#authpage .password-toggle:hover {
+    color: #000;
+}
+
+/* password-toggle css ends */
+    font-weight: normal;
+    color: #374151;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+}
+
+
+#authpage .select-box:focus {
+    border-width: 2px;
+    border-color: #5fa8d3;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+}
+
+
+#authpage .select-label {
+    pointer-events: none;
+    position: absolute;
+    left: 12px;
+    top: -6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1f2937;
+    transition: all 0.3s ease-in-out;
+
+
+    .select-box:placeholder-shown+& {
+        top: 10px;
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    #authpage .select-box:focus+& {
+        top: -6px;
+        font-size: 12px;
+        color: #5fa8d3;
+    }
+}
+
+#authpage .input-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+#authpage .col {
+    flex: 1;
+    margin-right: 10px;
+}
+
+#authpage .col:last-child {
+    margin-right: 0;
+}
+
+.register-button {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    color: white;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    background: linear-gradient(to right, #bcccd6, #0693e5);
+    transition: transform 0.2s ease-in-out;
+}
+
+.register-button:hover {
+    transform: scale(1.05);
+}
+
+.register-button:active {
+    transform: scale(0.95);
+}
+
+#authpage .register-button1 {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    margin-top: 1.5rem;
+    font-weight: 500;
+    color: white;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    background: linear-gradient(to right, var(--primary-color), #f6e605);
+    transition: transform 0.2s ease-in-out;
+}
+
+#authpage .register-button1:hover {
+    transform: scale(1.05);
+}
+
+#authpage .register-button1:active {
+    transform: scale(0.95);
+}
+
+#authpage .register-text {
+    text-align: center;
+    margin-top: 1rem;
+    color: #4b5563;
+}
+
+#authpage .login-link {
+    color: var(--primary-color);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#authpage .login-link:hover {
+    text-decoration: underline;
+}
+
+#authpage form .val {
+    color: black;
+}
+
+
+#authpage .containerdiv {
+    background: linear-gradient(to right, #e9d5ff, #fecdd3);
+    display: flex;
+    justify-content: center;
+    border-radius: 9999px;
+    max-width: 28rem;
+    margin: 0 auto 1rem;
+    font-size: 1.25rem;
+}
+
+#authpage .link {
+    flex: 1;
+    padding: 0.5rem 0;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 9999px;
+    text-decoration: none;
+}
+
+#authpage .link.active {
+    background: linear-gradient(to right, #abcee1, #078ad5);
+    color: white;
+}
+
+#authpage .link.inactive {
+    background: linear-gradient(to right, #e9d5ff, #fecdd3);
+    color: black;
+}
+
+
+@media (max-width: 768px) {
+
+    #authpage .authimage {
+        display: none;
+    }
+
+    #authpage .containerdiv {
+        width: 100%;
+        margin-top: 100px !important;
+    }
+
+}
+
+@media (max-width: 426px) {
+    #authpage .input-row {
+        display: block;
+    }
+}
+
+@media (max-width: 321px) {
+
+    #authpage .containerdiv {
+        margin-top: 120px !important;
+    }
+
+}
+
+
+#authpage .note-text {
+    color: red;
+    font-weight: bold;
+}
+
+
+#authpage .captcha-container {
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 427px) {
+    #authpage .captcha-container {
+        transform: scale(0.7);
+    }
+}
+
+
+/* thanks page css start */
+
+#authpage .thanks-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    background: #f9fafc;
+    padding: 20px;
+}
+
+#authpage .thanks-container {
+    max-width: 800px;
+    text-align: center;
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+#authpage .thanks-heading {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 16px;
+}
+
+#authpage .thanks-subheading {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #444;
+    margin-bottom: 24px;
+}
+
+#authpage .thanks-message {
+    font-size: 1.1rem;
+    color: #2c7a7b;
+}
+
+
+/* password-toggle css starts */
+
+#authpage .password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 18px;
+    z-index: 10;
+}
+
+#authpage .password-toggle:hover {
+    color: #000;
+}
+
+/* password-toggle css ends */
 
 

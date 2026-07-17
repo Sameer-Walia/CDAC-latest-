@@ -66,7 +66,7 @@ function Director()
                         <ul>
                             <li className="active"><Link to="/director">Director</Link></li>
                             <li><Link to="/rules_guidelines">Rules & guidelines</Link> </li>
-                            <li> <Link to="/notice">Notice</Link> </li>
+                            <li> <Link to="#">Notice</Link> </li>
                         </ul>
                     </div>
                 </div>

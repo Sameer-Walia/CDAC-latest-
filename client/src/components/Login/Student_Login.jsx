@@ -17,6 +17,8 @@ function Student_Login()
     const [captchaToken, setcaptchaToken] = useState("");
     const dispatch = useDispatch()
 
+    const [showPassword, setShowPassword] = useState(false);
+
     const navi = useNavigate();
 
     useEffect(() =>
@@ -108,17 +110,28 @@ function Student_Login()
 
                                 </div>
 
-                                <div className="input-container mt-4 ">
+                                <div className="input-container mt-4">
 
-                                    <input type="password" name="userpass" placeholder="" value={pass} onChange={(e) => setpass(e.target.value)} className="input-field" required />
+                                    <input type={showPassword ? "text" : "password"} name="userpass" placeholder="" value={pass} onChange={(e) => setpass(e.target.value)} className="input-field" required
+                                    />
 
                                     <label className="input-label">
                                         <span><i className="fa-solid fa-lock" /></span><span>Password</span>
                                     </label>
+
+                                    <span
+                                        className="password-toggle"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                        <i
+                                            className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"
+                                                }`}
+                                        ></i>
+                                    </span>
+
                                 </div>
 
                                 <br />
-                                {/* <div className="captcha-container"><ReCAPTCHA sitekey="6LfERsgrAAAAALuRJGrIb-al3osvxot0jCNfyLgU" onChange={onChange} /></div> */}
 
                                 {
                                     loading ?

@@ -17,7 +17,7 @@ function Campus()
         "/assets/images/campus3.jpg",
         "/assets/images/campus4.jpg",
         "/assets/images/campus5.jpg",
-        "/assets/images/campus6.jpg"
+        // "/assets/images/campus6.jpg"
     ];
 
     const [currentIndex, setCurrentIndex] = useState(null);
