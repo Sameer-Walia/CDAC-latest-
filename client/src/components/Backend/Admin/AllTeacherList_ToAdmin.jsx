@@ -69,7 +69,7 @@ function AllTeacherList_ToAdmin()
             if (confirmdelete)
             {
                 setloading(true)
-                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_teacher_by_admin/${id}` , {withCredentials:true})
+                const resp = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete_teacher_by_admin/${id}`, { withCredentials: true })
 
                 if (resp.data.statuscode === 1)
                 {

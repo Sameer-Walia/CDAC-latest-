@@ -994,5 +994,33 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.page-btn,
+.page-number {
+
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #007bff;
+    color: white;
+}
+
+.page-btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.active-page {
+    background: #28a745;
+}
 
 /* mark attendance css end  */
