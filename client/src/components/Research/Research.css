@@ -1,0 +1,227 @@
+#Research_page .breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+}
+
+#Research_page .breadcrumb .crumb {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #3b8dbd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#Research_page .breadcrumb .crumb:hover {
+    background: #dbeafe;
+    color: #0d6efd;
+    transform: translateY(-2px);
+}
+
+#Research_page .breadcrumb .separator {
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+#Research_page .breadcrumb .active {
+    background: #3b8dbd;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+@media (max-width: 1440px) {
+    #Research_page .breadcrumb {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 1024px) {
+    #Research_page .breadcrumb {
+        margin-top: -8px;
+    }
+}
+
+@media (max-width: 768px) {
+    #Research_page .breadcrumb {
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 426px) {
+    #Research_page .breadcrumb {
+        font-size: 13px;
+        margin-top: 40px;
+    }
+
+    #Research_page .breadcrumb .crumb {
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    #Research_page .breadcrumb {
+        margin-top: 85px;
+        font-size: 12px;
+    }
+}
+
+#Research_page .divide {
+    display: flex;
+    gap: 40px;
+}
+
+#Research_page .content {
+    flex: 3;
+}
+
+#Research_page .title {
+    font-size: 28px;
+    color: #3b8dbd;
+    margin-bottom: 20px;
+}
+
+
+#Research_page .sidebar {
+    flex: 1;
+    background: linear-gradient(145deg, #f0f6fa, #dce9f2);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+#Research_page .sidebar-title {
+    color: #3b8dbd;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#Research_page .sidebar-title::after {
+    content: "";
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(to right, #3b8dbd, #0982e4);
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    border-radius: 10px;
+}
+
+#Research_page .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#Research_page .sidebar li {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #333;
+    background: transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#Research_page .sidebar li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+#Research_page .sidebar li:hover a {
+    color: #3b8dbd;
+}
+
+#Research_page .sidebar .active a {
+    color: white;
+}
+
+#Research_page .sidebar li:hover {
+    background: #e3f2fd;
+    transform: translateX(5px);
+    color: #0d6efd;
+}
+
+#Research_page .sidebar li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #3b8dbd, #4dabf7);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+#Research_page .sidebar li:hover::before {
+    opacity: 1;
+}
+
+#Research_page .sidebar .active {
+    background: linear-gradient(to right, #3b8dbd, #4dabf7);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+#Research_page .sidebar .active:hover {
+    transform: none;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    #Research_page .divide {
+        flex-direction: column;
+    }
+
+    #Research_page .sidebar {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 426px) {
+    #Research_page {
+        padding: 15px;
+    }
+
+    #Research_page .title {
+        font-size: 22px;
+    }
+
+}
+
+#Research_page .custom-img {
+    width: 50%;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#Research_page .custom-img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+#Research_page .dimension {
+    height: 350px;
+    width: 300px;
+}

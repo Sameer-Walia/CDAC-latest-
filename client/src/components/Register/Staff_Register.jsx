@@ -1,0 +1,203 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "../Login/Login.css";
+
+function Staff_Register()
+{
+
+    const [name, setname] = useState("");
+    const [phone, setphone] = useState("");
+    const [email, setemail] = useState("");
+    const [pass, setpass] = useState("");
+    const [cpass, setcpass] = useState("");
+    const [terms, setterms] = useState(false);
+    const [loading, setloading] = useState(false);
+
+    const navi = useNavigate();
+
+    useEffect(() =>
+    {
+        document.title = "Register Page"
+    }, [])
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+
+    async function onsignup(e) 
+    {
+        e.preventDefault()
+
+        if (terms === true) 
+        {
+            if (pass === cpass) 
+            {
+                if (!name?.trim() || !phone?.trim() || !email?.trim() || !pass?.trim())
+                {
+                    return toast.error("All fields are required");
+                }
+
+                if (name.trim().length < 3)
+                {
+                    return toast.error("Name must be at least 3 characters");
+                }
+
+                if (!/^[0-9]{10}$/.test(phone))
+                {
+                    return toast.error("Phone must be 10 digits");
+                }
+
+                if (!/\S+@\S+\.\S+/.test(email))
+                {
+                    return toast.error("Invalid email format");
+                }
+
+                if (pass.length < 3)
+                {
+                    return toast.error("Password must be at least 3 characters");
+                }
+                const reqdata = { name, phone, email, pass }
+                try 
+                {
+                    setloading(true)
+                    const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/add_teacher_by_itself`, reqdata)
+                    if (resp.data.statuscode === 1)
+                    {
+                        navi("/thanks")
+                        toast.success(resp.data.msg)
+                    }
+                    else if (resp.data.statuscode === 2)
+                    {
+                        navi("/resend_email")
+                        toast.warn(resp.data.msg)
+                    }
+                    else if (resp.data.statuscode === 0)
+                    {
+                        toast.warn(resp.data.msg)
+                    }
+                }
+                catch (e) 
+                {
+                    toast.error("Error Occured : " + (e.response?.data?.msg || e.message))
+                }
+                finally
+                {
+                    setloading(false)
+                }
+            }
+            else
+            {
+                toast.error("Password and Confirm Password Doesnot Match")
+            }
+        }
+        else
+        {
+            toast.warn("Please accept terms and condition")
+        }
+    }
+
+    return (
+        <div id="authpage">
+
+            {loading && (
+                <div className="overlay">
+                    <div>
+                        <div className="spinner"></div>
+                        <p style={{ color: "white", marginTop: "10px" }}>
+                            Please wait...
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            <form name="form1" onSubmit={onsignup} className="register-form mb-5" >
+
+                <div className="input-container mt-4 ">
+
+                    <input type="text" name="name" placeholder="" className="input-field" onChange={(e) => setname(e.target.value)} required minLength={3} />
+                    <label className="input-label">
+                        <span><i className="fa-solid fa-user" /></span><span>Name</span>
+                    </label>
+
+                </div>
+
+                <div className="input-container mt-4 ">
+
+                    <input type="tel" name="usernumber" placeholder="" className="input-field" onChange={(e) => setphone(e.target.value)} minLength={10} maxLength={10} required />
+                    <label className="input-label">
+                        <span><i className="fa-solid fa-phone" /></span><span>Phone</span>
+                    </label>
+
+                </div>
+
+                <div className="input-container mt-4 ">
+
+                    <input type="email" name="useremail" placeholder="" className="input-field" onChange={(e) => setemail(e.target.value)} required />
+
+                    <label className="input-label">
+                        <span><i className="fa-solid fa-envelope" /></span><span>Email</span>
+                    </label>
+
+                </div>
+
+                <div className="input-container mt-4">
+
+                    <input type={showPassword ? "text" : "password"} name="password" value={pass} className="input-field" onChange={(e) => setpass(e.target.value)} required placeholder="" />
+
+                    <label className="input-label">
+                        <span><i className="fa-solid fa-lock" /></span><span>Password</span>
+                    </label>
+
+                    <span
+                        className="password-toggle"
+                        onClick={() => setShowPassword(!showPassword)}
+                    >
+                        <i
+                            className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                        ></i>
+                    </span>
+
+                </div>
+
+                <div className="input-container mt-4">
+
+                    <input type={showConfirmPassword ? "text" : "password"} name="confirmpass" value={cpass} className="input-field" onChange={(e) => setcpass(e.target.value)} required placeholder="" />
+
+                    <label className="input-label">
+                        <span><i className="fa-solid fa-lock" /></span><span>Confirm Password</span>
+                    </label>
+
+                    <span
+                        className="password-toggle"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                        <i
+                            className={`fa-solid ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}
+                        ></i>
+                    </span>
+
+                </div>
+
+                <label className="checkbox m-4">
+                    <input type="checkbox" name="cbx1" onChange={(e) => setterms(e.target.checked)} /><i> </i>I accept the terms and conditions
+                </label>
+
+                <button type="submit" className="register-button " disabled={loading}>
+                    {loading ? "Signing up..." : "SIGN UP"}
+                </button>
+
+                <p className="register-text">
+                    Already registered? <Link to="/staff_login" className="login-link" >Login</Link>
+                </p>
+
+                <Link to="/resend_email" className="login-link" >Resend Email</Link>
+
+            </form>
+
+        </div>
+    )
+}
+
+export default Staff_Register

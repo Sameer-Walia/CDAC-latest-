@@ -1,0 +1,609 @@
+#student_page .breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+}
+
+#student_page .breadcrumb .crumb {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #3b8dbd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#student_page .breadcrumb .crumb:hover {
+    background: #dbeafe;
+    color: #0d6efd;
+    transform: translateY(-2px);
+}
+
+#student_page .breadcrumb .separator {
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+#student_page .breadcrumb .active {
+    background: #3b8dbd;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+@media (max-width: 1440px) {
+    #student_page .breadcrumb {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 1024px) {
+    #student_page .breadcrumb {
+        margin-top: -8px;
+    }
+}
+
+@media (max-width: 768px) {
+    #student_page .breadcrumb {
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 426px) {
+    #student_page .breadcrumb {
+        font-size: 13px;
+        margin-top: 40px;
+    }
+
+    #student_page .breadcrumb .crumb {
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    #student_page .breadcrumb {
+        margin-top: 85px;
+        font-size: 12px;
+    }
+}
+
+
+#student_page .title {
+    font-size: 28px;
+    color: #3b8dbd;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 426px) {
+    #student_page {
+        padding: 15px;
+    }
+
+    #student_page .title {
+        font-size: 22px;
+    }
+
+}
+
+/* Table container css start*/
+
+#student_page #student_marks_table .custom-table {
+    border-radius: 12px;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+#student_page #student_marks_table .custom-table thead {
+    background: linear-gradient(to right, #0d6efd, #4dabf7);
+    color: white;
+}
+
+#student_page #student_marks_table .custom-table th {
+    padding: 14px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+#student_page #student_marks_table .custom-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #444;
+}
+
+#student_page #student_marks_table .custom-table tbody tr:nth-child(even) {
+    background-color: #f8fbff;
+}
+
+#student_page #student_marks_table .custom-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+#student_page #student_marks_table .custom-table tbody tr:hover {
+    background-color: #e3f2fd;
+    transform: scale(1.01);
+}
+
+#student_page #student_marks_table .custom-table td:first-child {
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+#student_page #student_marks_table .custom-table thead tr:first-child th:first-child {
+    border-top-left-radius: 12px;
+}
+
+#student_page #student_marks_table .custom-table thead tr:first-child th:last-child {
+    border-top-right-radius: 12px;
+}
+
+@media (max-width: 768px) {
+
+    #student_page #student_marks_table .custom-table th,
+    #student_page #student_marks_table .custom-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    #student_page #student_marks_table .custom-table th,
+    #student_page #student_marks_table .custom-table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+/* Table container css end*/
+
+
+
+/* fees css start */
+
+
+#student_page .fees-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+#student_page .fees-heading {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#student_page .filters {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#student_page .degree {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    background: #5fa8d3;
+    padding: 6px 22px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 20px;
+}
+
+#student_page .degree-title {
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+#student_page .degree-separator {
+    color: white;
+}
+
+#student_page .degree-course {
+    font-weight: 500;
+    color: white;
+}
+
+#student_page .filters select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+}
+
+#student_page .filters select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+#student_page .status-box {
+    padding: 12px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+#student_page .status-box .pending {
+    color: red;
+}
+
+#student_page .status-box .paid {
+    color: green;
+}
+
+#student_page .upload-box {
+    padding: 20px;
+    border: 1px dashed #ccc;
+    border-radius: 10px;
+    text-align: center;
+    background: #fafafa;
+}
+
+#student_page .upload-box input {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+#student_page .upload-box button {
+    padding: 10px 20px;
+    border: none;
+    background: #28a745;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#student_page .upload-box button:hover {
+    background: #218838;
+}
+
+
+
+/* student fees details table css start */
+
+#student_page #student_fees_upload_table .custom-fee-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-size: 14px;
+}
+
+#student_page #student_fees_upload_table .table-title {
+    background: #3b8dbd;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+}
+
+#student_page #student_fees_upload_table .custom-fee-table td {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+#student_page #student_fees_upload_table .custom-fee-table tbody tr:nth-child(even) {
+    background: #f7f9fb;
+}
+
+#student_page #student_fees_upload_table .custom-fee-table tbody tr:hover {
+    background: #eef6fb;
+}
+
+#student_page #student_fees_upload_table .custom-fee-table td:first-child {
+    text-align: center;
+}
+
+#student_page #student_fees_upload_table .custom-fee-table td:last-child {
+    text-align: center;
+    font-weight: 500;
+}
+
+#student_page #student_fees_upload_table .total-row {
+    background: #e3f2fd;
+    font-weight: 600;
+}
+
+#student_page #student_fees_upload_table .total-row td {
+    border-top: 2px solid #1f7ea8;
+}
+
+/* student fees details table css end */
+
+
+
+/* mark attendance css start  */
+
+#student_page .attendance-filter-box {
+    width: 100%;
+    background: #fff;
+    margin-top: 25px;
+    padding: 25px;
+    border-radius: 16px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+#student_page .filter-group {
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* #student_page .attendance-filter-box {
+    width: 100%;
+    max-width: 650px;
+    background: #fff;
+    margin: 25px auto;
+    padding: 25px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+#student_page .filter-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+} */
+
+#student_page .filter-group label {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+#student_page .filter-group select,
+#student_page .filter-group input {
+    height: 48px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    padding: 0 14px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+    background: #fafafa;
+}
+
+#student_page .filter-group select:focus,
+#student_page .filter-group input:focus {
+    border-color: #2563eb;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+#student_page .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+
+#student_page .attendance-action {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+#student_page .filter-group input[type="file"] {
+    padding: 10px;
+    background: #fafafa;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+/* mark attendance css end  */
+
+
+
+/* select-box status css start */
+
+#student_page .status-select {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: none;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+#student_page .status-select.Pending {
+    background-color: #ffe5e5;
+    color: #d93025;
+}
+
+#student_page .status-select.Verified {
+    background-color: #f5eebd;
+    color: #c49c0d;
+}
+
+#student_page .status-select.Approved {
+    background-color: #e6f4ea;
+    color: #188038;
+}
+
+
+#student_page .status-select:hover {
+    transform: scale(1.05);
+}
+
+#student_page .status-select:focus {
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* select-box status css end */
+
+
+
+
+/* pop-up box css start */
+
+#student_page .clickable-text {
+    color: #3b8dbd;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    display: inline-block;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#student_page .clickable-text:hover {
+    color: #1d4ed8;
+    transform: scale(1.03);
+    text-decoration: underline;
+}
+
+
+#student_page .popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 9999;
+    animation: fadeIn 0.25s ease;
+}
+
+
+#student_page .popup-box {
+    width: 500px;
+    max-width: 95%;
+    background: linear-gradient(145deg, #ffffff, #f8fafc);
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.4);
+    position: relative;
+    animation: popupScale 0.3s ease;
+}
+
+#student_page .popup-box h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 18px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+#student_page .popup-box p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #334155;
+    word-break: break-word;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+#student_page .popup-box p::-webkit-scrollbar {
+    width: 6px;
+}
+
+#student_page .popup-box p::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+#student_page .popup-box button {
+    margin-top: 25px;
+    border: none;
+    outline: none;
+    background: linear-gradient(to right, #2563eb, #3b8dbd);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+#student_page .popup-box button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes popupScale {
+    from {
+        opacity: 0;
+        transform: scale(0.85) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* pop-up box css end */
+
+
+
+/* progress-title css start */
+
+#student_page .progress-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e293b;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+#student_page .progress-title::after {
+    content: "";
+    width: 70%;
+    height: 4px;
+    background: linear-gradient(to right, #2563eb, #60a5fa);
+    position: absolute;
+    left: 15%;
+    bottom: -8px;
+    border-radius: 10px;
+}
+
+/* progress-title css end */
